@@ -1,0 +1,9 @@
+[
+  {"name":"area:be","color":"1d76db"},{"name":"area:fe","color":"0e8a16"},
+  {"name":"area:contract","color":"5319e7"},{"name":"area:ops","color":"6a737d"},
+  {"name":"type:feature","color":"a2eeef"},{"name":"type:bug","color":"d73a4a"},
+  {"name":"type:chore","color":"cfd3d7"},{"name":"type:docs","color":"0075ca"},
+  {"name":"P0","color":"b60205"},{"name":"P1","color":"d93f0b"},{"name":"P2","color":"fbca04"},
+  {"name":"status:ready","color":"0e8a16"},{"name":"status:blocked","color":"b60205"},
+  {"name":"status:needs-info","color":"fef2c0"}
+]
