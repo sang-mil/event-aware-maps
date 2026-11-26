@@ -5,7 +5,7 @@
     python backend/cli.py collect subway_month --month 202510   # 지하철 월별·시간대별 승하차
     python backend/cli.py build-db                         # 원본(raw) → SQLite 한 파일 (backend/data/tumgil.db). 원본 CSV가 없으면 요약(seed) 사용
     python backend/cli.py export-seed                      # DB → 승하차 요약 backend/data/seed/ridership_daily.csv.gz
-    python backend/cli.py build --out 폴더 [--as-of 시각]   # 행사 반영·혼잡 계산 → calendar·events·forecast·station·compare·route JSON 검증 후 발행
+    python backend/cli.py build --out 폴더 [--as-of 시각]   # 행사 반영·혼잡 계산 → stations·venues·calendar·events·event·forecast·station·compare·route JSON 검증 후 발행
     python backend/cli.py backtest                         # 공연 날마다 그날을 빼고 예측해 실제와 비교 (혼잡 단계 적중률)
     python backend/cli.py publish --src 폴더 --out 폴더      # src 의 JSON을 검증해 out 에 발행
 
@@ -29,7 +29,8 @@ from collectors import CollectError, kspo, seoul_subway  # noqa: E402
 from normalize import db as normalize_db, seed as normalize_seed  # noqa: E402
 from congestion import backtest as cg_backtest, load as cg_load, model as cg_model, outputs as cg_outputs  # noqa: E402
 from recommend import compare as rc_compare  # noqa: E402
-from events import detect as ev_detect, load as ev_load, outputs as ev_outputs  # noqa: E402
+import reference  # noqa: E402
+from events import detail as ev_detail, detect as ev_detect, load as ev_load, outputs as ev_outputs  # noqa: E402
 from publish import PublishError, publish, wrap  # noqa: E402
 
 RAW_DIR = BACKEND / "data" / "raw"
@@ -140,7 +141,13 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime) -> int:
             days[d] = cg_outputs.compute_day(d, obs, exits, base, res)
         return days[d]
 
-    data = ev_outputs.build_files(events, *span, nearest=lambda ev: cg_outputs.nearest_level(day_of(ev.date), ev.exit_hour))
+    nearest = lambda ev: cg_outputs.nearest_level(day_of(ev.date), ev.exit_hour)  # noqa: E731
+    data = ev_outputs.build_files(events, *span, nearest=nearest, linkable=True)
+    data["stations.json"] = reference.stations(set(obs))
+    data["venues.json"] = reference.venues()
+    for ev in events:
+        same = [o for o in events if o.date == ev.date]
+        data[f"event-{ev.id}.json"] = ev_detail.event_detail(ev, same, day_of(ev.date), nearest)
     for d in sorted(name[len("events-"):-len(".json")] for name in list(data) if name.startswith("events-")):
         data[f"forecast-{d}.json"] = cg_outputs.forecast(d, day_of(d), exits)
         for sid in cg_outputs.STATIONS:

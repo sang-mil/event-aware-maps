@@ -1,6 +1,6 @@
 """공연 목록 → 화면용 JSON(data 부분). data-contract 의 calendar, events 스키마를 따른다.
 
-공연장은 원자료에 없어서 venue_id 는 null, 지역은 올림픽공원. 공연장이 없으면 상세 화면을 만들 수 없어 linkable=false.
+공연장은 원자료에 없어서 venue_id 는 null, 지역은 올림픽공원. linkable 은 행사 상세(event-{id}.json)를 함께 발행할 때 true.
 역 혼잡(nearest_station)은 nearest(공연) 함수가 주면 채운다: 올림픽공원 공연장은 모두 올림픽공원역이 가장 가깝다. 시작 시각은 원자료로 알 수 없어 null.
 """
 
@@ -24,24 +24,24 @@ def _end_at(ev: Event) -> str:
 Nearest = Callable[[Event], "str | None"]  # 공연 → 가장 가까운 역의 혼잡 단계 (모르면 None)
 
 
-def event_item(ev: Event, nearest: Nearest | None = None) -> dict:
+def event_item(ev: Event, nearest: Nearest | None = None, linkable: bool = False) -> dict:
     lv = nearest(ev) if nearest else None
     return {
         "id": ev.id, "type": "show", "title": ev.title, "venue_id": None, "area": AREA, "date": ev.date,
         "start_at": None, "end_at": _end_at(ev), "end_at_source": "estimated",
         "status": "scheduled", "change": None, "game_state": None,
-        "nearest_station": {"station_id": "olympic_park", "level": lv} if lv else None, "linkable": False,
+        "nearest_station": {"station_id": "olympic_park", "level": lv} if lv else None, "linkable": linkable,
     }
 
 
-def events_for_day(events: list[Event], day: str, nearest: Nearest | None = None) -> dict:
+def events_for_day(events: list[Event], day: str, nearest: Nearest | None = None, linkable: bool = False) -> dict:
     todays = [e for e in events if e.date == day]
     later = [e for e in events if e.date > day]
     nxt = None
     if not todays and later:
         n = later[0]
         nxt = {"id": n.id, "title": n.title, "venue_id": None, "date": n.date}
-    return {"date": day, "events": [event_item(e, nearest) for e in todays], "next_event": nxt}
+    return {"date": day, "events": [event_item(e, nearest, linkable) for e in todays], "next_event": nxt}
 
 
 def calendar_for_month(events: list[Event], month: str) -> dict:
@@ -54,13 +54,14 @@ def calendar_for_month(events: list[Event], month: str) -> dict:
     return {"month": month, "days": days}
 
 
-def build_files(events: list[Event], first_day: str, last_day: str, nearest: Nearest | None = None) -> dict[str, dict]:
+def build_files(events: list[Event], first_day: str, last_day: str, nearest: Nearest | None = None,
+                linkable: bool = False) -> dict[str, dict]:
     """first_day~last_day 의 모든 날 events 파일과 그 달들의 calendar 파일 (data 부분만)."""
     files: dict[str, dict] = {}
     d, end = Date.fromisoformat(first_day), Date.fromisoformat(last_day)
     months: set[str] = set()
     while d <= end:
-        files[f"events-{d.isoformat()}.json"] = events_for_day(events, d.isoformat(), nearest)
+        files[f"events-{d.isoformat()}.json"] = events_for_day(events, d.isoformat(), nearest, linkable)
         months.add(d.isoformat()[:7])
         d += timedelta(days=1)
     for m in sorted(months):
