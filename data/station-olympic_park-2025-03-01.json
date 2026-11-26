@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "olympic_park",
+    "date": "2025-03-01",
+    "focus_hour": "21",
+    "alternatives_title": "21시대에 타야 한다면",
+    "alternatives": [
+      {
+        "station_id": "bangi",
+        "level": "normal",
+        "walk_min": null,
+        "message": "방이역 367명, 행사 없는 평일과 비슷"
+      },
+      {
+        "station_id": "mongchontoseong",
+        "level": "normal",
+        "walk_min": null,
+        "message": "몽촌토성역 322명, 행사 없는 평일과 비슷"
+      },
+      {
+        "station_id": "hanseong_baekje",
+        "level": "normal",
+        "walk_min": null,
+        "message": "한성백제역 115명, 행사 없는 평일의 1.2배"
+      }
+    ],
+    "notify_hour": "19",
+    "no_data": null,
+    "focus_level": "crowded",
+    "headline": {
+      "highlight": "19시대",
+      "text": "에 타면 가장 덜 붐빌 거예요"
+    },
+    "description": "21시대 3,741명, 행사 없는 평일의 11.3배.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 410,
+        "baseline": 477,
+        "ratio": 0.9,
+        "level": "normal",
+        "message": "410명, 행사 없는 평일과 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "20",
+        "expected": 961,
+        "baseline": 378,
+        "ratio": 2.5,
+        "level": "crowded",
+        "message": "961명, 행사 없는 평일의 2.5배",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 3741,
+        "baseline": 332,
+        "ratio": 11.3,
+        "level": "crowded",
+        "message": "3,741명, 행사 없는 평일의 11.3배",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 1972,
+        "baseline": 241,
+        "ratio": 8.2,
+        "level": "crowded",
+        "message": "1,972명, 행사 없는 평일의 8.2배",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 266,
+        "baseline": 77,
+        "ratio": 3.5,
+        "level": "crowded",
+        "message": "266명, 행사 없는 평일의 3.5배",
+        "recommended": false
+      }
+    ]
+  }
+}

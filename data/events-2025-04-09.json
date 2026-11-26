@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-04-09",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250412_210c64",
+      "title": "2025 STAYC TOUR STAY TUNED, 2025 2NE1 CONCERT ［WELCOME BACK］ ENCORE IN SEOUL",
+      "venue_id": null,
+      "date": "2025-04-12"
+    }
+  }
+}

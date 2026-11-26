@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-02-16",
+    "events": [
+      {
+        "id": "evt_20250216_4b99b3",
+        "type": "show",
+        "title": "2025 TWS 1ST FANMEETING 〈42:CLUB〉 IN SEOUL",
+        "venue_id": null,
+        "area": "olympic_park",
+        "date": "2025-02-16",
+        "start_at": null,
+        "end_at": "2025-02-16T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": false
+      },
+      {
+        "id": "evt_20250216_977b30",
+        "type": "show",
+        "title": "2025 박지현 콘서트 쇼맨쉽 SHOWMANSHIP",
+        "venue_id": null,
+        "area": "olympic_park",
+        "date": "2025-02-16",
+        "start_at": null,
+        "end_at": "2025-02-16T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": false
+      },
+      {
+        "id": "evt_20250216_3931b2",
+        "type": "show",
+        "title": "2025 윤하 앵콜 콘서트 〈GROWTH THEORY : Final Edition〉",
+        "venue_id": null,
+        "area": "olympic_park",
+        "date": "2025-02-16",
+        "start_at": null,
+        "end_at": "2025-02-16T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": false
+      }
+    ],
+    "next_event": null
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-10-02",
+    "events": [],
+    "next_event": {
+      "id": "evt_20251003_7b34ad",
+      "title": "허용별 콘서트 : 보컬 전쟁 시즌2 The War of Vocalists II - 서울 앵콜",
+      "venue_id": null,
+      "date": "2025-10-03"
+    }
+  }
+}

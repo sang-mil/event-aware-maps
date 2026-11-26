@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "month": "2025-12",
+    "days": [
+      {
+        "date": "2025-12-05",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-12-06",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-12-07",
+        "has_show": true,
+        "has_game": false,
+        "count": 3,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-12-12",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-12-14",
+        "has_show": true,
+        "has_game": false,
+        "count": 2,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-12-19",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-12-20",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      }
+    ]
+  }
+}

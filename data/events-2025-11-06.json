@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-11-06",
+    "events": [],
+    "next_event": {
+      "id": "evt_20251108_1ec04e",
+      "title": "뮤지컬 〈빨래〉 20주년 콘서트",
+      "venue_id": null,
+      "date": "2025-11-08"
+    }
+  }
+}

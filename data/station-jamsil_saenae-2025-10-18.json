@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "jamsil_saenae",
+    "date": "2025-10-18",
+    "focus_hour": "23",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "23시대",
+      "text": " 예상: 보통"
+    },
+    "description": "23시대 517명, 행사 없는 평일의 1.2배.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 1164,
+        "baseline": 1164,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "1,164명, 행사 없는 평일과 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 968,
+        "baseline": 968,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "968명, 행사 없는 평일과 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 768,
+        "baseline": 935,
+        "ratio": 0.8,
+        "level": "normal",
+        "message": "768명, 행사 없는 평일의 0.8배",
+        "recommended": true
+      },
+      {
+        "hour": "22",
+        "expected": 830,
+        "baseline": 859,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "830명, 행사 없는 평일과 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 517,
+        "baseline": 424,
+        "ratio": 1.2,
+        "level": "normal",
+        "message": "517명, 행사 없는 평일의 1.2배",
+        "recommended": false
+      }
+    ]
+  }
+}

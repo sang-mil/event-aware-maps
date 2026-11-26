@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "jamsil_saenae",
+    "date": "2025-04-08",
+    "focus_hour": "20",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "20시대",
+      "text": " 예상: 보통"
+    },
+    "description": "20시대 972명, 평소와 비슷.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 1165,
+        "baseline": 1165,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "1,165명, 평소와 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "20",
+        "expected": 972,
+        "baseline": 972,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "972명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 917,
+        "baseline": 917,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "917명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 833,
+        "baseline": 833,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "833명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 421,
+        "baseline": 421,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "421명, 평소와 비슷",
+        "recommended": false
+      }
+    ]
+  }
+}

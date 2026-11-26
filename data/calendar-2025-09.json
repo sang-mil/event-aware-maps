@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "month": "2025-09",
+    "days": [
+      {
+        "date": "2025-09-06",
+        "has_show": true,
+        "has_game": false,
+        "count": 2,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-09-07",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-09-13",
+        "has_show": true,
+        "has_game": false,
+        "count": 2,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-09-14",
+        "has_show": true,
+        "has_game": false,
+        "count": 2,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-09-20",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-09-21",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-09-26",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-09-27",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2025-09-28",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {},
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          }
+        }
+      }
+    ]
+  }
+}

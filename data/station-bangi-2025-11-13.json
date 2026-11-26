@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "bangi",
+    "date": "2025-11-13",
+    "focus_hour": "22",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "22시대",
+      "text": " 예상: 보통"
+    },
+    "description": "22시대 455명, 평소와 비슷.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 404,
+        "baseline": 404,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "404명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 286,
+        "baseline": 348,
+        "ratio": 0.8,
+        "level": "normal",
+        "message": "286명, 평소의 0.8배",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 393,
+        "baseline": 454,
+        "ratio": 0.9,
+        "level": "normal",
+        "message": "393명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 455,
+        "baseline": 473,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "455명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 60,
+        "baseline": 93,
+        "ratio": 0.6,
+        "level": "relaxed",
+        "message": "60명, 평소의 0.6배",
+        "recommended": true
+      }
+    ]
+  }
+}

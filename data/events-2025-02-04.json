@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-02-04",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250207_2455a8",
+      "title": "2025 LEECHANGSUB SOLO CONCERT 〈The Wayfarer〉 ENCORE",
+      "venue_id": null,
+      "date": "2025-02-07"
+    }
+  }
+}

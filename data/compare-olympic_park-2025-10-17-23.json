@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "condition_label": {
+      "to_name": null,
+      "hour_label": "23시대 출발"
+    },
+    "headline": {
+      "highlight": "방이역",
+      "text": "에서 타면 가장 덜 붐빌 거예요"
+    },
+    "last_train": null,
+    "options": [
+      {
+        "id": "walk_bangi",
+        "kind": "walk_to_other",
+        "recommended": true,
+        "title": "방이역에서 타기",
+        "subtitle": "가까운 다른 역까지 걸어가기",
+        "station_id": "bangi",
+        "board_hour": "23",
+        "walk_min": null,
+        "expected": 78,
+        "level": "normal",
+        "compare_message": "78명, 행사 없는 평일과 비슷"
+      },
+      {
+        "id": "now_olympic",
+        "kind": "board_now",
+        "recommended": false,
+        "title": "올림픽공원역에서 23시대에 타기",
+        "subtitle": "가장 가까운 역",
+        "station_id": "olympic_park",
+        "board_hour": "23",
+        "walk_min": null,
+        "expected": 197,
+        "level": "crowded",
+        "compare_message": "197명, 행사 없는 평일의 2.6배"
+      }
+    ]
+  }
+}

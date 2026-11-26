@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "sports_complex",
+    "date": "2025-02-15",
+    "focus_hour": "22",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "22시대",
+      "text": " 예상: 보통"
+    },
+    "description": "22시대 488명, 행사 없는 평일의 1.3배.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 672,
+        "baseline": 663,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "672명, 행사 없는 평일과 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "20",
+        "expected": 576,
+        "baseline": 531,
+        "ratio": 1.1,
+        "level": "normal",
+        "message": "576명, 행사 없는 평일과 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 1143,
+        "baseline": 1056,
+        "ratio": 1.1,
+        "level": "normal",
+        "message": "1,143명, 행사 없는 평일과 비슷 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 488,
+        "baseline": 370,
+        "ratio": 1.3,
+        "level": "normal",
+        "message": "488명, 행사 없는 평일의 1.3배",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 288,
+        "baseline": 159,
+        "ratio": 1.8,
+        "level": "crowded",
+        "message": "288명, 행사 없는 평일의 1.8배",
+        "recommended": false
+      }
+    ]
+  }
+}

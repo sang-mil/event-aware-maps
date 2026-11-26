@@ -1,0 +1,378 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-03-01",
+    "day_label": "3월 1일 (토)",
+    "has_event": true,
+    "focus_hour": "21",
+    "supported_hours": [
+      "19",
+      "20",
+      "21",
+      "22",
+      "23"
+    ],
+    "summaries": {
+      "19": {
+        "highlight": "방이역",
+        "text": "에서 타면 가장 덜 붐빌 거예요",
+        "best_station_id": "bangi"
+      },
+      "20": {
+        "highlight": "방이역",
+        "text": "에서 타면 가장 덜 붐빌 거예요",
+        "best_station_id": "bangi"
+      },
+      "21": {
+        "highlight": "방이역",
+        "text": "에서 타면 가장 덜 붐빌 거예요",
+        "best_station_id": "bangi"
+      },
+      "22": {
+        "highlight": "방이역",
+        "text": "에서 타면 가장 덜 붐빌 거예요",
+        "best_station_id": "bangi"
+      },
+      "23": {
+        "highlight": "방이역",
+        "text": "에서 타면 가장 덜 붐빌 거예요",
+        "best_station_id": "bangi"
+      }
+    },
+    "ranking": {
+      "19": [
+        "bangi",
+        "olympic_park",
+        "hanseong_baekje",
+        "mongchontoseong"
+      ],
+      "20": [
+        "bangi",
+        "mongchontoseong",
+        "hanseong_baekje",
+        "olympic_park"
+      ],
+      "21": [
+        "bangi",
+        "mongchontoseong",
+        "hanseong_baekje",
+        "olympic_park"
+      ],
+      "22": [
+        "bangi",
+        "mongchontoseong",
+        "hanseong_baekje",
+        "olympic_park"
+      ],
+      "23": [
+        "bangi",
+        "mongchontoseong",
+        "hanseong_baekje",
+        "olympic_park"
+      ]
+    },
+    "stations": [
+      {
+        "station_id": "olympic_park",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 410,
+            "baseline": 477,
+            "ratio": 0.9,
+            "level": "normal",
+            "message": "410명, 행사 없는 평일과 비슷",
+            "recommended": true
+          },
+          {
+            "hour": "20",
+            "expected": 961,
+            "baseline": 378,
+            "ratio": 2.5,
+            "level": "crowded",
+            "message": "961명, 행사 없는 평일의 2.5배",
+            "recommended": false
+          },
+          {
+            "hour": "21",
+            "expected": 3741,
+            "baseline": 332,
+            "ratio": 11.3,
+            "level": "crowded",
+            "message": "3,741명, 행사 없는 평일의 11.3배",
+            "recommended": false
+          },
+          {
+            "hour": "22",
+            "expected": 1972,
+            "baseline": 241,
+            "ratio": 8.2,
+            "level": "crowded",
+            "message": "1,972명, 행사 없는 평일의 8.2배",
+            "recommended": false
+          },
+          {
+            "hour": "23",
+            "expected": 266,
+            "baseline": 77,
+            "ratio": 3.5,
+            "level": "crowded",
+            "message": "266명, 행사 없는 평일의 3.5배",
+            "recommended": false
+          }
+        ]
+      },
+      {
+        "station_id": "bangi",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 318,
+            "baseline": 388,
+            "ratio": 0.8,
+            "level": "normal",
+            "message": "318명, 행사 없는 평일의 0.8배",
+            "recommended": false
+          },
+          {
+            "hour": "20",
+            "expected": 238,
+            "baseline": 336,
+            "ratio": 0.7,
+            "level": "relaxed",
+            "message": "238명, 행사 없는 평일의 0.7배",
+            "recommended": true
+          },
+          {
+            "hour": "21",
+            "expected": 367,
+            "baseline": 413,
+            "ratio": 0.9,
+            "level": "normal",
+            "message": "367명, 행사 없는 평일과 비슷",
+            "recommended": false
+          },
+          {
+            "hour": "22",
+            "expected": 386,
+            "baseline": 431,
+            "ratio": 0.9,
+            "level": "normal",
+            "message": "386명, 행사 없는 평일과 비슷",
+            "recommended": false
+          },
+          {
+            "hour": "23",
+            "expected": 72,
+            "baseline": 87,
+            "ratio": 0.8,
+            "level": "normal",
+            "message": "72명, 행사 없는 평일의 0.8배",
+            "recommended": false
+          }
+        ]
+      },
+      {
+        "station_id": "mongchontoseong",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 380,
+            "baseline": 434,
+            "ratio": 0.9,
+            "level": "normal",
+            "message": "380명, 행사 없는 평일과 비슷",
+            "recommended": false
+          },
+          {
+            "hour": "20",
+            "expected": 274,
+            "baseline": 326,
+            "ratio": 0.8,
+            "level": "normal",
+            "message": "274명, 행사 없는 평일의 0.8배",
+            "recommended": true
+          },
+          {
+            "hour": "21",
+            "expected": 322,
+            "baseline": 329,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "322명, 행사 없는 평일과 비슷",
+            "recommended": false
+          },
+          {
+            "hour": "22",
+            "expected": 274,
+            "baseline": 265,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "274명, 행사 없는 평일과 비슷",
+            "recommended": false
+          },
+          {
+            "hour": "23",
+            "expected": 116,
+            "baseline": 113,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "116명, 행사 없는 평일과 비슷",
+            "recommended": false
+          }
+        ]
+      },
+      {
+        "station_id": "sports_complex",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 632,
+            "baseline": 663,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "632명, 행사 없는 평일과 비슷",
+            "recommended": true
+          },
+          {
+            "hour": "20",
+            "expected": 543,
+            "baseline": 531,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "543명, 행사 없는 평일과 비슷",
+            "recommended": false
+          },
+          {
+            "hour": "21",
+            "expected": 1247,
+            "baseline": 1056,
+            "ratio": 1.2,
+            "level": "normal",
+            "message": "1,247명, 행사 없는 평일의 1.2배",
+            "recommended": false
+          },
+          {
+            "hour": "22",
+            "expected": 640,
+            "baseline": 370,
+            "ratio": 1.7,
+            "level": "crowded",
+            "message": "640명, 행사 없는 평일의 1.7배",
+            "recommended": false
+          },
+          {
+            "hour": "23",
+            "expected": 237,
+            "baseline": 159,
+            "ratio": 1.5,
+            "level": "normal",
+            "message": "237명, 행사 없는 평일의 1.5배",
+            "recommended": false
+          }
+        ]
+      },
+      {
+        "station_id": "jamsil_saenae",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 1034,
+            "baseline": 1164,
+            "ratio": 0.9,
+            "level": "normal",
+            "message": "1,034명, 행사 없는 평일과 비슷",
+            "recommended": true
+          },
+          {
+            "hour": "20",
+            "expected": 894,
+            "baseline": 968,
+            "ratio": 0.9,
+            "level": "normal",
+            "message": "894명, 행사 없는 평일과 비슷",
+            "recommended": false
+          },
+          {
+            "hour": "21",
+            "expected": 998,
+            "baseline": 935,
+            "ratio": 1.1,
+            "level": "normal",
+            "message": "998명, 행사 없는 평일과 비슷",
+            "recommended": false
+          },
+          {
+            "hour": "22",
+            "expected": 993,
+            "baseline": 859,
+            "ratio": 1.2,
+            "level": "normal",
+            "message": "993명, 행사 없는 평일의 1.2배",
+            "recommended": false
+          },
+          {
+            "hour": "23",
+            "expected": 466,
+            "baseline": 424,
+            "ratio": 1.1,
+            "level": "normal",
+            "message": "466명, 행사 없는 평일과 비슷",
+            "recommended": false
+          }
+        ]
+      },
+      {
+        "station_id": "hanseong_baekje",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 126,
+            "baseline": 144,
+            "ratio": 0.9,
+            "level": "normal",
+            "message": "126명, 행사 없는 평일과 비슷",
+            "recommended": true
+          },
+          {
+            "hour": "20",
+            "expected": 101,
+            "baseline": 107,
+            "ratio": 0.9,
+            "level": "normal",
+            "message": "101명, 행사 없는 평일과 비슷",
+            "recommended": false
+          },
+          {
+            "hour": "21",
+            "expected": 115,
+            "baseline": 99,
+            "ratio": 1.2,
+            "level": "normal",
+            "message": "115명, 행사 없는 평일의 1.2배",
+            "recommended": false
+          },
+          {
+            "hour": "22",
+            "expected": 86,
+            "baseline": 75,
+            "ratio": 1.2,
+            "level": "normal",
+            "message": "86명, 행사 없는 평일의 1.2배",
+            "recommended": false
+          },
+          {
+            "hour": "23",
+            "expected": 26,
+            "baseline": 24,
+            "ratio": 1.1,
+            "level": "normal",
+            "message": "26명, 행사 없는 평일과 비슷",
+            "recommended": false
+          }
+        ]
+      }
+    ]
+  }
+}

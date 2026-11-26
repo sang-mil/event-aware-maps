@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "olympic_park",
+    "date": "2025-11-10",
+    "focus_hour": "22",
+    "alternatives_title": "22시대에 타야 한다면",
+    "alternatives": [
+      {
+        "station_id": "bangi",
+        "level": "normal",
+        "walk_min": null,
+        "message": "방이역 372명, 평소와 비슷"
+      },
+      {
+        "station_id": "mongchontoseong",
+        "level": "normal",
+        "walk_min": null,
+        "message": "몽촌토성역 232명, 평소와 비슷"
+      },
+      {
+        "station_id": "hanseong_baekje",
+        "level": "normal",
+        "walk_min": null,
+        "message": "한성백제역 83명, 평소의 1.2배"
+      }
+    ],
+    "notify_hour": "20",
+    "no_data": null,
+    "focus_level": "crowded",
+    "headline": {
+      "highlight": "20시대",
+      "text": "에 타면 가장 덜 붐빌 거예요"
+    },
+    "description": "22시대 2,919명, 평소의 14.5배.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 464,
+        "baseline": 464,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "464명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 308,
+        "baseline": 368,
+        "ratio": 0.8,
+        "level": "normal",
+        "message": "308명, 평소의 0.8배",
+        "recommended": true
+      },
+      {
+        "hour": "21",
+        "expected": 864,
+        "baseline": 290,
+        "ratio": 3.0,
+        "level": "crowded",
+        "message": "864명, 평소의 3.0배",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 2919,
+        "baseline": 202,
+        "ratio": 14.5,
+        "level": "crowded",
+        "message": "2,919명, 평소의 14.5배",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 495,
+        "baseline": 68,
+        "ratio": 7.3,
+        "level": "crowded",
+        "message": "495명, 평소의 7.3배",
+        "recommended": false
+      }
+    ]
+  }
+}

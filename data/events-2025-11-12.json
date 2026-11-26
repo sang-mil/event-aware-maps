@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-11-12",
+    "events": [],
+    "next_event": {
+      "id": "evt_20251113_29900b",
+      "title": "2025 김동률 콘서트 산책",
+      "venue_id": null,
+      "date": "2025-11-13"
+    }
+  }
+}

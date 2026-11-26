@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "olympic_park",
+    "date": "2025-01-17",
+    "focus_hour": "23",
+    "alternatives_title": "23시대에 타야 한다면",
+    "alternatives": [
+      {
+        "station_id": "bangi",
+        "level": "normal",
+        "walk_min": null,
+        "message": "방이역 77명, 행사 없는 평일과 비슷"
+      },
+      {
+        "station_id": "mongchontoseong",
+        "level": "normal",
+        "walk_min": null,
+        "message": "몽촌토성역 115명, 행사 없는 평일과 비슷"
+      },
+      {
+        "station_id": "hanseong_baekje",
+        "level": "normal",
+        "walk_min": null,
+        "message": "한성백제역 32명, 행사 없는 평일의 1.3배"
+      }
+    ],
+    "notify_hour": "21",
+    "no_data": null,
+    "focus_level": "crowded",
+    "headline": {
+      "highlight": "21시대",
+      "text": "에 타면 가장 덜 붐빌 거예요"
+    },
+    "description": "23시대 1,632명, 행사 없는 평일의 21.2배.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 574,
+        "baseline": 574,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "574명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 442,
+        "baseline": 442,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "442명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 298,
+        "baseline": 332,
+        "ratio": 0.9,
+        "level": "normal",
+        "message": "298명, 행사 없는 평일과 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "22",
+        "expected": 513,
+        "baseline": 241,
+        "ratio": 2.1,
+        "level": "crowded",
+        "message": "513명, 행사 없는 평일의 2.1배",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 1632,
+        "baseline": 77,
+        "ratio": 21.2,
+        "level": "crowded",
+        "message": "1,632명, 행사 없는 평일의 21.2배",
+        "recommended": false
+      }
+    ]
+  }
+}

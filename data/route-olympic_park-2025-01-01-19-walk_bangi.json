@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "option_id": "walk_bangi",
+    "board_station_id": "bangi",
+    "to_station_id": null,
+    "walk_min": null,
+    "distance_km": null,
+    "arrive_at": null,
+    "last_train_at": null,
+    "level": "normal",
+    "message": "380명, 평소와 비슷",
+    "steps": [
+      {
+        "type": "start",
+        "title": "출발",
+        "detail": "19시대 출발",
+        "exit_no": null,
+        "direction": null
+      },
+      {
+        "type": "walk",
+        "title": "방이역까지 걷기",
+        "detail": null,
+        "exit_no": null,
+        "direction": null
+      },
+      {
+        "type": "board",
+        "title": "방이역에서 타기",
+        "detail": "5호선",
+        "exit_no": null,
+        "direction": null
+      }
+    ],
+    "compare": {
+      "hour": "19",
+      "items": [
+        {
+          "station_id": "olympic_park",
+          "expected": 633
+        },
+        {
+          "station_id": "bangi",
+          "expected": 380
+        }
+      ],
+      "note": "19시대 예상: 올림픽공원역 633명, 방이역 380명"
+    },
+    "map_links": null
+  }
+}

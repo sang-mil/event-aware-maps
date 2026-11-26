@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "hanseong_baekje",
+    "date": "2025-08-15",
+    "focus_hour": "23",
+    "alternatives_title": "23시대에 타야 한다면",
+    "alternatives": [
+      {
+        "station_id": "bangi",
+        "level": "normal",
+        "walk_min": null,
+        "message": "방이역 73명, 행사 없는 평일의 0.8배"
+      },
+      {
+        "station_id": "mongchontoseong",
+        "level": "normal",
+        "walk_min": null,
+        "message": "몽촌토성역 116명, 행사 없는 평일과 비슷"
+      }
+    ],
+    "notify_hour": "21",
+    "no_data": null,
+    "focus_level": "crowded",
+    "headline": {
+      "highlight": "21시대",
+      "text": "에 타면 가장 덜 붐빌 거예요"
+    },
+    "description": "23시대 37명, 행사 없는 평일의 1.5배.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 154,
+        "baseline": 154,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "154명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 114,
+        "baseline": 114,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "114명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 84,
+        "baseline": 99,
+        "ratio": 0.8,
+        "level": "normal",
+        "message": "84명, 행사 없는 평일의 0.8배",
+        "recommended": true
+      },
+      {
+        "hour": "22",
+        "expected": 77,
+        "baseline": 75,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "77명, 행사 없는 평일과 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 37,
+        "baseline": 24,
+        "ratio": 1.5,
+        "level": "crowded",
+        "message": "37명, 행사 없는 평일의 1.5배",
+        "recommended": false
+      }
+    ]
+  }
+}

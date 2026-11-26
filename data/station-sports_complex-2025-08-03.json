@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "sports_complex",
+    "date": "2025-08-03",
+    "focus_hour": "19",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "crowded",
+    "headline": {
+      "highlight": "22시대",
+      "text": "에 타면 가장 덜 붐빌 거예요"
+    },
+    "description": "19시대 1,140명, 행사 없는 평일의 1.7배.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 1140,
+        "baseline": 663,
+        "ratio": 1.7,
+        "level": "crowded",
+        "message": "1,140명, 행사 없는 평일의 1.7배",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 1218,
+        "baseline": 531,
+        "ratio": 2.3,
+        "level": "crowded",
+        "message": "1,218명, 행사 없는 평일의 2.3배",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 1268,
+        "baseline": 1056,
+        "ratio": 1.2,
+        "level": "normal",
+        "message": "1,268명, 행사 없는 평일의 1.2배",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 370,
+        "baseline": 370,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "370명, 행사 없는 평일과 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "23",
+        "expected": 111,
+        "baseline": 111,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "111명, 평소와 비슷",
+        "recommended": false
+      }
+    ]
+  }
+}

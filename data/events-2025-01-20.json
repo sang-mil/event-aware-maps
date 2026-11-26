@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-01-20",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250125_e60729",
+      "title": "2025 BABYMONSTER 1st WORLD TOUR 〈HELLO MONSTERS〉 IN SEOUL",
+      "venue_id": null,
+      "date": "2025-01-25"
+    }
+  }
+}

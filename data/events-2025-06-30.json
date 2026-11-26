@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-06-30",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250704_bacd39",
+      "title": "2025 RIIZE CONCERT TOUR [RIIZING LOUD] IN SEOUL",
+      "venue_id": null,
+      "date": "2025-07-04"
+    }
+  }
+}

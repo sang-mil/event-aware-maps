@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-01-07",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250110_97e2b9",
+      "title": "나훈아 2024 고마웠습니다-라스트 콘서트(LAST CONCERT)",
+      "venue_id": null,
+      "date": "2025-01-10"
+    }
+  }
+}

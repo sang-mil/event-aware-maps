@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "mongchontoseong",
+    "date": "2025-11-27",
+    "focus_hour": "20",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "20시대",
+      "text": " 예상: 보통"
+    },
+    "description": "20시대 329명, 평소와 비슷.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 437,
+        "baseline": 437,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "437명, 평소와 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "20",
+        "expected": 329,
+        "baseline": 329,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "329명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 352,
+        "baseline": 352,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "352명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 283,
+        "baseline": 283,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "283명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 124,
+        "baseline": 124,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "124명, 평소와 비슷",
+        "recommended": false
+      }
+    ]
+  }
+}

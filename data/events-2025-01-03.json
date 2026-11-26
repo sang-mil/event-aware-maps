@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-01-03",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250104_d1c8e5",
+      "title": "김희재 콘서트 HEERE WE GO",
+      "venue_id": null,
+      "date": "2025-01-04"
+    }
+  }
+}

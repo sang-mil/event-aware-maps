@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-06-15",
+    "events": [
+      {
+        "id": "evt_20250615_7bfcc6",
+        "type": "show",
+        "title": "뷰티풀 민트 라이프 2025",
+        "venue_id": null,
+        "area": "olympic_park",
+        "date": "2025-06-15",
+        "start_at": null,
+        "end_at": "2025-06-15T22:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": false
+      },
+      {
+        "id": "evt_20250615_a6e0eb",
+        "type": "show",
+        "title": "뷰티풀 민트 라이프 2025, 2025 IRENE & SEULGI Concert Tour [ BALANCE ] in SEOUL",
+        "venue_id": null,
+        "area": "olympic_park",
+        "date": "2025-06-15",
+        "start_at": null,
+        "end_at": "2025-06-15T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": false
+      }
+    ],
+    "next_event": null
+  }
+}

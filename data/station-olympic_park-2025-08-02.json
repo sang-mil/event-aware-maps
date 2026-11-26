@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "olympic_park",
+    "date": "2025-08-02",
+    "focus_hour": "20",
+    "alternatives_title": "20시대에 타야 한다면",
+    "alternatives": [
+      {
+        "station_id": "bangi",
+        "level": "relaxed",
+        "walk_min": null,
+        "message": "방이역 232명, 행사 없는 평일의 0.7배"
+      },
+      {
+        "station_id": "mongchontoseong",
+        "level": "normal",
+        "walk_min": null,
+        "message": "몽촌토성역 314명, 행사 없는 평일과 비슷"
+      },
+      {
+        "station_id": "hanseong_baekje",
+        "level": "normal",
+        "walk_min": null,
+        "message": "한성백제역 140명, 행사 없는 평일의 1.3배"
+      }
+    ],
+    "notify_hour": "23",
+    "no_data": null,
+    "focus_level": "crowded",
+    "headline": {
+      "highlight": "23시대",
+      "text": "에 타면 가장 덜 붐빌 거예요"
+    },
+    "description": "20시대 7,385명, 행사 없는 평일의 19.6배.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 1723,
+        "baseline": 477,
+        "ratio": 3.6,
+        "level": "crowded",
+        "message": "1,723명, 행사 없는 평일의 3.6배",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 7385,
+        "baseline": 378,
+        "ratio": 19.6,
+        "level": "crowded",
+        "message": "7,385명, 행사 없는 평일의 19.6배",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 4534,
+        "baseline": 332,
+        "ratio": 13.7,
+        "level": "crowded",
+        "message": "4,534명, 행사 없는 평일의 13.7배",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 736,
+        "baseline": 241,
+        "ratio": 3.1,
+        "level": "crowded",
+        "message": "736명, 행사 없는 평일의 3.1배",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 77,
+        "baseline": 77,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "77명, 행사 없는 평일과 비슷",
+        "recommended": true
+      }
+    ]
+  }
+}

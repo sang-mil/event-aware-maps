@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-07-08",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250711_8fdb4a",
+      "title": "HIGHLIGHT LIVE 2025 [RIDE OR DIE]",
+      "venue_id": null,
+      "date": "2025-07-11"
+    }
+  }
+}

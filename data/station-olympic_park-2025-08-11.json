@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "olympic_park",
+    "date": "2025-08-11",
+    "focus_hour": "20",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "20시대",
+      "text": " 예상: 보통"
+    },
+    "description": "20시대 366명, 평소와 비슷.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 464,
+        "baseline": 464,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "464명, 평소와 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "20",
+        "expected": 366,
+        "baseline": 366,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "366명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 290,
+        "baseline": 290,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "290명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 201,
+        "baseline": 201,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "201명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 70,
+        "baseline": 70,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "70명, 평소와 비슷",
+        "recommended": false
+      }
+    ]
+  }
+}

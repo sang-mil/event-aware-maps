@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "bangi",
+    "date": "2025-06-03",
+    "focus_hour": "20",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "20시대",
+      "text": " 예상: 보통"
+    },
+    "description": "20시대 333명, 평소와 비슷.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 383,
+        "baseline": 383,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "383명, 평소와 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "20",
+        "expected": 333,
+        "baseline": 333,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "333명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 420,
+        "baseline": 420,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "420명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 450,
+        "baseline": 450,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "450명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 81,
+        "baseline": 81,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "81명, 평소와 비슷",
+        "recommended": false
+      }
+    ]
+  }
+}

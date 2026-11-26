@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-06-21",
+    "events": [
+      {
+        "id": "evt_20250621_ca8ebc",
+        "type": "show",
+        "title": "[서울 앵콜] 2025 박지현 콘서트 쇼맨쉽 SHOWMANSHIP",
+        "venue_id": null,
+        "area": "olympic_park",
+        "date": "2025-06-21",
+        "start_at": null,
+        "end_at": "2025-06-21T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": false
+      }
+    ],
+    "next_event": null
+  }
+}

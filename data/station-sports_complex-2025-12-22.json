@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "sports_complex",
+    "date": "2025-12-22",
+    "focus_hour": "20",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "20시대",
+      "text": " 예상: 보통"
+    },
+    "description": "20시대 466명, 평소와 비슷.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 603,
+        "baseline": 603,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "603명, 평소와 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "20",
+        "expected": 466,
+        "baseline": 466,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "466명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 486,
+        "baseline": 486,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "486명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 292,
+        "baseline": 292,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "292명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 122,
+        "baseline": 122,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "122명, 평소와 비슷",
+        "recommended": false
+      }
+    ]
+  }
+}

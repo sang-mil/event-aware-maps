@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-03-10",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250315_248690",
+      "title": "2024-25 aespa LIVE TOUR－SYNK：PARALLEL LINE－ENCORE",
+      "venue_id": null,
+      "date": "2025-03-15"
+    }
+  }
+}

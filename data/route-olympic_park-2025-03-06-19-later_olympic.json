@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "option_id": "later_olympic",
+    "board_station_id": "olympic_park",
+    "to_station_id": null,
+    "walk_min": null,
+    "distance_km": null,
+    "arrive_at": null,
+    "last_train_at": null,
+    "level": "normal",
+    "message": "386명, 평소와 비슷",
+    "steps": [
+      {
+        "type": "start",
+        "title": "출발",
+        "detail": "19시대 출발",
+        "exit_no": null,
+        "direction": null
+      },
+      {
+        "type": "walk",
+        "title": "올림픽공원역까지 걷기",
+        "detail": null,
+        "exit_no": null,
+        "direction": null
+      },
+      {
+        "type": "board",
+        "title": "올림픽공원역에서 20시대에 타기",
+        "detail": "5·9호선",
+        "exit_no": null,
+        "direction": null
+      }
+    ],
+    "compare": {
+      "hour": "20",
+      "items": [
+        {
+          "station_id": "olympic_park",
+          "expected": 386
+        },
+        {
+          "station_id": "bangi",
+          "expected": 348
+        }
+      ],
+      "note": "20시대 예상: 올림픽공원역 386명, 방이역 348명"
+    },
+    "map_links": null
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "condition_label": {
+      "to_name": null,
+      "hour_label": "19시대 출발"
+    },
+    "headline": {
+      "highlight": "20시대",
+      "text": "에 타면 가장 덜 붐빌 거예요"
+    },
+    "last_train": null,
+    "options": [
+      {
+        "id": "later_olympic",
+        "kind": "wait_later",
+        "recommended": true,
+        "title": "올림픽공원역에서 20시대에 타기",
+        "subtitle": "1시간 기다렸다 타기",
+        "station_id": "olympic_park",
+        "board_hour": "20",
+        "walk_min": null,
+        "expected": 347,
+        "level": "relaxed",
+        "compare_message": "347명, 평소의 0.8배"
+      },
+      {
+        "id": "walk_bangi",
+        "kind": "walk_to_other",
+        "recommended": false,
+        "title": "방이역에서 타기",
+        "subtitle": "가까운 다른 역까지 걸어가기",
+        "station_id": "bangi",
+        "board_hour": "19",
+        "walk_min": null,
+        "expected": 404,
+        "level": "normal",
+        "compare_message": "404명, 평소와 비슷"
+      },
+      {
+        "id": "now_olympic",
+        "kind": "board_now",
+        "recommended": false,
+        "title": "올림픽공원역에서 19시대에 타기",
+        "subtitle": "가장 가까운 역",
+        "station_id": "olympic_park",
+        "board_hour": "19",
+        "walk_min": null,
+        "expected": 574,
+        "level": "normal",
+        "compare_message": "574명, 평소와 비슷"
+      }
+    ]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "mongchontoseong",
+    "date": "2025-08-15",
+    "focus_hour": "23",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "23시대",
+      "text": " 예상: 보통"
+    },
+    "description": "23시대 116명, 행사 없는 평일과 비슷.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 426,
+        "baseline": 426,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "426명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 329,
+        "baseline": 329,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "329명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 285,
+        "baseline": 329,
+        "ratio": 0.9,
+        "level": "normal",
+        "message": "285명, 행사 없는 평일과 비슷",
+        "recommended": true
+      },
+      {
+        "hour": "22",
+        "expected": 243,
+        "baseline": 265,
+        "ratio": 0.9,
+        "level": "normal",
+        "message": "243명, 행사 없는 평일과 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 116,
+        "baseline": 113,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "116명, 행사 없는 평일과 비슷",
+        "recommended": false
+      }
+    ]
+  }
+}

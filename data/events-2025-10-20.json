@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-10-20",
+    "events": [],
+    "next_event": {
+      "id": "evt_20251025_3c0489",
+      "title": "NEXZ SPECIAL CONCERT〈ONE BEAT〉",
+      "venue_id": null,
+      "date": "2025-10-25"
+    }
+  }
+}

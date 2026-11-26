@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-01-19",
+    "events": [
+      {
+        "id": "evt_20250119_13e448",
+        "type": "show",
+        "title": "2025 DAVICHI CONCERT 〈A Stitch in Time〉, GFRIEND 10th Anniversary < Season of Memories >, I.M WORLD TOUR 〈Off The Beat〉 FINAL IN SEOUL",
+        "venue_id": null,
+        "area": "olympic_park",
+        "date": "2025-01-19",
+        "start_at": null,
+        "end_at": "2025-01-19T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": false
+      }
+    ],
+    "next_event": null
+  }
+}

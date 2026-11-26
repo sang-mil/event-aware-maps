@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-06-06",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250607_619c5f",
+      "title": "윤종신 전국투어 콘서트 그때 - 서울",
+      "venue_id": null,
+      "date": "2025-06-07"
+    }
+  }
+}

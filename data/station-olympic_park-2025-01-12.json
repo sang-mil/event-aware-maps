@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "olympic_park",
+    "date": "2025-01-12",
+    "focus_hour": "22",
+    "alternatives_title": "22시대에 타야 한다면",
+    "alternatives": [
+      {
+        "station_id": "bangi",
+        "level": "normal",
+        "walk_min": null,
+        "message": "방이역 417명, 행사 없는 평일과 비슷"
+      },
+      {
+        "station_id": "mongchontoseong",
+        "level": "normal",
+        "walk_min": null,
+        "message": "몽촌토성역 269명, 행사 없는 평일과 비슷"
+      },
+      {
+        "station_id": "hanseong_baekje",
+        "level": "normal",
+        "walk_min": null,
+        "message": "한성백제역 87명, 행사 없는 평일의 1.2배"
+      }
+    ],
+    "notify_hour": "20",
+    "no_data": null,
+    "focus_level": "crowded",
+    "headline": {
+      "highlight": "20시대",
+      "text": "에 타면 가장 덜 붐빌 거예요"
+    },
+    "description": "22시대 2,706명, 행사 없는 평일의 11.2배 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음).",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 477,
+        "baseline": 477,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "477명, 행사 없는 평일과 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 326,
+        "baseline": 378,
+        "ratio": 0.9,
+        "level": "normal",
+        "message": "326명, 행사 없는 평일과 비슷 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+        "recommended": true
+      },
+      {
+        "hour": "21",
+        "expected": 806,
+        "baseline": 332,
+        "ratio": 2.4,
+        "level": "crowded",
+        "message": "806명, 행사 없는 평일의 2.4배 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 2706,
+        "baseline": 241,
+        "ratio": 11.2,
+        "level": "crowded",
+        "message": "2,706명, 행사 없는 평일의 11.2배 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 432,
+        "baseline": 60,
+        "ratio": 7.2,
+        "level": "crowded",
+        "message": "432명, 평소의 7.2배",
+        "recommended": false
+      }
+    ]
+  }
+}

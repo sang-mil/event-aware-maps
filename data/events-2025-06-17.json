@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "date": "2025-06-17",
+    "events": [],
+    "next_event": {
+      "id": "evt_20250620_a7fe37",
+      "title": "［서울］뮤지컬 번개맨 시즌2 - 여름맞이 특별공연",
+      "venue_id": null,
+      "date": "2025-06-20"
+    }
+  }
+}

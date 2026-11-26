@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:09:33+09:00",
+  "data": {
+    "station_id": "bangi",
+    "date": "2025-07-18",
+    "focus_hour": "23",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "relaxed",
+    "headline": {
+      "highlight": "23시대",
+      "text": " 예상: 여유"
+    },
+    "description": "23시대 64명, 행사 없는 평일의 0.7배.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 404,
+        "baseline": 404,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "404명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "20",
+        "expected": 352,
+        "baseline": 352,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "352명, 평소와 비슷",
+        "recommended": false
+      },
+      {
+        "hour": "21",
+        "expected": 332,
+        "baseline": 413,
+        "ratio": 0.8,
+        "level": "normal",
+        "message": "332명, 행사 없는 평일의 0.8배",
+        "recommended": false
+      },
+      {
+        "hour": "22",
+        "expected": 352,
+        "baseline": 431,
+        "ratio": 0.8,
+        "level": "normal",
+        "message": "352명, 행사 없는 평일의 0.8배",
+        "recommended": false
+      },
+      {
+        "hour": "23",
+        "expected": 64,
+        "baseline": 87,
+        "ratio": 0.7,
+        "level": "relaxed",
+        "message": "64명, 행사 없는 평일의 0.7배",
+        "recommended": true
+      }
+    ]
+  }
+}
