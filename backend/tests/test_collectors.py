@@ -73,6 +73,35 @@ def test_kspo_short_page_stops_instead_of_skipping():
         kspo.fetch_all("perf", SECRET, get=lambda url, source: kspo_xml(100, 5000))
 
 
+def test_kspo_page_size_is_used_in_url_and_paging():
+    calls = []
+
+    def fake_get(url, source):
+        q = parse_qs(urlparse(url).query)
+        calls.append((q["numOfRows"][0], q["pageNo"][0]))
+        return kspo_xml(100 if q["pageNo"][0] != "3" else 50, 250)
+
+    result = kspo.fetch_all("linked", SECRET, get=fake_get, page_size=100)
+    assert len(result["items"]) == 250
+    assert calls == [("100", "1"), ("100", "2"), ("100", "3")]
+
+
+def test_http_429_message_has_no_key(monkeypatch):
+    import urllib.error
+    import urllib.request
+
+    from collectors import http
+
+    def raise_429(req, timeout):
+        raise urllib.error.HTTPError(req.full_url, 429, "Too Many Requests", {}, None)
+
+    monkeypatch.setattr(urllib.request, "urlopen", raise_429)
+    with pytest.raises(CollectError) as e:
+        http.get_text(kspo.page_url("linked", SECRET, 1), "kspo_linked")
+    assert "429" in str(e.value) and "--page-size" in str(e.value)
+    assert SECRET not in str(e.value)
+
+
 # ── 서울 지하철 ────────────────────────────────────────
 
 def test_subway_parse_rows():

@@ -52,7 +52,7 @@ KEY_ENV = {
 }
 
 
-def cmd_collect(source: str, month: str | None, raw_dir: Path) -> int:
+def cmd_collect(source: str, month: str | None, raw_dir: Path, page_size: int | None = None) -> int:
     env = KEY_ENV[source]
     key = os.environ.get(env, "").strip()
     if not key:
@@ -66,7 +66,8 @@ def cmd_collect(source: str, month: str | None, raw_dir: Path) -> int:
             result = seoul_subway.fetch_month(key, month)
             name = f"subway_month_{month}.json"
         else:
-            result = kspo.fetch_all(source.removeprefix("kspo_"), key)
+            extra = {"page_size": page_size} if page_size else {}
+            result = kspo.fetch_all(source.removeprefix("kspo_"), key, **extra)
             name = f"{source}.json"
     except CollectError as e:
         print(f"수집 실패: {e}")
@@ -104,6 +105,7 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("source", choices=sorted(KEY_ENV))
     c.add_argument("--month", help="YYYYMM (subway_month 전용)")
     c.add_argument("--raw-dir", type=Path, default=RAW_DIR)
+    c.add_argument("--page-size", type=int, help="KSPO 한 번에 받을 건수 (기본 1000)")
     sub.add_parser("build", help="행사 반영, 혼잡 계산, 추천 생성")
     p = sub.add_parser("publish", help="검증 후 발행")
     p.add_argument("--src", type=Path, required=True)
@@ -111,7 +113,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.command == "collect":
-        return cmd_collect(args.source, args.month, args.raw_dir)
+        return cmd_collect(args.source, args.month, args.raw_dir, args.page_size)
     if args.command == "publish":
         return cmd_publish(args.src, args.out)
     print(f"'{args.command}' 는 아직 만들지 않았습니다 (2단계 다음 작업).")
