@@ -3,7 +3,8 @@
     python backend/cli.py collect kspo_linked              # KSPO 연계 데이터(1시간 단위 공연·주차·날씨) 전체
     python backend/cli.py collect kspo_perf                # KSPO 공연정보 전체
     python backend/cli.py collect subway_month --month 202510   # 지하철 월별·시간대별 승하차
-    python backend/cli.py build-db                         # 원본(raw) → SQLite 한 파일 (backend/data/tumgil.db)
+    python backend/cli.py build-db                         # 원본(raw) → SQLite 한 파일 (backend/data/tumgil.db). 원본 CSV가 없으면 요약(seed) 사용
+    python backend/cli.py export-seed                      # DB → 승하차 요약 backend/data/seed/ridership_daily.csv.gz
     python backend/cli.py build --out 폴더 [--as-of 시각]   # 행사 반영·혼잡 계산 → calendar·events·forecast·station·compare·route JSON 검증 후 발행
     python backend/cli.py backtest                         # 공연 날마다 그날을 빼고 예측해 실제와 비교 (혼잡 단계 적중률)
     python backend/cli.py publish --src 폴더 --out 폴더      # src 의 JSON을 검증해 out 에 발행
@@ -25,7 +26,7 @@ BACKEND = Path(__file__).resolve().parent
 sys.path.insert(0, str(BACKEND))
 
 from collectors import CollectError, kspo, seoul_subway  # noqa: E402
-from normalize import db as normalize_db  # noqa: E402
+from normalize import db as normalize_db, seed as normalize_seed  # noqa: E402
 from congestion import backtest as cg_backtest, load as cg_load, model as cg_model, outputs as cg_outputs  # noqa: E402
 from recommend import compare as rc_compare  # noqa: E402
 from events import detect as ev_detect, load as ev_load, outputs as ev_outputs  # noqa: E402
@@ -33,6 +34,7 @@ from publish import PublishError, publish, wrap  # noqa: E402
 
 RAW_DIR = BACKEND / "data" / "raw"
 DB_PATH = BACKEND / "data" / "tumgil.db"  # backend/.gitignore 로 git에 올라가지 않음
+SEED_PATH = BACKEND / "data" / "seed" / "ridership_daily.csv.gz"  # 대상 역 승하차 요약 (git에 올림)
 ENV_FILE = BACKEND / ".env"  # backend/.env. .gitignore 로 git에 올라가지 않음. 형식은 backend/env.example
 KST = timezone(timedelta(hours=9))
 
@@ -96,9 +98,9 @@ def cmd_collect(source: str, month: str | None, raw_dir: Path, page_size: int | 
     return 0
 
 
-def cmd_build_db(raw_dir: Path, db_path: Path) -> int:
+def cmd_build_db(raw_dir: Path, db_path: Path, seed_path: Path = SEED_PATH) -> int:
     try:
-        report = normalize_db.build(raw_dir, db_path)
+        report = normalize_db.build(raw_dir, db_path, seed_path)
     except (ValueError, OSError) as e:
         print(f"DB 만들기 실패 (기존 DB는 그대로): {e}")
         return 1
@@ -107,6 +109,15 @@ def cmd_build_db(raw_dir: Path, db_path: Path) -> int:
         print(f"  {table}: {n}행")
     for reason, n in report["skipped"].items():
         print(f"  건너뜀 {reason}: {n}행")
+    return 0
+
+
+def cmd_export_seed(db_path: Path, out: Path) -> int:
+    if not db_path.is_file():
+        print(f"DB가 없습니다. 먼저 build-db 를 실행하세요: {db_path}")
+        return 1
+    n = normalize_seed.export(db_path, out)
+    print(f"승하차 요약 {n}행 → {out} ({out.stat().st_size / 1024:.0f}KB)")
     return 0
 
 
@@ -194,6 +205,10 @@ def main(argv: list[str] | None = None) -> int:
     b = sub.add_parser("build-db", help="원본 → SQLite")
     b.add_argument("--raw-dir", type=Path, default=RAW_DIR)
     b.add_argument("--db", type=Path, default=DB_PATH)
+    b.add_argument("--seed", type=Path, default=SEED_PATH)
+    es = sub.add_parser("export-seed", help="DB → 승하차 요약 파일 (원본 CSV가 없는 곳에서 build-db 가 씀)")
+    es.add_argument("--db", type=Path, default=DB_PATH)
+    es.add_argument("--out", type=Path, default=SEED_PATH)
     bd = sub.add_parser("build", help="행사 반영 → 화면용 JSON 발행")
     bd.add_argument("--db", type=Path, default=DB_PATH)
     bd.add_argument("--out", type=Path, required=True)
@@ -216,7 +231,9 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         return cmd_build(args.db, args.out, as_of)
     if args.command == "build-db":
-        return cmd_build_db(args.raw_dir, args.db)
+        return cmd_build_db(args.raw_dir, args.db, args.seed)
+    if args.command == "export-seed":
+        return cmd_export_seed(args.db, args.out)
     if args.command == "publish":
         return cmd_publish(args.src, args.out)
     print(f"'{args.command}' 는 아직 만들지 않았습니다 (2단계 다음 작업).")
