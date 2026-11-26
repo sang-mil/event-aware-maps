@@ -6,7 +6,7 @@
     python backend/cli.py build                            # 행사 반영 → 혼잡 계산 → 추천 (다음 작업)
     python backend/cli.py publish --src 폴더 --out 폴더      # src 의 JSON을 검증해 out 에 발행
 
-collect 는 인증키를 환경변수에서 읽고, 결과를 backend/data/raw/ 에 저장한다(이 폴더는 git에 올라가지 않음).
+collect 는 인증키를 환경변수에서 읽고(backend/.env 파일이 있으면 그것도 읽음, 형식은 backend/env.example), 결과를 backend/data/raw/ 에 저장한다(이 폴더는 git에 올라가지 않음).
 publish 는 하나라도 검증에 실패하면 out 의 기존 파일을 그대로 두고 종료 코드 1로 끝난다.
 """
 
@@ -26,7 +26,23 @@ from collectors import CollectError, kspo, seoul_subway  # noqa: E402
 from publish import PublishError, publish  # noqa: E402
 
 RAW_DIR = BACKEND / "data" / "raw"
+ENV_FILE = BACKEND / ".env"  # backend/.env. .gitignore 로 git에 올라가지 않음. 형식은 backend/env.example
 KST = timezone(timedelta(hours=9))
+
+
+def load_env_file(path: Path) -> None:
+    """KEY=값 줄을 읽어 환경변수로 넣는다. 이미 있는 환경변수는 덮어쓰지 않는다. 값은 출력하지 않는다."""
+    if not path.is_file():
+        return
+    for line in path.read_text(encoding="utf-8-sig").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        name, value = (part.strip() for part in line.split("=", 1))
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        if name and value:
+            os.environ.setdefault(name, value)
 
 # 수집 종류 → 필요한 환경변수
 KEY_ENV = {
@@ -103,4 +119,5 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
+    load_env_file(ENV_FILE)
     sys.exit(main())

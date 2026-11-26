@@ -127,6 +127,20 @@ def test_cli_collect_saves_raw_without_key(tmp_path, monkeypatch, capsys):
     assert SECRET not in capsys.readouterr().out
 
 
+def test_load_env_file_does_not_override(tmp_path, monkeypatch):
+    env = tmp_path / "test.env"
+    env.write_text('# 주석\nKSPO_PERF_KEY="from-file"\nSEOUL_KEY=from-file\nEMPTY_KEY=\n', encoding="utf-8")
+    monkeypatch.delenv("KSPO_PERF_KEY", raising=False)
+    monkeypatch.delenv("EMPTY_KEY", raising=False)
+    monkeypatch.setenv("SEOUL_KEY", "already-set")
+    cli.load_env_file(env)
+    import os
+    assert os.environ["KSPO_PERF_KEY"] == "from-file"
+    assert os.environ["SEOUL_KEY"] == "already-set"
+    assert "EMPTY_KEY" not in os.environ
+    cli.load_env_file(tmp_path / "없는파일.env")  # 파일이 없어도 오류 없음
+
+
 def test_cli_collect_failure_keeps_previous_file(tmp_path, monkeypatch):
     (tmp_path / "subway_month_209901.json").write_text("이전 파일", encoding="utf-8")
     monkeypatch.setenv("SEOUL_KEY", SECRET)
