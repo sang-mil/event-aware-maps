@@ -46,6 +46,7 @@
         "venue_id": "kspo_dome",
         "start_at": null,
         "end_at": null,
+        "end_at_source": null,
         "type": "show"
       },
       {
@@ -54,6 +55,7 @@
         "venue_id": "olympic_hall",
         "start_at": null,
         "end_at": null,
+        "end_at_source": null,
         "type": "show"
       },
       {
@@ -62,6 +64,7 @@
         "venue_id": null,
         "start_at": null,
         "end_at": null,
+        "end_at_source": null,
         "type": "show"
       }
     ],

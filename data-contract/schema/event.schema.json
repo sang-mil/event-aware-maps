@@ -29,6 +29,10 @@
               "venue_id": { "$ref": "common.schema.json#/$defs/id_or_null" },
               "start_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
               "end_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+              "end_at_source": {
+                "enum": ["scheduled", "estimated", null],
+                "description": "(2026-11 추가, 선택 필드) end_at 의 근거. scheduled 공식 일정, estimated 추정, null 모름"
+              },
               "type": { "$ref": "common.schema.json#/$defs/event_type" }
             },
             "required": ["id", "title", "venue_id", "start_at", "end_at", "type"],
