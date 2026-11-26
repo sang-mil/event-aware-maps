@@ -21,8 +21,10 @@ import {
   Time,
   TimeSheet,
   Walk,
+  stationName,
+  venueName,
 } from '@/components/ui';
-import { DEFAULT_ORIGIN_STATION, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track } from '@/lib/app';
+import { DEFAULT_ORIGIN_STATION, demoState, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 /** 지도 위 배치 (지도 API를 정하기 전 개략도, 390px 화면 기준 좌표) */
@@ -84,7 +86,7 @@ export function MapScreen() {
         <span style={{ position: 'absolute', left: 226, top: 182, fontSize: 13, fontWeight: 700, color: '#2E6B3D' }}>올림픽공원</span>
         <span style={{ position: 'absolute', left: 28, top: 252, fontSize: 13, fontWeight: 700, color: '#4A4F5C' }}>잠실종합운동장</span>
         <span style={{ position: 'absolute', right: 16, top: 130, fontSize: 12, color: '#4A4F5C', background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>지도 API 연동 전 개략도</span>
-        {MAP_VENUES.map((v) => {
+        {MAP_VENUES.filter((v) => vn[v.id]).map((v) => {
           const e = ev.value.data.events.find((x) => x.venue_id === v.id);
           const game = e?.type === 'game';
           return (
@@ -98,7 +100,7 @@ export function MapScreen() {
               <span style={{ width: 32, height: 32, borderRadius: 9, background: game ? '#FFF0E6' : '#E8F0FB', color: game ? '#B54708' : '#1F5FAF', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {game ? '경' : '공'}
               </span>
-              {vn[v.id]?.name}
+              {venueName(vn, v.id)}
             </button>
           );
         })}
@@ -126,16 +128,16 @@ export function MapScreen() {
           {!sel ? (
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{best ? `${st[best]?.name ?? ''}이 가장 덜 붐빌 거예요` : '주변 역 예상이에요'}</h2>
+                <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{best && st[best] ? `${st[best].name}이 가장 덜 붐빌 거예요` : '주변 역 예상이에요'}</h2>
                 <span style={{ fontSize: 14, color: '#5F6573' }}>{Number(hour)}시대에 출발할 때의 예상이에요</span>
               </div>
               <div>
                 {top.map((id) => (
                   <Link key={id} className="row" href={`/station/?id=${id}`} style={{ minHeight: 60, padding: '4px' }}>
-                    <LineBadge line={st[id]?.lines[0] ?? '5'} size={36} />
+                    <LineBadge line={st[id]?.lines[0]} size={36} />
                     <span className="main" style={{ gap: 2 }}>
                       <span className="title" style={{ fontSize: 16 }}>
-                        {st[id]?.name}
+                        {stationName(st, id)}
                       </span>
                       <span className="sub">
                         <Walk min={null} />
@@ -161,9 +163,9 @@ export function MapScreen() {
                       {selEvent.type === 'game' ? '경기' : '공연'}
                     </span>
                   )}
-                  <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{selEvent?.title ?? selVenue?.name}</h2>
+                  <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{selEvent?.title ?? venueName(vn, sel)}</h2>
                   <span style={{ fontSize: 14, color: '#5F6573' }}>
-                    {selVenue?.name}, 가까운 역 {st[selVenue?.nearby_stations[0]?.station_id ?? '']?.name ?? '확인 중'}
+                    {venueName(vn, sel)}, 가까운 역 {st[selVenue?.nearby_stations[0]?.station_id ?? '']?.name ?? '정보 없음'}
                   </span>
                 </div>
                 <button type="button" onClick={() => setSel(null)} aria-label="선택 해제" className="icon-btn" style={{ margin: '-6px -10px 0 0', color: '#5F6573' }}>
@@ -202,7 +204,7 @@ export function Search() {
   const [to, setTo] = useState('');
   const now = nowMin();
   const [when, setWhen] = useState(now);
-  const [sheet, setSheet] = useState(q.get('state') === 'time');
+  const [sheet, setSheet] = useState(demoState(q) === 'time');
   const [recents, setRecents] = useState<string[]>([]);
   const fc = useLoad(() => getForecast(today()), []);
   const supported = fc.status === 'ok' ? fc.value.data.supported_hours : [];
@@ -215,7 +217,7 @@ export function Search() {
     if (toName) setTo(toName);
   }, [toName]);
 
-  const fromLabel = from ? vn[from]?.name ?? from : '현재 위치';
+  const fromLabel = from ? venueName(vn, from) : '현재 위치';
   const matches = to.trim() ? Object.values(st).filter((s) => s.name.includes(to.trim())) : [];
   const go = (dest: string) => {
     if (dest) setRecents(sessionList('recent', dest));
@@ -311,11 +313,12 @@ export function Search() {
       <SectionTitle>공연장에서 출발하기</SectionTitle>
       <section className="card pad">
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {SEARCH_VENUES.map((id) => (
+          {SEARCH_VENUES.filter((id) => vn[id]).map((id) => (
             <button key={id} type="button" aria-pressed={from === id} onClick={() => setFrom(from === id ? '' : id)} className="chip">
-              {vn[id]?.name ?? id}
+              {vn[id].name}
             </button>
           ))}
+          {!SEARCH_VENUES.some((id) => vn[id]) && <span className="na">공연장 정보 없음</span>}
         </div>
         <span style={{ fontSize: 14, color: '#5F6573' }}>아직 공연장 안이라면 출발지를 공연장으로 바꿔 보세요</span>
       </section>
@@ -359,7 +362,7 @@ function readCompareParams(q: URLSearchParams): CompareParams {
 export function Compare() {
   const q = useSearchParams();
   const from = q.get('from') ?? 'search';
-  const late = q.get('state') === 'late'; // E4 시안 미리보기용 (목업 전용)
+  const late = demoState(q) === 'late'; // E4 시안 미리보기용 (목업 전용)
   const eventId = q.get('event');
   const params = readCompareParams(q);
   const key = q.toString();
@@ -376,7 +379,8 @@ export function Compare() {
   if (res.status === 'error') return <LoadError code={res.code === 'not_found' ? 'unsupported' : res.code} lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} back={back} />;
   const c = res.value.data;
   const [rec, ...others] = c.options;
-  const origin = params.fromType === 'venue' ? vn[params.fromId]?.name ?? '출발지' : '현재 위치';
+  // 출발지 이름을 모르면(공연장 목록 없음) 지어내지 않고 '출발 공연장 정보 없음'으로 적어요
+  const originKnown = params.fromType === 'venue' ? vn[params.fromId]?.name ?? null : '현재 위치';
   const toName = c.condition_label.to_name ?? st[params.toStationId]?.name ?? null;
   const event = eventId && events.status === 'ok' ? events.value.data.events.find((e) => e.id === eventId) ?? null : null;
 
@@ -401,14 +405,14 @@ export function Compare() {
       {res.value.fromCache && <StaleNotice updatedAt={res.value.updatedAt} />}
       <section style={{ padding: '4px 24px 22px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         <span style={{ fontSize: 15, color: '#5F6573' }}>
-          {origin}에서 <Ph value={toName}>OO역</Ph>까지, {c.condition_label.hour_label}
+          {[originKnown ? `${originKnown}에서${toName ? ` ${toName}까지` : ''}` : `출발 공연장 정보 없음${toName ? `, ${toName}까지` : ''}`, c.condition_label.hour_label].join(', ')}
         </span>
         <Headline highlight={c.headline.highlight} text={c.headline.text} />
       </section>
       {c.last_train?.imminent && (
         <div role="alert" className="alert red" style={{ margin: '0 16px 12px' }}>
           <strong>
-            막차까지 <Ph value={c.last_train.minutes_left != null ? `${c.last_train.minutes_left}분` : null}>00분</Ph> 남았어요
+            {c.last_train.minutes_left != null ? `막차까지 ${c.last_train.minutes_left}분 남았어요` : '막차가 가까워요(남은 시간 정보 없음)'}
           </strong>
           <span>막차가 가까워 기다리는 방법은 뺐어요. 바로 출발하세요.</span>
         </div>
@@ -432,8 +436,16 @@ export function Compare() {
           <span style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
             <span style={{ fontSize: 14, color: '#5F6573' }}>{rec.compare_message}</span>
             <span className="t" style={{ fontSize: 24, fontWeight: 800 }}>
-              {rec.expected != null ? fmtNum(rec.expected) : <Ph>000</Ph>}
-              <span style={{ fontSize: 14, fontWeight: 500, color: '#5F6573' }}>명 예상</span>
+              {rec.expected != null ? (
+                <>
+                  {fmtNum(rec.expected)}
+                  <span style={{ fontSize: 14, fontWeight: 500, color: '#5F6573' }}>명 예상</span>
+                </>
+              ) : (
+                <span className="na" style={{ fontSize: 14 }}>
+                  예상 인원 정보 없음
+                </span>
+              )}
             </span>
           </span>
         </Link>
@@ -479,7 +491,8 @@ export function RouteScreen() {
   if (res.status === 'error') return <LoadError code={res.code} lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} back={`/compare/?${back.toString()}`} />;
   const r = res.value.data;
   const board = st[r.board_station_id];
-  const originName = params.fromType === 'venue' ? vn[params.fromId]?.name ?? '출발지' : '현재 위치';
+  const boardName = stationName(st, r.board_station_id);
+  const originName = params.fromType === 'venue' ? venueName(vn, params.fromId) : '현재 위치';
   const toName = r.to_station_id ? st[r.to_station_id]?.name : params.toStationId ? st[params.toStationId]?.name : null;
   const hourLabel = `${Number(params.departAt.slice(11, 13))}시대 출발`;
   const max = Math.max(1, ...r.compare.items.map((i) => i.expected));
@@ -488,29 +501,30 @@ export function RouteScreen() {
     app === 'naver' ? `https://map.naver.com/p/search/${encodeURIComponent(name)}` : `https://map.kakao.com/link/search/${encodeURIComponent(name)}`;
   const appName = app === 'naver' ? '네이버지도' : '카카오맵';
   const steps = [
-    { n: '1', title: `${board?.name}까지 걷기`, sub: walked ? '도보 길 안내를 열었어요' : `도보 길찾기, 도착은 ${board?.name}`, active: !walked, onClick: () => setWalked(true) },
-    { n: '2', title: `${board?.name}에서 지하철 타기`, sub: `대중교통 길찾기, 출발은 ${board?.name}`, active: walked, onClick: () => undefined },
+    { n: '1', title: `${boardName}까지 걷기`, sub: walked ? '도보 길 안내를 열었어요' : `도보 길찾기, 도착은 ${boardName}`, active: !walked, onClick: () => setWalked(true) },
+    { n: '2', title: `${boardName}에서 지하철 타기`, sub: `대중교통 길찾기, 출발은 ${boardName}`, active: walked, onClick: () => undefined },
   ];
 
   return (
     <main className="screen">
       <BackHeader href={`/compare/?${back.toString()}`} />
-      <div role="img" aria-label={`지도 영역: ${originName}에서 ${board?.name}까지 걷는 길`} style={{ margin: '0 16px', height: 220, borderRadius: 20, background: '#EEF0F3', position: 'relative', overflow: 'hidden' }}>
+      <div role="img" aria-label={`지도 영역: ${originName}에서 ${boardName}까지 걷는 길`} style={{ margin: '0 16px', height: 220, borderRadius: 20, background: '#EEF0F3', position: 'relative', overflow: 'hidden' }}>
         <svg aria-hidden="true" width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
           <path d="M80 110 C 140 130, 200 150, 270 168" stroke="#4E3DBC" strokeWidth="4" strokeDasharray="2 8" strokeLinecap="round" fill="none" />
         </svg>
         <span style={{ position: 'absolute', left: 40, top: 86, fontSize: 13, fontWeight: 700, background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>{originName}</span>
-        <span style={{ position: 'absolute', left: 244, top: 158, fontSize: 13, fontWeight: 700, background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>{board?.name}</span>
+        <span style={{ position: 'absolute', left: 244, top: 158, fontSize: 13, fontWeight: 700, background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>{boardName}</span>
         <span style={{ position: 'absolute', right: 10, top: 10, fontSize: 12, color: '#4A4F5C', background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>지도 API 연동 영역</span>
       </div>
       <section style={{ padding: '20px 24px 8px', display: 'flex', flexDirection: 'column', gap: 10 }}>
         <h1 className="h1 big">
-          {board?.name}까지
+          {boardName}까지
           <br />
           <Walk min={r.walk_min} />
         </h1>
         <p className="lead">
-          {board?.name}에서 {board?.lines[0]}호선 타고 <Ph value={toName}>OO역</Ph>까지 가요
+          {boardName}에서 {board?.lines[0] ? `${board.lines[0]}호선을 타요` : '지하철을 타요(노선 정보 없음)'}
+          {toName ? `. ${toName}까지 가요` : ''}
         </p>
         <span style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
           <LevelBadge level={r.level} />
@@ -520,7 +534,7 @@ export function RouteScreen() {
       <section className="card" style={{ marginTop: 12, display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
         {[
           ['도착 예상', <Time key="a" iso={r.arrive_at} />],
-          ['거리', <Ph key="d" value={r.distance_km != null ? `${r.distance_km}km` : null}>0.0km</Ph>],
+          ['거리', <Ph key="d" value={r.distance_km != null ? `${r.distance_km}km` : null} />],
           ['막차', <Time key="l" iso={r.last_train_at} />],
         ].map(([label, v]) => (
           <div key={label as string} style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '8px 16px' }}>
@@ -537,7 +551,7 @@ export function RouteScreen() {
             <li key={i} style={{ display: 'flex', gap: 14 }}>
               <div aria-hidden="true" style={{ width: 28, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {s.type === 'board' ? (
-                  <LineBadge line={s.detail ?? board?.lines[0] ?? '5'} size={28} />
+                  <LineBadge line={s.detail?.replace(/호선$/, '') ?? board?.lines[0]} size={28} />
                 ) : s.type === 'walk' ? (
                   <Icon.walk />
                 ) : (
@@ -551,12 +565,12 @@ export function RouteScreen() {
                   {s.type === 'start' && hourLabel}
                   {s.type === 'walk' && (
                     <>
-                      <Walk min={r.walk_min} />, 추천 출구와 동선은 <Ph>현장 확인 후 입력</Ph>
+                      <Walk min={r.walk_min} />, <span className="na">추천 출구·동선 정보 없음</span>
                     </>
                   )}
                   {s.type === 'board' && (
                     <>
-                      <Ph value={s.exit_no}>0</Ph>번 출구, <Ph value={s.direction}>OO</Ph> 방면
+                      {s.exit_no ? `${s.exit_no}번 출구` : <span className="na">출구 정보 없음</span>}, {s.direction ? `${s.direction} 방면` : <span className="na">방면 정보 없음</span>}
                     </>
                   )}
                 </span>
@@ -569,7 +583,7 @@ export function RouteScreen() {
       <section className="card pad" style={{ gap: 14 }}>
         {r.compare.items.map((it) => (
           <div key={it.station_id} style={{ display: 'grid', gridTemplateColumns: '96px minmax(0, 1fr) 64px', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: 15, color: it.station_id === r.board_station_id ? '#17171C' : '#4A4F5C', fontWeight: it.station_id === r.board_station_id ? 700 : 400 }}>{st[it.station_id]?.name}</span>
+            <span style={{ fontSize: 15, color: it.station_id === r.board_station_id ? '#17171C' : '#4A4F5C', fontWeight: it.station_id === r.board_station_id ? 700 : 400 }}>{stationName(st, it.station_id)}</span>
             <span className="bar" aria-hidden="true">
               <span style={{ width: `${Math.round((it.expected / max) * 100)}%`, background: it.expected === max ? '#C2281B' : '#8A5300' }} />
             </span>

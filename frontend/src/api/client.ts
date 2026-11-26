@@ -69,11 +69,10 @@ export interface JsonFiles<T> {
   mock: string;
   /**
    * 발행된 정적 파일 이름. 예: `compare-olympic_park-2025-08-09-20.json`
-   * - 문자열이면 `{DATA_BASE}/{이름}` 을 읽어요.
-   * - 'mock' 이면 아직 발행되지 않은 정보라서 목업을 그대로 읽어요(역·공연장 목록).
+   * - 문자열이면 `{DATA_BASE}/{이름}` 을 읽어요. 정적 파일 모드에서는 목업을 절대 대신 읽지 않아요.
    * - null 이면 발행되는 파일이 없는 조건이라 '지원하지 않는 조건'으로 처리해요.
    */
-  data?: string | 'mock' | null;
+  data?: string | null;
   /**
    * 파일이 없을 때 돌려줄 '빈 결과'. 명세상 서버가 404 대신 빈 목록을 주는 API에만 써요
    * (예: 행사 없는 날 GET /events → events: []). 실제 API에서는 쓰지 않아요.
@@ -90,7 +89,7 @@ export interface JsonFiles<T> {
 export async function getJson<T>(apiPath: string, files: JsonFiles<T>): Promise<Loaded<T>> {
   const dataFile = files.data === undefined ? files.mock : files.data;
   if (usingStaticData && dataFile === null) throw new ApiError('unsupported', null);
-  const fromData = usingStaticData && dataFile !== 'mock';
+  const fromData = usingStaticData;
   const url = usingApi ? `${API_BASE}${apiPath}` : fromData ? `${DATA_BASE}/${dataFile}` : `${BASE}/mock/${files.mock}`;
   const key = usingApi ? apiPath : fromData ? `data:${dataFile}` : files.mock;
   let res: Response;

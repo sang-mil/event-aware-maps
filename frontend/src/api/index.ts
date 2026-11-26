@@ -19,9 +19,9 @@ export type { ApiErrorCode, Loaded } from './client';
 // 첫 번째 인자는 실제 API 경로, 두 번째는 같은 조건의 목업·정적 파일 이름이에요.
 // 정적 파일(GitHub Pages data/) 이름 규칙은 목업과 거의 같고, 다른 곳만 `data`에 따로 적어요.
 
-// 역·공연장 목록은 아직 발행되지 않아서 정적 파일 모드에서도 목업을 읽어요.
-export const getStations = () => getJson<Station[]>('/stations', { mock: 'stations.json', data: 'mock' });
-export const getVenues = () => getJson<Venue[]>('/venues', { mock: 'venues.json', data: 'mock' });
+// 정적 파일 모드에서는 목업을 절대 대신 쓰지 않아요. 파일이 없으면 화면이 '정보 없음'으로 보여줘요.
+export const getStations = () => getJson<Station[]>('/stations', { mock: 'stations.json' });
+export const getVenues = () => getJson<Venue[]>('/venues', { mock: 'venues.json' });
 
 /** GET /events?date= */
 export const getEvents = (date: string) =>
@@ -34,7 +34,7 @@ export const getEvents = (date: string) =>
 /**
  * GET /events/{id}
  * `variant`는 시안의 상태(E6 시간 변경, E7 취소, 경기 전/끝)를 미리 보기 위한 목업 전용 값이에요. 실제 API에는 보내지 않아요.
- * 행사 상세 파일은 아직 발행되지 않아서, 정적 파일 모드에서는 '찾을 수 없음'이 돼요.
+ * 정적 파일은 event-{id}.json 이에요. 파일이 없으면 '찾을 수 없음'이 돼요.
  */
 export const getEvent = (id: string, variant?: string) =>
   getJson<EventDetail>(`/events/${encodeURIComponent(id)}`, {
@@ -42,9 +42,8 @@ export const getEvent = (id: string, variant?: string) =>
     data: `event-${id}.json`,
   });
 
-/** GET /calendar?month= */
-export const getCalendar = (month: string) =>
-  getJson<CalendarMonth>(`/calendar${qs({ month })}`, { mock: `calendar-${month}.json`, empty: () => ({ month, days: [] }) });
+/** GET /calendar?month= — 그 달 파일이 없으면 '찾을 수 없음'이고, 캘린더가 '이 달은 데이터가 없어요'로 보여줘요 */
+export const getCalendar = (month: string) => getJson<CalendarMonth>(`/calendar${qs({ month })}`, { mock: `calendar-${month}.json` });
 
 /** GET /forecast?date= */
 export const getForecast = (date: string) => getJson<Forecast>(`/forecast${qs({ date })}`, { mock: `forecast-${date}.json` });

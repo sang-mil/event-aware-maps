@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { alertKey, getStationForecast, hasAlert, pushReady, setAlert } from '@/api';
 import { SourceNote } from '@/components/DataNote';
-import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, Walk } from '@/components/ui';
+import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, Walk, stationName } from '@/components/ui';
 import { LEVEL, today, dateLabel, isoAt, requestPush, pushSupport, track } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
@@ -40,7 +40,7 @@ export function Station() {
         <section className="intro">
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             {station?.lines.map((l) => <LineBadge key={l} line={l} size={28} />)}
-            <span style={{ fontSize: 17, fontWeight: 700, marginLeft: 4 }}>{station?.name}</span>
+            <span style={{ fontSize: 17, fontWeight: 700, marginLeft: 4 }}>{stationName(st, id)}</span>
           </span>
           <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span className="t" style={{ fontSize: 15, color: '#5F6573' }}>
@@ -59,9 +59,9 @@ export function Station() {
         <section className="card">
           {f.no_data.nearby.map((n) => (
             <Link key={n.station_id} className="row" href={`/station/?id=${n.station_id}`}>
-              <LineStack lines={st[n.station_id]?.lines ?? ['5']} />
+              <LineStack lines={st[n.station_id]?.lines ?? []} />
               <span className="main">
-                <span className="title">{st[n.station_id]?.name}</span>
+                <span className="title">{stationName(st, n.station_id)}</span>
                 <span className="sub">
                   <Walk min={n.walk_min} />
                 </span>
@@ -91,7 +91,7 @@ export function Station() {
       <section className="intro">
         <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           {station?.lines.map((l) => <LineBadge key={l} line={l} size={28} />)}
-          <span style={{ fontSize: 17, fontWeight: 700, marginLeft: 4 }}>{station?.name}</span>
+          <span style={{ fontSize: 17, fontWeight: 700, marginLeft: 4 }}>{stationName(st, id)}</span>
         </span>
         <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span className="t" style={{ fontSize: 15, color: '#5F6573' }}>
@@ -109,9 +109,9 @@ export function Station() {
           <section className="card">
             {f.alternatives.map((a) => (
               <Link key={a.station_id} className="row" href={`/station/?id=${a.station_id}${pickedDate ? `&date=${pickedDate}` : ''}`}>
-                <LineBadge line={st[a.station_id]?.lines[0] ?? '5'} />
+                <LineBadge line={st[a.station_id]?.lines[0]} />
                 <span className="main">
-                  <span className="title">{st[a.station_id]?.name}</span>
+                  <span className="title">{stationName(st, a.station_id)}</span>
                   <span className="sub">
                     <Walk min={a.walk_min} />, {a.message}
                   </span>
@@ -165,7 +165,7 @@ export function Station() {
           </>
         ) : (
           <Link href={`/search/?to=${id}`} className="btn primary">
-            {station?.name}으로 길찾기
+            {station ? `${station.name}으로 길찾기` : "길찾기"}
           </Link>
         )}
       </BottomBar>

@@ -14,16 +14,18 @@ import {
   LoadError,
   Loading,
   Offline,
-  Ph,
   SectionTitle,
   Sheet,
   StaleNotice,
   TabBar,
-  Time,
+  EventWhen,
+  placeLabel,
+  stationName,
+  venueName,
   TimeSheet,
   Walk,
 } from '@/components/ui';
-import { DEMO_QUIET_DAY, LEVEL, nowMin, today, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
+import { DEMO_QUIET_DAY, dateLabel, demoState, LEVEL, nowMin, today, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 export interface PendingFeedback {
@@ -39,7 +41,7 @@ export interface PendingFeedback {
 /** 01 홈 (+ 01-1 시간 선택, 01-2 피드백, E1 위치 꺼짐, E2 행사 없는 날, E5 연결 오류) */
 export function Home() {
   const q = useSearchParams();
-  const demo = q.get('state'); // 시안 미리보기: noLocation | noEvent | feedback | offline | time
+  const demo = demoState(q); // 시안 미리보기: noLocation | noEvent | feedback | offline | time
   const date = demo === 'noEvent' ? DEMO_QUIET_DAY : today(); // noEvent: 행사가 없는 날(E2) 목업
 
   const forecast = useLoad(() => (demo === 'offline' ? Promise.reject(new Error('demo')) : getForecast(date)), [date, demo]);
@@ -76,8 +78,7 @@ export function Home() {
     .map((id) => {
       const slot = f.stations.find((s) => s.station_id === id)?.slots.find((s) => s.hour === hour);
       const station = st[id];
-      if (!station) return null;
-      const note = slot ? slot.message : station.has_data ? '이 시간대는 연동 후 보여드려요' : '혼잡 정보 연동 예정';
+      const note = slot ? slot.message : station && !station.has_data ? '혼잡 정보 없음' : '이 시간대 혼잡 정보 없음';
       return { id, station, level: (slot?.level ?? 'no_data') as Level, note, best: summary?.best_station_id === id };
     })
     .filter((x): x is NonNullable<typeof x> => !!x)
@@ -122,7 +123,7 @@ export function Home() {
         ) : summary && supported ? (
           <Headline highlight={summary.highlight} text={summary.text} />
         ) : (
-          <Headline highlight={`${hourNum}시`} text=" 혼잡 예상은 데이터를 연동한 뒤 보여드려요" />
+          <Headline highlight={`${hourNum}시`} text=" 혼잡 예상 정보가 없어요" />
         )}
       </section>
 
@@ -133,9 +134,9 @@ export function Home() {
             className="row"
             href={`/station/?id=${s.id}`}
           >
-            <LineBadge line={s.station.lines[0]} />
+            <LineBadge line={s.station?.lines[0]} />
             <span className="main">
-              <span className="title">{s.station.name}</span>
+              <span className="title">{stationName(st, s.id)}</span>
               <span className="sub">
                 <Walk min={null} />, {s.best && <b className="best">가장 덜 붐빔</b>}
                 {!s.best && s.note}
@@ -150,28 +151,29 @@ export function Home() {
       <section className="card">
         {ev.events.length > 0 ? (
           ev.events
-            .filter((e) => e.linkable)
             .filter((e, i, arr) => arr.findIndex((x) => x.type === e.type) === i)
-            .map((e) => (
-              <Link key={e.id} className="row" href={e.type === 'game' ? `/game/?id=${e.id}` : `/event/?id=${e.id}&from=home`}>
-                <KindChip type={e.type} />
-                <span className="main">
-                  <span className="title">{e.title}</span>
-                  <span className="sub">
-                    {e.venue_id ? vn[e.venue_id]?.name : '장소 확인 중'},{' '}
-                    {e.type === 'game' ? (
-                      <>
-                        <Time iso={e.start_at} /> 시작
-                      </>
-                    ) : (
-                      <>
-                        <Time iso={e.end_at} />에 끝나요
-                      </>
-                    )}
+            .map((e) => {
+              const inner = (
+                <>
+                  <KindChip type={e.type} />
+                  <span className="main">
+                    <span className="title">{e.title}</span>
+                    <span className="sub">
+                      {placeLabel(vn, e)}, <EventWhen e={e} start={false} />
+                    </span>
                   </span>
-                </span>
-              </Link>
-            ))
+                </>
+              );
+              return e.linkable ? (
+                <Link key={e.id} className="row" href={e.type === 'game' ? `/game/?id=${e.id}` : `/event/?id=${e.id}&from=home`}>
+                  {inner}
+                </Link>
+              ) : (
+                <div key={e.id} className="row">
+                  {inner}
+                </div>
+              );
+            })
         ) : (
           <Link className="row" href="/calendar/">
             <span className="tile" aria-hidden="true" style={{ width: 40, height: 40, borderRadius: 12, background: '#EEF0F3', color: '#5F6573' }}>
@@ -180,8 +182,13 @@ export function Home() {
             <span className="main">
               <span className="title">오늘은 큰 행사가 없어요</span>
               <span className="sub">
-                다음 공연 <Ph value={ev.next_event?.date ?? null}>0월 0일 (토)</Ph>
-                {ev.next_event?.venue_id ? `, ${vn[ev.next_event.venue_id]?.name ?? ''}` : ''}
+                {ev.next_event?.date ? (
+                  <>
+                    다음 공연 <span className="t">{dateLabel(ev.next_event.date)}</span>, {venueName(vn, ev.next_event.venue_id)}
+                  </>
+                ) : (
+                  <span className="na">다음 공연 정보 없음</span>
+                )}
               </span>
             </span>
             <Icon.chevron />

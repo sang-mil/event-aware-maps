@@ -87,7 +87,7 @@ function Doc({ title, intro, children }: { title: string; intro: string; childre
           {intro}
         </p>
         <span style={{ fontSize: 14, color: '#5F6573' }}>
-          시행일 <Ph>0000.00.00</Ph>
+          시행일 <Ph />
         </span>
       </section>
       <article className="doc">{children}</article>
@@ -117,14 +117,14 @@ export function Privacy() {
       <ul>
         <li>알림 구독 정보는 알림을 끄거나 앱을 삭제하면 지체 없이 지워요</li>
         <li>
-          피드백 응답은 통계로 만든 뒤 <Ph>00개월</Ph> 안에 지워요
+          피드백 응답은 통계로 만든 뒤 지워요(보관 기간: <Ph />)
         </li>
       </ul>
       <h2>4. 다른 곳에 주는 경우</h2>
       <ul>
         <li>법에 정해진 경우 말고는 제3자에게 주지 않아요</li>
         <li>
-          알림 발송은 <Ph>알림 발송 업체</Ph>에 맡기며, 맡긴 정보는 발송에만 써요
+          알림 발송은 발송 업체(<Ph />)에 맡기며, 맡긴 정보는 발송에만 써요
         </li>
       </ul>
       <h2>5. 내 정보 지우기</h2>
@@ -135,10 +135,10 @@ export function Privacy() {
       <h2>6. 개인정보 보호 담당</h2>
       <ul>
         <li>
-          담당: <Ph>운영자</Ph>
+          담당: <Ph />
         </li>
         <li>
-          문의: <Ph>이메일</Ph>
+          문의: <Ph />
         </li>
       </ul>
       <h2>7. 바뀌는 경우</h2>
@@ -189,10 +189,10 @@ export function Terms() {
       <h2>7. 운영자</h2>
       <ul>
         <li>
-          운영: <Ph>운영자</Ph>
+          운영: <Ph />
         </li>
         <li>
-          문의: <Ph>이메일</Ph>
+          문의: <Ph />
         </li>
       </ul>
     </Doc>
