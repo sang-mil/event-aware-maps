@@ -530,16 +530,23 @@ export function EventScreen() {
             <span className="main">
               <span className="title">{stationName(st, s.station_id)}</span>
               <span className="sub">
-                <Walk min={s.walk_min} />, {s.message}
+                <Walk min={s.walk_min} />
+                {s.message ? `, ${s.message}` : ''}
               </span>
             </span>
             <LevelBadge level={s.level} />
           </Link>
         ))}
+        {e.after_end.no_data_message && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 14, color: '#5F6573' }}>{e.after_end.no_data_message}</p>}
       </section>
 
       <SectionTitle>같은 날 송파 일정</SectionTitle>
       <ul className="card" style={{ listStyle: 'none' }}>
+        {e.same_day.length === 0 && (
+          <li className="row" style={{ minHeight: 56 }}>
+            <span className="na">같은 날 다른 일정이 없어요</span>
+          </li>
+        )}
         {e.same_day.map((s) => (
           <li key={s.id} className="row" style={{ minHeight: 64 }}>
             <span className="main">
@@ -552,8 +559,9 @@ export function EventScreen() {
         ))}
       </ul>
       <BottomBar>
-        <Link href={`/search/?venue=${e.venue_id ?? ''}&event=${e.id}`} className="btn primary">
-          이 공연장에서 출발하기
+        {/* 공연장을 모르면 '이 공연장에서'라고 하지 않고 출발지를 고르는 화면으로 보내요 */}
+        <Link href={e.venue_id ? `/search/?venue=${e.venue_id}&event=${e.id}` : `/search/?event=${e.id}`} className="btn primary">
+          {e.venue_id ? '이 공연장에서 출발하기' : '귀갓길 찾기'}
         </Link>
       </BottomBar>
     </main>
