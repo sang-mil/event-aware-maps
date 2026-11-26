@@ -5,6 +5,7 @@
     python backend/cli.py collect subway_month --month 202510   # 지하철 월별·시간대별 승하차
     python backend/cli.py build-db                         # 원본(raw) → SQLite 한 파일 (backend/data/tumgil.db)
     python backend/cli.py build --out 폴더 [--as-of 시각]   # 행사 반영 → calendar·events JSON 검증 후 발행 (혼잡·추천은 다음 작업)
+    python backend/cli.py backtest                         # 공연 날마다 그날을 빼고 예측해 실제와 비교 (혼잡 단계 적중률)
     python backend/cli.py publish --src 폴더 --out 폴더      # src 의 JSON을 검증해 out 에 발행
 
 collect 는 인증키를 환경변수에서 읽고(backend/.env 파일이 있으면 그것도 읽음, 형식은 backend/env.example), 결과를 backend/data/raw/ 에 저장한다(이 폴더는 git에 올라가지 않음).
@@ -25,6 +26,7 @@ sys.path.insert(0, str(BACKEND))
 
 from collectors import CollectError, kspo, seoul_subway  # noqa: E402
 from normalize import db as normalize_db  # noqa: E402
+from congestion import backtest as cg_backtest, load as cg_load  # noqa: E402
 from events import detect as ev_detect, load as ev_load, outputs as ev_outputs  # noqa: E402
 from publish import PublishError, publish, wrap  # noqa: E402
 
@@ -126,6 +128,29 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime) -> int:
     return 0
 
 
+BACKTEST_STATIONS = ["olympic_park", "bangi", "mongchontoseong", "hanseong_baekje"]
+LEVEL_KO = {"relaxed": "여유", "normal": "보통", "crowded": "혼잡"}
+
+
+def cmd_backtest(db_path: Path) -> int:
+    if not db_path.is_file():
+        print(f"DB가 없습니다. 먼저 build-db 를 실행하세요: {db_path}")
+        return 1
+    r = cg_backtest.run(*cg_load.load_inputs(db_path), BACKTEST_STATIONS)
+    if not r["cases"]:
+        print("비교할 공연 날이 없습니다.")
+        return 1
+    pct = lambda x: "-" if x is None else f"{x:.0%}"  # noqa: E731
+    print(f"공연 날 {r['days']}일 × 역 {len(BACKTEST_STATIONS)}곳 × 19~23시 = {r['cases']}건 (각 날은 그날을 빼고 예측)")
+    print(f"단계 적중률 {pct(r['accuracy'])} (행사 효과 없이 기준선만 쓰면 {pct(r['naive_accuracy'])})")
+    print(f"'혼잡' 예측이 맞은 비율 {pct(r['crowded_precision'])}, 실제 혼잡을 미리 잡은 비율 {pct(r['crowded_recall'])}")
+    for sid, (acc, naive, n) in r["by_station"].items():
+        print(f"  {sid}: {pct(acc)} (기준선만 {pct(naive)}, {n}건)")
+    print(f"예상 인원 오차 중앙값 {r['median_abs_error']:.0f}명")
+    print("실제→예측: " + ", ".join(f"{LEVEL_KO[a]}→{LEVEL_KO[p]} {n}" for (a, p), n in sorted(r["confusion"].items())))
+    return 0
+
+
 def cmd_publish(src: Path, out: Path) -> int:
     files = {p.name: json.loads(p.read_text(encoding="utf-8")) for p in sorted(src.glob("*.json"))}
     if not files:
@@ -155,6 +180,8 @@ def main(argv: list[str] | None = None) -> int:
     bd.add_argument("--db", type=Path, default=DB_PATH)
     bd.add_argument("--out", type=Path, required=True)
     bd.add_argument("--as-of", type=datetime.fromisoformat, default=None, help="기준 시각 (예: 2025-08-09T18:00:00+09:00)")
+    bt = sub.add_parser("backtest", help="혼잡 단계 적중률 검증")
+    bt.add_argument("--db", type=Path, default=DB_PATH)
     p = sub.add_parser("publish", help="검증 후 발행")
     p.add_argument("--src", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
@@ -162,6 +189,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "collect":
         return cmd_collect(args.source, args.month, args.raw_dir, args.page_size)
+    if args.command == "backtest":
+        return cmd_backtest(args.db)
     if args.command == "build":
         as_of = args.as_of or datetime.now(KST)
         if as_of.tzinfo is None:
