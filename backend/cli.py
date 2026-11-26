@@ -3,6 +3,7 @@
     python backend/cli.py collect kspo_linked              # KSPO 연계 데이터(1시간 단위 공연·주차·날씨) 전체
     python backend/cli.py collect kspo_perf                # KSPO 공연정보 전체
     python backend/cli.py collect subway_month --month 202510   # 지하철 월별·시간대별 승하차
+    python backend/cli.py build-db                         # 원본(raw) → SQLite 한 파일 (backend/data/tumgil.db)
     python backend/cli.py build                            # 행사 반영 → 혼잡 계산 → 추천 (다음 작업)
     python backend/cli.py publish --src 폴더 --out 폴더      # src 의 JSON을 검증해 out 에 발행
 
@@ -23,9 +24,11 @@ BACKEND = Path(__file__).resolve().parent
 sys.path.insert(0, str(BACKEND))
 
 from collectors import CollectError, kspo, seoul_subway  # noqa: E402
+from normalize import db as normalize_db  # noqa: E402
 from publish import PublishError, publish  # noqa: E402
 
 RAW_DIR = BACKEND / "data" / "raw"
+DB_PATH = BACKEND / "data" / "tumgil.db"  # backend/.gitignore 로 git에 올라가지 않음
 ENV_FILE = BACKEND / ".env"  # backend/.env. .gitignore 로 git에 올라가지 않음. 형식은 backend/env.example
 KST = timezone(timedelta(hours=9))
 
@@ -89,6 +92,20 @@ def cmd_collect(source: str, month: str | None, raw_dir: Path, page_size: int | 
     return 0
 
 
+def cmd_build_db(raw_dir: Path, db_path: Path) -> int:
+    try:
+        report = normalize_db.build(raw_dir, db_path)
+    except (ValueError, OSError) as e:
+        print(f"DB 만들기 실패 (기존 DB는 그대로): {e}")
+        return 1
+    print(f"원본 {len(report['sources'])}개 → {db_path}")
+    for table, n in report["counts"].items():
+        print(f"  {table}: {n}행")
+    for reason, n in report["skipped"].items():
+        print(f"  건너뜀 {reason}: {n}행")
+    return 0
+
+
 def cmd_publish(src: Path, out: Path) -> int:
     files = {p.name: json.loads(p.read_text(encoding="utf-8")) for p in sorted(src.glob("*.json"))}
     if not files:
@@ -111,6 +128,9 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--month", help="YYYYMM (subway_month 전용)")
     c.add_argument("--raw-dir", type=Path, default=RAW_DIR)
     c.add_argument("--page-size", type=int, help="KSPO 한 번에 받을 건수 (기본 1000)")
+    b = sub.add_parser("build-db", help="원본 → SQLite")
+    b.add_argument("--raw-dir", type=Path, default=RAW_DIR)
+    b.add_argument("--db", type=Path, default=DB_PATH)
     sub.add_parser("build", help="행사 반영, 혼잡 계산, 추천 생성")
     p = sub.add_parser("publish", help="검증 후 발행")
     p.add_argument("--src", type=Path, required=True)
@@ -119,6 +139,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "collect":
         return cmd_collect(args.source, args.month, args.raw_dir, args.page_size)
+    if args.command == "build-db":
+        return cmd_build_db(args.raw_dir, args.db)
     if args.command == "publish":
         return cmd_publish(args.src, args.out)
     print(f"'{args.command}' 는 아직 만들지 않았습니다 (2단계 다음 작업).")

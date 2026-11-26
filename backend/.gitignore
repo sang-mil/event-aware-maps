@@ -1,0 +1,3 @@
+# 원본으로 언제든 다시 만드는 SQLite (cli.py build-db)
+data/*.db
+data/*.db.tmp
