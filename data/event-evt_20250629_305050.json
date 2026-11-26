@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250629_305050",
+    "type": "show",
+    "title": "2025 PALMTREE ISLAND 3rd GALA CONCERT",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-06-29",
+    "start_at": null,
+    "end_at": "2025-06-29T20:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "normal"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "20~21시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "normal",
+            "message": "378명, 행사 없는 평일과 비슷 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "336명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "relaxed",
+            "message": "228명, 행사 없는 평일의 0.7배 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "relaxed",
+            "message": "305명, 행사 없는 평일의 0.7배",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20250629_250d2d",
+        "title": "2025 서울파크뮤직페스티벌",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-06-29T23:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

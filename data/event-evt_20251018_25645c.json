@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20251018_25645c",
+    "type": "show",
+    "title": "그랜드 민트 페스티벌 2025",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-10-18",
+    "start_at": null,
+    "end_at": "2025-10-18T23:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "23~24시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "4,182명, 행사 없는 평일의 54.3배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "relaxed",
+            "message": "63명, 행사 없는 평일의 0.7배",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20251018_28c968",
+        "title": "비보쇼 with Friends",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-10-18T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

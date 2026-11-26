@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20251206_ba2cee",
+    "type": "show",
+    "title": "2025 god CONCERT < ICONIC BOX > - 서울, 2025 정승환의 안녕, 겨울, 2025 손태진 전국투어 콘서트 〈It‘s Son Time〉",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-12-06",
+    "start_at": null,
+    "end_at": "2025-12-06T21:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "6,554명, 행사 없는 평일의 19.7배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "373명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "1,218명, 행사 없는 평일의 5.1배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "355명, 행사 없는 평일의 0.8배",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [],
+    "crossing_note": null
+  }
+}

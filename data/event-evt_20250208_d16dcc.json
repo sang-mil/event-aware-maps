@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250208_d16dcc",
+    "type": "show",
+    "title": "2025 황영웅 앨범 발매 쇼케이스 PANORAMA : SHOWKING",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-02-08",
+    "start_at": null,
+    "end_at": "2025-02-08T20:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "20~21시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "2,823명, 행사 없는 평일의 7.5배 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "303명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "867명, 행사 없는 평일의 2.6배 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "365명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20250208_2455a8",
+        "title": "2025 LEECHANGSUB SOLO CONCERT 〈The Wayfarer〉 ENCORE",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-02-08T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20250208_48615e",
+        "title": "2025 검정치마 단독공연 SONGS TO BRING YOU HOME",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-02-08T22:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250222_1e95fa",
+    "type": "show",
+    "title": "2025 ONEW CONCERT [ONEW THE LIVE : CONNECTION] IN SEOUL",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-02-22",
+    "start_at": null,
+    "end_at": "2025-02-22T21:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "1,007명, 행사 없는 평일의 3.0배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "409명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "normal",
+            "message": "343명, 행사 없는 평일의 1.4배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "423명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20250222_5f96cd",
+        "title": "2025 영탁 단독 콘서트 TAK SHOW3 - 앙코르",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-02-22T18:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250516_72dc60",
+    "type": "show",
+    "title": "2025 BIBI 1st WORLD TOUR ［EVE］ IN SEOUL",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-05-16",
+    "start_at": null,
+    "end_at": "2025-05-16T23:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "23~24시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "1,477명, 행사 없는 평일의 19.2배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "relaxed",
+            "message": "30명, 행사 없는 평일의 0.3배",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20250516_2be610",
+        "title": "DAY6 3RD WORLD TOUR〈FOREVER YOUNG〉FINALE in SEOUL",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-05-16T22:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

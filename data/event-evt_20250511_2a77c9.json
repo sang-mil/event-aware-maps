@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250511_2a77c9",
+    "type": "show",
+    "title": "2025 N.Flying LIVE ＆CON4 : FULL CIRCLE",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-05-11",
+    "start_at": null,
+    "end_at": "2025-05-11T19:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "19~20시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "2,386명, 행사 없는 평일의 5.0배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "relaxed",
+            "message": "288명, 행사 없는 평일의 0.7배",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "20~21시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "4,705명, 행사 없는 평일의 12.5배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "299명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20250511_2be610",
+        "title": "DAY6 3RD WORLD TOUR〈FOREVER YOUNG〉FINALE in SEOUL",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-05-11T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

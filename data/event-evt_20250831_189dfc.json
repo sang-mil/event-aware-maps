@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250831_189dfc",
+    "type": "show",
+    "title": "2025 aespa LIVE TOUR - SYNK : aeXIS LINE, 이승환 35주년 콘서트 HEAVEN [ ENCORE ] - 서울",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-08-31",
+    "start_at": null,
+    "end_at": "2025-08-31T20:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "20~21시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "3,677명, 행사 없는 평일의 9.7배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "318명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "787명, 행사 없는 평일의 2.4배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "374명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [],
+    "crossing_note": null
+  }
+}

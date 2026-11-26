@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": [
+    {
+      "id": "kspo_dome",
+      "name": "KSPO DOME",
+      "area": "olympic_park",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "olympic_park",
+          "walk_min": null
+        },
+        {
+          "station_id": "bangi",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "olympic_hall",
+      "name": "올림픽홀",
+      "area": "olympic_park",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "olympic_park",
+          "walk_min": null
+        },
+        {
+          "station_id": "bangi",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "ticketlink_live_arena",
+      "name": "티켓링크 라이브 아레나",
+      "area": "olympic_park",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "olympic_park",
+          "walk_min": null
+        },
+        {
+          "station_id": "bangi",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "woori_art_hall",
+      "name": "우리금융아트홀",
+      "area": "olympic_park",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "olympic_park",
+          "walk_min": null
+        },
+        {
+          "station_id": "bangi",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "muse_live",
+      "name": "뮤즈라이브",
+      "area": "olympic_park",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "olympic_park",
+          "walk_min": null
+        },
+        {
+          "station_id": "bangi",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "grass_88",
+      "name": "88잔디마당",
+      "area": "olympic_park",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "olympic_park",
+          "walk_min": null
+        },
+        {
+          "station_id": "bangi",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "jamsil_baseball",
+      "name": "잠실야구장",
+      "area": "jamsil",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "sports_complex",
+          "walk_min": null
+        },
+        {
+          "station_id": "jamsil_saenae",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "jamsil_arena",
+      "name": "잠실실내체육관",
+      "area": "jamsil",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "sports_complex",
+          "walk_min": null
+        },
+        {
+          "station_id": "jamsil_saenae",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "jamsil_student_gym",
+      "name": "잠실학생체육관",
+      "area": "jamsil",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "sports_complex",
+          "walk_min": null
+        },
+        {
+          "station_id": "jamsil_saenae",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "jamsil_main_stadium",
+      "name": "잠실주경기장",
+      "area": "jamsil",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": [
+        {
+          "station_id": "sports_complex",
+          "walk_min": null
+        },
+        {
+          "station_id": "jamsil_saenae",
+          "walk_min": null
+        }
+      ]
+    },
+    {
+      "id": "lotte_concert_hall",
+      "name": "롯데콘서트홀",
+      "area": "jamsil",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": []
+    },
+    {
+      "id": "charlotte_theater",
+      "name": "샤롯데씨어터",
+      "area": "jamsil",
+      "lat": null,
+      "lng": null,
+      "nearby_stations": []
+    }
+  ]
+}

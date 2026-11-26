@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250725_012668",
+    "type": "show",
+    "title": "2025 WINNER CONCERT ［IN OUR CIRCLE］",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-07-25",
+    "start_at": null,
+    "end_at": "2025-07-25T23:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "23~24시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "1,214명, 행사 없는 평일의 15.8배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "relaxed",
+            "message": "52명, 행사 없는 평일의 0.6배",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20250725_d543d1",
+        "title": "BOYNEXTDOOR TOUR [KNOCK ON Vol.1] FINAL",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-07-25T22:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

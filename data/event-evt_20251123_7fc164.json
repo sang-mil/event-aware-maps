@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20251123_7fc164",
+    "type": "show",
+    "title": "2025 이승철 콘서트 <오케스트락3> 서울공연",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-11-23",
+    "start_at": null,
+    "end_at": "2025-11-23T17:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "normal"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "17~18시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          }
+        ]
+      },
+      "no_data_message": "17시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20251123_5ea152",
+        "title": "임영웅 IM HERO TOUR 2025 - 서울",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-11-23T17:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

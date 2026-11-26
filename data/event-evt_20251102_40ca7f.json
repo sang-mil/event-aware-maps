@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20251102_40ca7f",
+    "type": "show",
+    "title": "2025 THE신승훈SHOW 〈SINCERELY 35〉",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-11-02",
+    "start_at": null,
+    "end_at": "2025-11-02T20:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "20~21시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "1,503명, 행사 없는 평일의 4.0배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "296명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "normal",
+            "message": "433명, 행사 없는 평일의 1.3배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "405명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20251102_b87b39",
+        "title": "IVE WORLD TOUR [SHOW WHAT I AM]",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-11-02T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

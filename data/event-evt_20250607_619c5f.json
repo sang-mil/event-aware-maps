@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250607_619c5f",
+    "type": "show",
+    "title": "윤종신 전국투어 콘서트 그때 - 서울",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-06-07",
+    "start_at": null,
+    "end_at": "2025-06-07T16:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "16~17시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          }
+        ]
+      },
+      "no_data_message": "16시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20250607_3b46bf",
+        "title": "윤종신 전국투어 콘서트 그때 - 서울, 2025 BAEKHYUN WORLD TOUR 〈Reverie〉 in SEOUL, 2025 ILLIT GLITTER DAY IN SEOUL",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-06-07T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20250607_50702a",
+        "title": "2025 BAEKHYUN WORLD TOUR 〈Reverie〉 in SEOUL, 2025 ILLIT GLITTER DAY IN SEOUL",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-06-07T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

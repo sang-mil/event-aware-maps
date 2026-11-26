@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250601_580964",
+    "type": "show",
+    "title": "제17회 서울재즈페스티벌 2025",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-06-01",
+    "start_at": null,
+    "end_at": "2025-06-01T14:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "normal"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "14~15시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          }
+        ]
+      },
+      "no_data_message": "14시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [],
+    "crossing_note": null
+  }
+}

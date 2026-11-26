@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250323_4651e5",
+    "type": "show",
+    "title": "2025 NCT WISH ASIA TOUR LOG in SEOUL",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-03-23",
+    "start_at": null,
+    "end_at": "2025-03-23T15:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "15~16시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          }
+        ]
+      },
+      "no_data_message": "15시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20250323_728152",
+        "title": "2025 NCT WISH ASIA TOUR LOG in SEOUL, 2025 ATEEZ WORLD TOUR [TOWARDS THE LIGHT : WILL TO POWER] FINALE IN SEOUL, 2025 BTOB FAN-CON 3,2,1 GO! MELympic 콘서트 주간 3위",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-03-23T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20250323_cf05b1",
+        "title": "2025 ATEEZ WORLD TOUR [TOWARDS THE LIGHT : WILL TO POWER] FINALE IN SEOUL, 2025 BTOB FAN-CON 3,2,1 GO! MELympic 콘서트 주간 3위",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-03-23T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

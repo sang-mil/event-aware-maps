@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250809_44a82b",
+    "type": "show",
+    "title": "2025 KANGDANIEL CONCERT ［ACT : NEW EPISODE］",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-08-09",
+    "start_at": null,
+    "end_at": "2025-08-09T21:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "704명, 행사 없는 평일의 2.1배 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "384명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "normal",
+            "message": "241명, 행사 없는 평일과 비슷 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "431명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20250809_a7bbcd",
+        "title": "THE BOYZ〈THE BLAZE〉WORLD TOUR in SEOUL",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-08-09T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20250809_d38616",
+        "title": "2025 10CM 단독공연 〈5.0〉",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-08-09T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

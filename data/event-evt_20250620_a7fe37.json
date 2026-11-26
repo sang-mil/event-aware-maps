@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250620_a7fe37",
+    "type": "show",
+    "title": "［서울］뮤지컬 번개맨 시즌2 - 여름맞이 특별공연",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-06-20",
+    "start_at": null,
+    "end_at": "2025-06-20T13:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "normal"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "13~14시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          }
+        ]
+      },
+      "no_data_message": "13시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20250620_ca8ebc",
+        "title": "[서울 앵콜] 2025 박지현 콘서트 쇼맨쉽 SHOWMANSHIP",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-06-20T22:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250629_250d2d",
+    "type": "show",
+    "title": "2025 서울파크뮤직페스티벌",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-06-29",
+    "start_at": null,
+    "end_at": "2025-06-29T23:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "23~24시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "4,986명, 평소의 83.1배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "relaxed",
+            "message": "17명, 평소의 0.4배",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20250629_305050",
+        "title": "2025 PALMTREE ISLAND 3rd GALA CONCERT",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-06-29T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

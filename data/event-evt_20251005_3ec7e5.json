@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20251005_3ec7e5",
+    "type": "show",
+    "title": "2025 ZEROBASEONE WORLD TOUR ［HERE ＆ NOW］ IN SEOUL",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-10-05",
+    "start_at": null,
+    "end_at": "2025-10-05T20:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "normal"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "20~21시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "normal",
+            "message": "378명, 행사 없는 평일과 비슷 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "336명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "normal",
+            "message": "332명, 행사 없는 평일과 비슷 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "413명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20251005_5954f7",
+        "title": "2025 QWER 1ST WORLDTOUR [ROCKATION]",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-10-05T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20250524_20a83b",
+    "type": "show",
+    "title": "2025 Jay Park World Tour [Serenades & Body Rolls], SHINee WORLD Ⅶ [E.S.S.A.Y] (Every Stage Shines Around You), [서울] 2025 멜로망스 전국투어 콘서트 〈Romance Station〉",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-05-24",
+    "start_at": null,
+    "end_at": "2025-05-24T21:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "4,555명, 행사 없는 평일의 13.7배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "390명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "823명, 행사 없는 평일의 3.4배",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "380명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [],
+    "crossing_note": null
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-26T20:48:47+09:00",
+  "data": {
+    "id": "evt_20251012_791200",
+    "type": "show",
+    "title": "2025-26 TREASURE TOUR［PULSE ON］IN SEOUL",
+    "venue_id": null,
+    "area": "olympic_park",
+    "date": "2025-10-12",
+    "start_at": null,
+    "end_at": "2025-10-12T20:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "normal"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "20~21시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "normal",
+            "message": "504명, 행사 없는 평일의 1.3배 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "321명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "992명, 행사 없는 평일의 3.0배 (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)",
+            "walk_min": null
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "409명, 행사 없는 평일과 비슷",
+            "walk_min": null
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20251012_072e8c",
+        "title": "2025 쎄시봉 ［The Last］ 콘서트 - 서울",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-10-12T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20251012_ff8f96",
+        "title": "2025 하현상 콘서트 〈Navy Horizon〉",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": "2025-10-12T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}
