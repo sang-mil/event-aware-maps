@@ -7,7 +7,7 @@ import { Install } from '@/screens/Start';
 
 function Inner() {
   const q = useSearchParams();
-  return <Install from={q.get('from')} />;
+  return <Install from={q.get('from')} event={q.get('event')} />;
 }
 
 export default function Page() {

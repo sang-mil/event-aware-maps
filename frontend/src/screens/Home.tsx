@@ -21,7 +21,7 @@ import {
   TimeSheet,
   Walk,
 } from '@/components/ui';
-import { DEMO_NOW_MIN, DEMO_QUIET_DAY, DEMO_TODAY, LEVEL, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
+import { DEMO_QUIET_DAY, LEVEL, nowMin, today, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 export interface PendingFeedback {
@@ -38,7 +38,7 @@ export interface PendingFeedback {
 export function Home() {
   const q = useSearchParams();
   const demo = q.get('state'); // 시안 미리보기: noLocation | noEvent | feedback | offline | time
-  const date = demo === 'noEvent' ? DEMO_QUIET_DAY : DEMO_TODAY;
+  const date = demo === 'noEvent' ? DEMO_QUIET_DAY : today(); // noEvent: 행사가 없는 날(E2) 목업
 
   const forecast = useLoad(() => (demo === 'offline' ? Promise.reject(new Error('demo')) : getForecast(date)), [date, demo]);
   const events = useLoad(() => getEvents(date), [date]);
@@ -47,12 +47,14 @@ export function Home() {
   const [locOn, setLocOn] = useState(false);
   const noLoc = demo === 'noLocation' || (locGranted === false && !locOn && demo !== 'feedback');
 
-  const [at, setAt] = useState(DEMO_NOW_MIN);
+  const now = nowMin();
+  const [at, setAt] = useState(now);
   const [sheet, setSheet] = useState(demo === 'time');
   const [fb, setFb] = useState<PendingFeedback | null>(null);
   useEffect(() => {
     if (demo === 'feedback') {
-      setFb({ station_id: 'bangi', station_name: '방이역', event_id: 'evt_20250809_kspo', event_title: '더보이즈 공연', date: DEMO_TODAY, hour: '20', level: 'normal' });
+      // 시안(01-2) 미리보기용 예시 값이에요. 실제로는 비교 화면에서 고른 방법이 저장돼요.
+      setFb({ station_id: 'bangi', station_name: '방이역', event_id: 'evt_20250809_kspo', event_title: '더보이즈 공연', date: today(), hour: '20', level: 'normal' });
     } else {
       setFb(store<PendingFeedback>('pendingFeedback'));
     }
@@ -79,7 +81,7 @@ export function Home() {
     .slice(0, 3);
   const ev = events.value.data;
   const hourNum = Number(hour);
-  const timeLabel = at === DEMO_NOW_MIN ? `지금 ${fmtMin(at)}` : `오늘 ${fmtMin(at)}`;
+  const timeLabel = at === now ? `지금 ${fmtMin(at)}` : `오늘 ${fmtMin(at)}`;
 
   return (
     <main className="screen with-tabs">
@@ -126,7 +128,7 @@ export function Home() {
           <Link
             key={s.id}
             className="row"
-            href={s.station.has_data ? `/station/?id=${s.id}` : `/station/?id=${s.id}`}
+            href={`/station/?id=${s.id}`}
           >
             <LineBadge line={s.station.lines[0]} />
             <span className="main">
@@ -191,7 +193,7 @@ export function Home() {
         title="언제 기준으로 볼까요?"
         sub="오늘 시와 분을 직접 맞춰요"
         value={at}
-        now={DEMO_NOW_MIN}
+        now={now}
         min={18 * 60}
         max={24 * 60 - 10}
         hint={(h) => (f.supported_hours.includes(String(h).padStart(2, '0')) ? `${h}시대 혼잡 예상을 보여드려요` : `${h}시대 혼잡 정보는 아직 준비 중이에요`)}

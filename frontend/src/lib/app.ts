@@ -12,6 +12,18 @@ export const DEMO_QUIET_DAY = '2025-08-16';
 export const DEMO_NOW_MIN = 20 * 60;
 export const DEMO_MONTH = '2025-08';
 
+/**
+ * 오늘 날짜와 지금 시각. 실제 데이터가 연동되면 이 두 함수만 실제 시계로 바꿔요.
+ * 화면 곳곳에 날짜·시간을 직접 적지 말고 이 함수를 써요.
+ */
+export const today = () => DEMO_TODAY;
+/** 위치를 쓸 수 없을 때(E1)의 기준. "올림픽공원 기준으로 보여드려요" */
+export const DEFAULT_ORIGIN_STATION = 'olympic_park';
+export const nowMin = () => DEMO_NOW_MIN;
+export const hourKey = (min: number) => pad(Math.floor(min / 60) % 24);
+/** 날짜 + 분 → 오프셋이 붙은 ISO 시각 (API 명세서 2.1) */
+export const isoAt = (date: string, min: number) => `${date}T${pad(Math.floor(min / 60) % 24)}:${pad(min % 60)}:00+09:00`;
+
 export const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 export const asset = (p: string) => `${BASE}${p}`;
 

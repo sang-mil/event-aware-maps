@@ -1,4 +1,4 @@
-import { getJson } from './client';
+import { getJson, qs } from './client';
 import type {
   CalendarMonth,
   Compare,
@@ -12,40 +12,60 @@ import type {
 } from './types';
 
 export * from './types';
-export { ApiError } from './client';
-export type { Loaded } from './client';
+export { ApiError, usingMock } from './client';
+export type { ApiErrorCode, Loaded } from './client';
 
 // ── 읽기 API (API 명세서 3~6장) ──────────────────────────────
+// 첫 번째 인자는 실제 API 경로, 두 번째는 같은 조건의 목업 파일이에요.
 
-export const getStations = () => getJson<Station[]>('stations.json');
-export const getVenues = () => getJson<Venue[]>('venues.json');
+export const getStations = () => getJson<Station[]>('/stations', 'stations.json');
+export const getVenues = () => getJson<Venue[]>('/venues', 'venues.json');
 
 /** GET /events?date= */
-export const getEvents = (date: string) => getJson<EventList>(`events-${date}.json`);
+export const getEvents = (date: string) => getJson<EventList>(`/events${qs({ date })}`, `events-${date}.json`);
 
 /**
  * GET /events/{id}
- * `variant`는 시안의 상태(E6 시간 변경, E7 취소, 경기 전/끝)를 미리 보기 위한 목업 전용 값이에요.
+ * `variant`는 시안의 상태(E6 시간 변경, E7 취소, 경기 전/끝)를 미리 보기 위한 목업 전용 값이에요. 실제 API에는 보내지 않아요.
  */
 export const getEvent = (id: string, variant?: string) =>
-  getJson<EventDetail>(`event-${id}${variant ? `-${variant}` : ''}.json`);
+  getJson<EventDetail>(`/events/${encodeURIComponent(id)}`, `event-${id}${variant ? `-${variant}` : ''}.json`);
 
 /** GET /calendar?month= */
-export const getCalendar = (month: string) => getJson<CalendarMonth>(`calendar-${month}.json`);
+export const getCalendar = (month: string) => getJson<CalendarMonth>(`/calendar${qs({ month })}`, `calendar-${month}.json`);
 
 /** GET /forecast?date= */
-export const getForecast = (date: string) => getJson<Forecast>(`forecast-${date}.json`);
+export const getForecast = (date: string) => getJson<Forecast>(`/forecast${qs({ date })}`, `forecast-${date}.json`);
 
 /** GET /stations/{id}/forecast?date= */
 export const getStationForecast = (id: string, date: string) =>
-  getJson<StationForecast>(`station-${id}-${date}.json`);
+  getJson<StationForecast>(`/stations/${encodeURIComponent(id)}/forecast${qs({ date })}`, `station-${id}-${date}.json`);
 
-/** GET /routes/compare  (late: E4 막차 임박 시안) */
-export const getCompare = (params: { fromType: string; fromId: string; to: string; departAt: string; late?: boolean }) =>
-  getJson<Compare>(params.late ? 'compare-late.json' : 'compare.json');
+export interface CompareParams {
+  fromType: 'venue' | 'station';
+  fromId: string;
+  toStationId: string;
+  /** ISO 시각. 예: 2025-08-09T20:00:00+09:00 */
+  departAt: string;
+}
 
-/** GET /routes/{option_id} */
-export const getRoute = (optionId: string) => getJson<RouteDetail>(`route-${optionId}.json`);
+function compareQuery(p: CompareParams) {
+  return qs({ from_type: p.fromType, from_id: p.fromId, to_station_id: p.toStationId, depart_at: p.departAt });
+}
+
+/**
+ * GET /routes/compare
+ * 목업은 출발지와 출발 시간대마다 파일이 따로 있어요: compare-{from_id}-{시}.json
+ * `late`는 E4 막차 임박 시안을 보기 위한 목업 전용 값이에요.
+ */
+export const getCompare = (p: CompareParams, late = false) => {
+  const hour = p.departAt.slice(11, 13);
+  return getJson<Compare>(`/routes/compare${compareQuery(p)}`, `compare-${p.fromId}-${hour}${late ? '-late' : ''}.json`);
+};
+
+/** GET /routes/{option_id} — 비교와 같은 조건을 함께 보내요 */
+export const getRoute = (optionId: string, p: CompareParams) =>
+  getJson<RouteDetail>(`/routes/${encodeURIComponent(optionId)}${compareQuery(p)}`, `route-${p.fromId}-${optionId}.json`);
 
 // ── 쓰기 API (API 명세서 7~8장) ──────────────────────────────
 // 백엔드 서버가 아직 없어서, 지금은 기기에만 기록해요. 서버가 생기면 fetch 로 바꿔요.

@@ -3,10 +3,11 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getCompare, getEvents, getForecast, getRoute, type CompareOption } from '@/api';
+import { getCompare, getEvents, getForecast, getRoute, type CompareOption, type CompareParams } from '@/api';
 import {
   BackHeader,
   BottomBar,
+  LoadError,
   Headline,
   Icon,
   LevelBadge,
@@ -21,7 +22,7 @@ import {
   TimeSheet,
   Walk,
 } from '@/components/ui';
-import { DEMO_NOW_MIN, DEMO_TODAY, LEVEL, fmtMin, fmtNum, sessionList, store, track } from '@/lib/app';
+import { DEFAULT_ORIGIN_STATION, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 /** 지도 위 배치 (지도 API를 정하기 전 개략도, 390px 화면 기준 좌표) */
@@ -40,15 +41,15 @@ const MAP_VENUES: { id: string; x: number; y: number }[] = [
 
 /** 04 길찾기 탭 · 지도 */
 export function MapScreen() {
-  const fc = useLoad(() => getForecast(DEMO_TODAY), []);
-  const ev = useLoad(() => getEvents(DEMO_TODAY), []);
+  const fc = useLoad(() => getForecast(today()), []);
+  const ev = useLoad(() => getEvents(today()), []);
   const { st, vn } = useRefs();
   const [sel, setSel] = useState<string | null>(null);
   if (fc.status === 'loading' || ev.status === 'loading') return <Loading />;
   if (fc.status === 'error') return <Offline lastUpdatedAt={fc.lastUpdatedAt} onRetry={fc.retry} />;
   if (ev.status === 'error') return <Offline lastUpdatedAt={ev.lastUpdatedAt} onRetry={ev.retry} />;
 
-  const hour = '20';
+  const hour = hourKey(nowMin()); // 지금 출발할 때의 예상
   const f = fc.value.data;
   const levelOf = (id: string) => f.stations.find((s) => s.station_id === id)?.slots.find((s) => s.hour === hour)?.level ?? 'no_data';
   const best = f.summaries[hour]?.best_station_id;
@@ -175,7 +176,7 @@ export function MapScreen() {
                     행사 정보
                   </Link>
                 )}
-                <Link href={`/search/?venue=${sel}`} className="btn primary" style={{ height: 52, fontSize: 16, flex: 1.4 }}>
+                <Link href={`/search/?venue=${sel}${selEvent ? `&event=${selEvent.id}` : ''}`} className="btn primary" style={{ height: 52, fontSize: 16, flex: 1.4 }}>
                   이 공연장에서 출발
                 </Link>
               </div>
@@ -195,14 +196,24 @@ export function Search() {
   const q = useSearchParams();
   const router = useRouter();
   const venueParam = q.get('venue') || '';
+  const eventParam = q.get('event') || '';
   const { st, vn } = useRefs();
   const [from, setFrom] = useState(venueParam);
   const [to, setTo] = useState('');
-  const [when, setWhen] = useState(DEMO_NOW_MIN);
+  const now = nowMin();
+  const [when, setWhen] = useState(now);
   const [sheet, setSheet] = useState(q.get('state') === 'time');
   const [recents, setRecents] = useState<string[]>([]);
+  const fc = useLoad(() => getForecast(today()), []);
+  const supported = fc.status === 'ok' ? fc.value.data.supported_hours : [];
   useEffect(() => setRecents(sessionList('recent')), []);
   useEffect(() => setFrom(venueParam), [venueParam]);
+  // 역 상세에서 [길찾기]로 오면 그 역을 도착지로 채워요
+  const toParam = q.get('to');
+  const toName = toParam ? st[toParam]?.name : undefined;
+  useEffect(() => {
+    if (toName) setTo(toName);
+  }, [toName]);
 
   const fromLabel = from ? vn[from]?.name ?? from : '현재 위치';
   const matches = to.trim() ? Object.values(st).filter((s) => s.name.includes(to.trim())) : [];
@@ -210,18 +221,21 @@ export function Search() {
     if (dest) setRecents(sessionList('recent', dest));
     const p = new URLSearchParams({
       from_type: from ? 'venue' : 'station',
-      from_id: from || 'olympic_park', // TODO: 현재 위치는 기기 안에서 가까운 역 id로 바꿔서 보내요
+      // 현재 위치는 기기 안에서 가까운 역 id로 바꿔서 보내요(위치는 서버로 보내지 않아요).
+      // 좌표 데이터가 아직 없어서, 지금은 E1과 같은 올림픽공원 기준 역을 써요.
+      from_id: from || DEFAULT_ORIGIN_STATION,
       to: dest,
-      depart: fmtMin(when),
-      from: venueParam ? 'event' : 'search',
+      depart: isoAt(today(), when),
+      from: eventParam ? 'event' : 'search',
     });
-    if (venueParam) p.set('venue', venueParam);
+    // 들어온 공연과 출발지를 그대로 넘겨요. 고른 공연장이 그 공연의 공연장일 때만 공연을 이어 줘요.
+    if (eventParam && from === venueParam) p.set('event', eventParam);
     router.push(`/compare/?${p.toString()}`);
   };
 
   return (
     <main className="screen">
-      <BackHeader href={venueParam ? `/event/?id=evt_20250809_kspo` : '/map/'} />
+      <BackHeader href={eventParam ? `/event/?id=${eventParam}` : '/map/'} />
       <section className="intro" style={{ paddingBottom: 16 }}>
         <h1 className="h1 big">귀갓길 찾기</h1>
       </section>
@@ -268,8 +282,8 @@ export function Search() {
           </div>
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 4 }}>
-          <button type="button" onClick={() => setSheet(true)} aria-haspopup="dialog" aria-label={`출발 시간 바꾸기, 지금은 ${when === DEMO_NOW_MIN ? '지금 출발' : `${fmtMin(when)} 출발`}`} className="chip">
-            {when === DEMO_NOW_MIN ? '지금 출발' : `${fmtMin(when)} 출발`}
+          <button type="button" onClick={() => setSheet(true)} aria-haspopup="dialog" aria-label={`출발 시간 바꾸기, 지금은 ${when === now ? '지금 출발' : `${fmtMin(when)} 출발`}`} className="chip">
+            {when === now ? '지금 출발' : `${fmtMin(when)} 출발`}
           </button>
           <span style={{ fontSize: 14, color: '#5F6573' }}>누르면 출발 시간을 바꿀 수 있어요</span>
         </div>
@@ -316,10 +330,10 @@ export function Search() {
         title="언제 출발할까요?"
         sub="시와 분을 직접 맞춰요"
         value={when}
-        now={DEMO_NOW_MIN}
-        min={DEMO_NOW_MIN}
+        now={now}
+        min={now}
         max={24 * 60 - 10}
-        hint={(h) => (h === 20 || h === 21 ? `${h}시대 혼잡 예상으로 비교해요` : `${h}시대 혼잡 정보는 아직 준비 중이에요`)}
+        hint={(h) => (supported.includes(hourKey(h * 60)) ? `${h}시대 혼잡 예상으로 비교해요` : `${h}시대 혼잡 정보는 아직 준비 중이에요`)}
         confirmLabel={(v, isNow) => (isNow ? '지금 출발로 정하기' : `${fmtMin(v)} 출발로 정하기`)}
         onConfirm={(v) => {
           setWhen(v);
@@ -331,43 +345,55 @@ export function Search() {
   );
 }
 
+/** 비교·경로 화면이 같은 조건을 주소로 주고받아요 */
+function readCompareParams(q: URLSearchParams): CompareParams {
+  return {
+    fromType: q.get('from_type') === 'venue' ? 'venue' : 'station',
+    fromId: q.get('from_id') || DEFAULT_ORIGIN_STATION,
+    toStationId: q.get('to') ?? '',
+    departAt: q.get('depart') || isoAt(today(), nowMin()),
+  };
+}
+
 /** 04-3 귀가 방법 비교 (+ E4 막차 임박) */
 export function Compare() {
   const q = useSearchParams();
   const from = q.get('from') ?? 'search';
-  const late = q.get('state') === 'late';
-  const venue = q.get('venue');
-  const to = q.get('to') ?? '';
-  const res = useLoad(
-    () => getCompare({ fromType: q.get('from_type') ?? 'station', fromId: q.get('from_id') ?? '', to, departAt: q.get('depart') ?? '', late }),
-    [late, to],
-  );
+  const late = q.get('state') === 'late'; // E4 시안 미리보기용 (목업 전용)
+  const eventId = q.get('event');
+  const params = readCompareParams(q);
+  const key = q.toString();
+  const res = useLoad(() => getCompare(params, late), [key]);
+  const events = useLoad(() => getEvents(params.departAt.slice(0, 10)), [params.departAt.slice(0, 10)]);
   const { st, vn } = useRefs();
   useEffect(() => {
     if (res.status === 'ok') track('compare_view', { from, last_train_imminent: !!res.value.data.last_train?.imminent });
   }, [res.status, from]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const searchBack = `/search/${params.fromType === 'venue' ? `?venue=${params.fromId}${eventId ? `&event=${eventId}` : ''}` : ''}`;
+  const back = from === 'noti' ? '/home/' : searchBack;
   if (res.status === 'loading') return <Loading />;
-  if (res.status === 'error') return <Offline lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} />;
+  if (res.status === 'error') return <LoadError code={res.code === 'not_found' ? 'unsupported' : res.code} lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} back={back} />;
   const c = res.value.data;
-  const back = from === 'noti' ? '/home/' : from === 'event' ? `/search/?venue=${venue ?? ''}` : '/search/';
   const [rec, ...others] = c.options;
-  const origin = venue ? vn[venue]?.name : '현재 위치';
-  const toName = c.condition_label.to_name ?? st[to]?.name ?? null;
+  const origin = params.fromType === 'venue' ? vn[params.fromId]?.name ?? '출발지' : '현재 위치';
+  const toName = c.condition_label.to_name ?? st[params.toStationId]?.name ?? null;
+  const event = eventId && events.status === 'ok' ? events.value.data.events.find((e) => e.id === eventId) ?? null : null;
 
   const pick = (o: CompareOption) => {
     track('option_pick', { option_kind: o.kind, recommended: o.recommended });
+    // 다음에 앱을 열면 묻는 피드백(01-2). 공연에서 들어온 경우에만 공연을 함께 기록해요.
     store('pendingFeedback', {
       station_id: o.station_id,
       station_name: st[o.station_id]?.name ?? '',
-      event_id: venue ? 'evt_20250809_kspo' : null,
-      event_title: venue ? '더보이즈 공연' : null,
-      date: DEMO_TODAY,
+      event_id: event?.id ?? null,
+      event_title: event?.title ?? null,
+      date: params.departAt.slice(0, 10),
       hour: o.board_hour,
       level: o.level,
     });
   };
-  const routeHref = (o: CompareOption) => `/route/?option=${o.id}${venue ? `&venue=${venue}` : ''}${to ? `&to=${to}` : ''}`;
+  const routeHref = (o: CompareOption) => `/route/?option=${o.id}&${key}`;
 
   return (
     <main className="screen">
@@ -441,19 +467,21 @@ export function Compare() {
 /** 04-4 경로 상세 */
 export function RouteScreen() {
   const q = useSearchParams();
-  const option = q.get('option') ?? 'walk_bangi';
-  const venue = q.get('venue');
-  const to = q.get('to');
-  const res = useLoad(() => getRoute(option), [option]);
+  const option = q.get('option') ?? '';
+  const params = readCompareParams(q);
+  const back = new URLSearchParams(q.toString());
+  back.delete('option');
+  const res = useLoad(() => getRoute(option, params), [q.toString()]);
   const { st, vn } = useRefs();
   const [app, setApp] = useState<'naver' | 'kakao'>('naver');
   const [walked, setWalked] = useState(false);
   if (res.status === 'loading') return <Loading />;
-  if (res.status === 'error') return <Offline lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} />;
+  if (res.status === 'error') return <LoadError code={res.code} lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} back={`/compare/?${back.toString()}`} />;
   const r = res.value.data;
   const board = st[r.board_station_id];
-  const originName = venue ? vn[venue]?.name ?? '출발지' : '현재 위치';
-  const toName = r.to_station_id ? st[r.to_station_id]?.name : to ? st[to]?.name : null;
+  const originName = params.fromType === 'venue' ? vn[params.fromId]?.name ?? '출발지' : '현재 위치';
+  const toName = r.to_station_id ? st[r.to_station_id]?.name : params.toStationId ? st[params.toStationId]?.name : null;
+  const hourLabel = `${Number(params.departAt.slice(11, 13))}시대 출발`;
   const max = Math.max(1, ...r.compare.items.map((i) => i.expected));
   // TODO: 좌표가 정해지면 각 지도 앱의 길찾기 링크로 바꿔요. 지금은 역 이름 검색으로 열어요.
   const mapUrl = (name: string) =>
@@ -466,7 +494,7 @@ export function RouteScreen() {
 
   return (
     <main className="screen">
-      <BackHeader href="/compare/" />
+      <BackHeader href={`/compare/?${back.toString()}`} />
       <div role="img" aria-label={`지도 영역: ${originName}에서 ${board?.name}까지 걷는 길`} style={{ margin: '0 16px', height: 220, borderRadius: 20, background: '#EEF0F3', position: 'relative', overflow: 'hidden' }}>
         <svg aria-hidden="true" width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
           <path d="M80 110 C 140 130, 200 150, 270 168" stroke="#4E3DBC" strokeWidth="4" strokeDasharray="2 8" strokeLinecap="round" fill="none" />
@@ -520,7 +548,7 @@ export function RouteScreen() {
               <div style={{ paddingBottom: last ? 0 : 18, display: 'flex', flexDirection: 'column', gap: 3 }}>
                 <span style={{ fontSize: 17, fontWeight: 700 }}>{s.type === 'start' ? `${originName}에서 출발` : s.title}</span>
                 <span style={{ fontSize: 14, lineHeight: 1.5, color: '#5F6573' }}>
-                  {s.type === 'start' && s.detail}
+                  {s.type === 'start' && hourLabel}
                   {s.type === 'walk' && (
                     <>
                       <Walk min={r.walk_min} />, 추천 출구와 동선은 <Ph>현장 확인 후 입력</Ph>

@@ -96,6 +96,7 @@
         "station_id": "hanseong_baekje",
         "slots": []
       }
-    ]
+    ],
+    "focus_hour": "20"
   }
 }

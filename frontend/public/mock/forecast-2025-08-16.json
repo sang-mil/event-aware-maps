@@ -84,6 +84,7 @@
         "station_id": "mongchontoseong",
         "slots": []
       }
-    ]
+    ],
+    "focus_hour": "20"
   }
 }

@@ -98,6 +98,8 @@ export interface Forecast {
   date: string;
   day_label: string;
   has_event: boolean;
+  /** 그날 가장 중요한 시간대(행사가 끝나는 시간대). 캘린더의 '근처 역, 20시대 예상'에 써요. */
+  focus_hour: string;
   supported_hours: string[];
   summaries: Record<string, Headline & { best_station_id: string | null }>;
   /** 시간대별 역 순서. 서버가 정해서 내려줘요(화면은 순서를 바꾸지 않아요). */

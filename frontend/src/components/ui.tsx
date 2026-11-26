@@ -372,3 +372,30 @@ export function StaleNotice({ updatedAt }: { updatedAt: string }) {
     </div>
   );
 }
+
+/** 불러오기 실패를 종류에 맞게 보여줘요: 연결 오류(E5), 없는 정보, 준비 중인 시간대 */
+export function LoadError({
+  code,
+  lastUpdatedAt,
+  onRetry,
+  back = '/home/',
+}: {
+  code: 'offline' | 'not_found' | 'unsupported';
+  lastUpdatedAt: string | null;
+  onRetry: () => void;
+  back?: string;
+}) {
+  if (code === 'offline') return <Offline lastUpdatedAt={lastUpdatedAt} onRetry={onRetry} />;
+  const unsupported = code === 'unsupported';
+  return (
+    <main className="screen">
+      <BackHeader href={back} />
+      <section className="intro">
+        <h1 className="h1 big">{unsupported ? '혼잡 정보는 아직 준비 중이에요' : '정보를 찾을 수 없어요'}</h1>
+        <p className="lead">
+          {unsupported ? '다른 출발 시간이나 출발지를 골라 주세요.' : '주소가 바뀌었거나 아직 준비되지 않은 정보예요.'}
+        </p>
+      </section>
+    </main>
+  );
+}

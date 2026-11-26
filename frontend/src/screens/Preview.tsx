@@ -54,11 +54,11 @@ const GROUPS: { title: string; items: [string, string, string][] }[] = [
       ['04', '길찾기 탭 · 지도', '/map/'],
       ['04-1', '귀갓길 찾기', '/search/'],
       ['04-1-1', '출발 시간 선택', '/search/?state=time'],
-      ['04-2', '공연장에서 출발', '/search/?venue=kspo_dome'],
-      ['04-3', '귀가 방법 비교', '/compare/'],
-      ['04-3a', '귀가 방법 비교 · 공연장에서 출발', '/compare/?from=event&venue=kspo_dome'],
-      ['04-3b', '귀가 방법 비교 · 알림에서', '/compare/?from=noti&venue=kspo_dome'],
-      ['04-4', '경로 상세 · 방이역에서 타기', '/route/?option=walk_bangi&venue=kspo_dome'],
+      ['04-2', '공연장에서 출발', '/search/?venue=kspo_dome&event=evt_20250809_kspo'],
+      ['04-3', '귀가 방법 비교', '/compare/?from_type=station&from_id=olympic_park&depart=2025-08-09T20:00:00%2B09:00'],
+      ['04-3a', '귀가 방법 비교 · 공연장에서 출발', '/compare/?from=event&from_type=venue&from_id=kspo_dome&event=evt_20250809_kspo&depart=2025-08-09T20:00:00%2B09:00'],
+      ['04-3b', '귀가 방법 비교 · 알림에서', '/compare/?from=noti&from_type=venue&from_id=kspo_dome&event=evt_20250809_kspo&depart=2025-08-09T20:00:00%2B09:00'],
+      ['04-4', '경로 상세 · 방이역에서 타기', '/route/?option=walk_bangi&from=event&from_type=venue&from_id=kspo_dome&event=evt_20250809_kspo&depart=2025-08-09T20:00:00%2B09:00'],
     ],
   },
   {
@@ -75,7 +75,7 @@ const GROUPS: { title: string; items: [string, string, string][] }[] = [
       ['E1', '위치 권한이 꺼져 있을 때', '/home/?state=noLocation'],
       ['E2', '오늘 행사가 없는 날', '/home/?state=noEvent'],
       ['E3', '혼잡 정보가 없는 역', '/station/?id=mongchontoseong'],
-      ['E4', '막차가 임박했을 때', '/compare/?state=late&venue=kspo_dome&from=event'],
+      ['E4', '막차가 임박했을 때', '/compare/?state=late&from=event&from_type=venue&from_id=kspo_dome&event=evt_20250809_kspo&depart=2025-08-09T20:00:00%2B09:00'],
       ['E5', '연결 오류', '/home/?state=offline'],
       ['E6', '공연 시간이 바뀌었을 때', '/event/?id=evt_20250809_kspo&state=changed'],
       ['E7', '공연이 취소됐을 때', '/event/?id=evt_20250809_kspo&state=canceled'],
@@ -175,7 +175,7 @@ export function Brand() {
 /** 05 알림 미리보기 · 잠금화면 */
 export function Notifications() {
   const items = [
-    ['지금', '더보이즈 공연이 곧 끝나요', '20시대 올림픽공원역은 혼잡, 방이역은 보통일 거예요. 눌러서 귀가 방법을 비교해 보세요.', '웹 푸시, 관람 예정 알림. 누르면 귀가 방법 비교로 가요', '/compare/?from=noti&venue=kspo_dome'],
+    ['지금', '더보이즈 공연이 곧 끝나요', '20시대 올림픽공원역은 혼잡, 방이역은 보통일 거예요. 눌러서 귀가 방법을 비교해 보세요.', '웹 푸시, 관람 예정 알림. 누르면 귀가 방법 비교로 가요', '/compare/?from=noti&from_type=venue&from_id=kspo_dome&event=evt_20250809_kspo&depart=2025-08-09T20:00:00%2B09:00'],
     ['오늘 21:00', '21시예요. 올림픽공원역이 덜 붐빌 거예요', '20시대의 절반 수준으로 줄 거예요.', '웹 푸시, 출발 시간 알림. 누르면 역 상세로 가요', '/station/?id=olympic_park'],
     ['어제 18:00', '내일 저녁 송파에 큰 행사가 있어요', 'KSPO DOME 공연이 있어 20~21시 올림픽공원역이 붐빌 수 있어요.', '웹 푸시, 주민용 행사 전날 알림. 누르면 캘린더로 가요', '/calendar/'],
     ['오늘 15:02', '공연 시간이 바뀌었어요', '더보이즈 공연이 끝나는 시간이 바뀌어 알림도 맞춰 옮겼어요.', '웹 푸시, 일정 변경 알림. 누르면 공연 상세로 가요', '/event/?id=evt_20250809_kspo&state=changed'],

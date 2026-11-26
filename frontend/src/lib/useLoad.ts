@@ -1,12 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { ApiError, getStations, getVenues, type Loaded, type Station, type Venue } from '@/api';
+import { ApiError, getStations, getVenues, type ApiErrorCode, type Loaded, type Station, type Venue } from '@/api';
 
 export type LoadState<T> =
   | { status: 'loading' }
   | { status: 'ok'; value: Loaded<T> }
-  | { status: 'error'; lastUpdatedAt: string | null; retry: () => void };
+  | { status: 'error'; code: ApiErrorCode; lastUpdatedAt: string | null; retry: () => void };
 
 /** 화면에서 API 를 부를 때 쓰는 공통 훅. 실패하면 E5 화면을 보여줄 수 있게 상태를 돌려줘요. */
 export function useLoad<T>(fn: () => Promise<Loaded<T>>, deps: unknown[]): LoadState<T> {
@@ -21,7 +21,8 @@ export function useLoad<T>(fn: () => Promise<Loaded<T>>, deps: unknown[]): LoadS
       .then((value) => !cancelled && setState({ status: 'ok', value }))
       .catch((e: unknown) => {
         if (cancelled) return;
-        setState({ status: 'error', lastUpdatedAt: e instanceof ApiError ? e.cachedUpdatedAt : null, retry });
+        const err = e instanceof ApiError ? e : null;
+        setState({ status: 'error', code: err?.code ?? 'offline', lastUpdatedAt: err?.cachedUpdatedAt ?? null, retry });
       });
     return () => {
       cancelled = true;

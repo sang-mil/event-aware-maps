@@ -12,6 +12,7 @@ import {
   LevelBadge,
   LineBadge,
   LineStack,
+  LoadError,
   Loading,
   Offline,
   SectionTitle,
@@ -20,7 +21,7 @@ import {
   Time,
   Walk,
 } from '@/components/ui';
-import { DEMO_MONTH, DEMO_TODAY, dateLabel, isIphone, pushSupport, requestPush, track, type PushSupport } from '@/lib/app';
+import { DEMO_MONTH, dateLabel, isIphone, pushSupport, requestPush, today, track, type PushSupport } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 const AREAS = [
@@ -37,7 +38,7 @@ function eventHref(e: { id: string; type: 'show' | 'game' }, from: string) {
 export function Calendar() {
   const [area, setArea] = useState<string>('all');
   const [venue, setVenue] = useState<string>('all');
-  const [picked, setPicked] = useState(DEMO_TODAY);
+  const [picked, setPicked] = useState(today());
   const month = DEMO_MONTH;
   const cal = useLoad(() => getCalendar(month), [month]);
   // 일정이 없는 날은 목업 파일이 없어서 오류가 나요. 그때는 '일정 없음'으로 보여줘요.
@@ -69,7 +70,12 @@ export function Calendar() {
     setPicked(date);
     track('calendar_pick', { area, venue_id: venue, event_count: dayEvents.length });
   };
-  const nearStations = ['olympic_park', 'bangi'];
+  // 그날 가장 중요한 시간대(서버가 정해요)와 그 시간대의 역 순서를 그대로 써요.
+  const focus = fc.status === 'ok' ? fc.value.data.focus_hour : null;
+  const nearStations =
+    fc.status === 'ok' && focus
+      ? (fc.value.data.ranking[focus] ?? []).filter((sid) => fc.value.data.stations.find((s) => s.station_id === sid)?.slots.some((x) => x.hour === focus)).slice(0, 2)
+      : [];
 
   return (
     <main className="screen with-tabs">
@@ -184,10 +190,10 @@ export function Calendar() {
         <>
           {showStations && fc.status === 'ok' && (
             <>
-              <p style={{ margin: 0, padding: '28px 24px 10px', fontSize: 15, fontWeight: 700, color: '#4A4F5C' }}>근처 역, 20시대 예상</p>
+              <p style={{ margin: 0, padding: '28px 24px 10px', fontSize: 15, fontWeight: 700, color: '#4A4F5C' }}>근처 역, {Number(focus)}시대 예상</p>
               <section className="card">
                 {nearStations.map((sid) => {
-                  const slot = fc.value.data.stations.find((s) => s.station_id === sid)?.slots.find((s) => s.hour === '20');
+                  const slot = fc.value.data.stations.find((s) => s.station_id === sid)?.slots.find((s) => s.hour === focus);
                   if (!slot) return null;
                   return (
                     <Link key={sid} className="row" href={`/station/?id=${sid}&date=${picked}`}>
@@ -259,7 +265,7 @@ export function Calendar() {
 /** 03-1 오늘 공연과 경기 전체 */
 export function EventsToday() {
   const [f, setF] = useState('all');
-  const res = useLoad(() => getEvents(DEMO_TODAY), []);
+  const res = useLoad(() => getEvents(today()), []);
   const { st, vn } = useRefs();
   if (res.status === 'loading') return <Loading />;
   if (res.status === 'error') return <Offline lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} />;
@@ -283,7 +289,7 @@ export function EventsToday() {
           <span className="t">{list.length}</span>개 열려요
         </h1>
         <span className="t" style={{ fontSize: 15, color: '#5F6573' }}>
-          {dateLabel(DEMO_TODAY, true)}
+          {dateLabel(res.value.data.date, true)}
         </span>
       </section>
       <div role="radiogroup" aria-label="종류" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, padding: '16px 24px 8px' }}>
@@ -351,7 +357,7 @@ const BACK: Record<string, string> = { home: '/home/', calendar: '/calendar/', e
 /** 03-2 공연 상세 (+ 05-2 알림 불가, E6 시간 변경, E7 취소, E8 알림 거부) */
 export function EventScreen() {
   const q = useSearchParams();
-  const id = q.get('id') ?? 'evt_20250809_kspo';
+  const id = q.get('id') ?? '';
   const from = q.get('from') ?? 'home';
   const demo = q.get('state'); // changed | canceled | nopush | denied
   const variant = demo === 'changed' || demo === 'canceled' ? demo : undefined;
@@ -370,7 +376,7 @@ export function EventScreen() {
   }, [demo, key]);
 
   if (res.status === 'loading') return <Loading />;
-  if (res.status === 'error') return <Offline lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} />;
+  if (res.status === 'error') return <LoadError code={res.code} lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} back={BACK[from] ?? '/home/'} />;
   const e = res.value.data;
   const canceled = e.status === 'canceled';
   const noPush = push === 'unsupported' || push === 'denied';
@@ -484,7 +490,7 @@ export function EventScreen() {
             </span>
           )}
           {(denied || iphone || demo === 'nopush') && (
-            <Link href="/install/" className="link-u">
+            <Link href={`/install/?from=event&event=${e.id}`} className="link-u">
               {denied ? '알림 다시 켜는 방법' : '홈 화면에 추가하면 실시간 알림도 받을 수 있어요'}
             </Link>
           )}
@@ -550,7 +556,7 @@ export function EventScreen() {
         ))}
       </ul>
       <BottomBar>
-        <Link href={`/search/?venue=${e.venue_id ?? ''}`} className="btn primary">
+        <Link href={`/search/?venue=${e.venue_id ?? ''}&event=${e.id}`} className="btn primary">
           이 공연장에서 출발하기
         </Link>
       </BottomBar>
@@ -600,7 +606,7 @@ const GAME = {
 /** 03-3 경기 상세 */
 export function GameScreen() {
   const q = useSearchParams();
-  const id = q.get('id') ?? 'evt_20250809_kbo';
+  const id = q.get('id') ?? '';
   const demo = q.get('state'); // before | end
   const variant = demo === 'before' || demo === 'end' ? demo : undefined;
   const res = useLoad(() => getEvent(id, variant), [id, variant]);
@@ -610,7 +616,7 @@ export function GameScreen() {
   useEffect(() => setOn(hasAlert(key)), [key]);
 
   if (res.status === 'loading') return <Loading />;
-  if (res.status === 'error') return <Offline lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} />;
+  if (res.status === 'error') return <LoadError code={res.code} lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} />;
   const e = res.value.data;
   const g = GAME[e.game_state ?? 'before'];
   const toggle = async () => {

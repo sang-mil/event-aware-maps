@@ -125,13 +125,13 @@ export function Onboarding() {
 }
 
 /** 05-1 아이폰 알림 받는 방법 */
-export function Install({ from }: { from: string | null }) {
+export function Install({ from, event }: { from: string | null; event: string | null }) {
   const steps = [
     ['사파리 아래쪽 공유 버튼을 눌러요', '네모에서 화살표가 위로 나온 모양이에요'],
     ['‘홈 화면에 추가’를 골라요', '목록을 조금 내리면 있어요'],
     ['홈 화면의 틈길 아이콘으로 열어요', '처음 열 때 알림 허용을 눌러 주세요'],
   ];
-  const back = from === 'onboarding' ? '/onboarding/' : `/event/?id=evt_20250809_kspo`;
+  const back = from === 'onboarding' ? '/onboarding/' : event ? `/event/?id=${event}` : '/home/';
   return (
     <main className="screen">
       <header className="topbar">

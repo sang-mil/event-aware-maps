@@ -4,16 +4,16 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { alertKey, getStationForecast, hasAlert, setAlert } from '@/api';
-import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, Loading, Offline, SectionTitle, StaleNotice, Walk } from '@/components/ui';
-import { DEMO_TODAY, LEVEL, dateLabel, requestPush, pushSupport, track } from '@/lib/app';
+import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, Walk } from '@/components/ui';
+import { LEVEL, today, dateLabel, requestPush, pushSupport, track } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 /** 02 · 02-1 역 상세, 02-2 · 02-3 고른 날짜, E3 혼잡 정보가 없는 역 */
 export function Station() {
   const q = useSearchParams();
-  const id = q.get('id') ?? 'olympic_park';
+  const id = q.get('id') ?? '';
   const pickedDate = q.get('date'); // 캘린더에서 들어오면 날짜가 있어요
-  const date = pickedDate ?? DEMO_TODAY;
+  const date = pickedDate ?? today();
   const back = pickedDate ? '/calendar/' : '/home/';
   const res = useLoad(() => getStationForecast(id, date), [id, date]);
   const { st } = useRefs();
@@ -25,7 +25,7 @@ export function Station() {
   }, [key, id, pickedDate]);
 
   if (res.status === 'loading') return <Loading />;
-  if (res.status === 'error') return <Offline lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} />;
+  if (res.status === 'error') return <LoadError code={res.code} lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} back={back} />;
   const f = res.value.data;
   const station = st[id];
   const dayLabel = pickedDate ? dateLabel(pickedDate) : '오늘';
@@ -148,7 +148,7 @@ export function Station() {
       <BottomBar>
         {notifyHour !== null ? (
           <>
-            <Link href="/search/" className="btn secondary">
+            <Link href={`/search/?to=${id}`} className="btn secondary">
               길찾기
             </Link>
             <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn primary'} style={{ flex: 2 }}>
@@ -156,7 +156,7 @@ export function Station() {
             </button>
           </>
         ) : (
-          <Link href="/search/" className="btn primary">
+          <Link href={`/search/?to=${id}`} className="btn primary">
             {station?.name}으로 길찾기
           </Link>
         )}
