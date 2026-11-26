@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2025-08-09T18:05:00+09:00",
+  "data": {
+    "date": "2025-08-16",
+    "day_label": "8월 16일 (토)",
+    "has_event": false,
+    "supported_hours": [
+      "20",
+      "21"
+    ],
+    "summaries": {
+      "20": {
+        "highlight": null,
+        "text": "오늘은 큰 행사가 없어 주변 역이 평소와 비슷할 거예요",
+        "best_station_id": null
+      },
+      "21": {
+        "highlight": null,
+        "text": "오늘은 큰 행사가 없어 주변 역이 평소와 비슷할 거예요",
+        "best_station_id": null
+      }
+    },
+    "ranking": {
+      "20": [
+        "bangi",
+        "olympic_park",
+        "mongchontoseong"
+      ],
+      "21": [
+        "bangi",
+        "olympic_park",
+        "mongchontoseong"
+      ]
+    },
+    "stations": [
+      {
+        "station_id": "olympic_park",
+        "slots": [
+          {
+            "hour": "20",
+            "expected": null,
+            "baseline": null,
+            "ratio": null,
+            "level": "normal",
+            "message": "평소 토요일과 비슷할 거예요",
+            "recommended": false
+          },
+          {
+            "hour": "21",
+            "expected": null,
+            "baseline": null,
+            "ratio": null,
+            "level": "normal",
+            "message": "평소 토요일과 비슷할 거예요",
+            "recommended": false
+          }
+        ]
+      },
+      {
+        "station_id": "bangi",
+        "slots": [
+          {
+            "hour": "20",
+            "expected": null,
+            "baseline": null,
+            "ratio": null,
+            "level": "normal",
+            "message": "평소 토요일과 비슷할 거예요",
+            "recommended": false
+          },
+          {
+            "hour": "21",
+            "expected": null,
+            "baseline": null,
+            "ratio": null,
+            "level": "normal",
+            "message": "평소 토요일과 비슷할 거예요",
+            "recommended": false
+          }
+        ]
+      },
+      {
+        "station_id": "mongchontoseong",
+        "slots": []
+      }
+    ]
+  }
+}

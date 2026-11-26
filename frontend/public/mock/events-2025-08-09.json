@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2025-08-09T18:05:00+09:00",
+  "data": {
+    "date": "2025-08-09",
+    "events": [
+      {
+        "id": "evt_20250809_kspo",
+        "type": "show",
+        "title": "더보이즈 공연",
+        "venue_id": "kspo_dome",
+        "area": "olympic_park",
+        "date": "2025-08-09",
+        "start_at": null,
+        "end_at": null,
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": true
+      },
+      {
+        "id": "evt_20250809_hall",
+        "type": "show",
+        "title": "강다니엘 공연",
+        "venue_id": "olympic_hall",
+        "area": "olympic_park",
+        "date": "2025-08-09",
+        "start_at": null,
+        "end_at": null,
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": true
+      },
+      {
+        "id": "evt_20250809_kbo",
+        "type": "game",
+        "title": "한화 대 LG",
+        "venue_id": "jamsil_baseball",
+        "area": "jamsil",
+        "date": "2025-08-09",
+        "start_at": null,
+        "end_at": null,
+        "end_at_source": null,
+        "status": "scheduled",
+        "change": null,
+        "game_state": "live",
+        "nearest_station": {
+          "station_id": "sports_complex",
+          "level": "no_data"
+        },
+        "linkable": true
+      },
+      {
+        "id": "evt_20250809_jamsil_concert",
+        "type": "show",
+        "title": "영탁 콘서트",
+        "venue_id": null,
+        "area": "jamsil",
+        "date": "2025-08-09",
+        "start_at": null,
+        "end_at": null,
+        "end_at_source": null,
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": null,
+        "linkable": false
+      }
+    ],
+    "next_event": null
+  }
+}

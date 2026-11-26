@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2025-08-09T18:05:00+09:00",
+  "data": {
+    "condition_label": {
+      "to_name": null,
+      "hour_label": "20시대 출발"
+    },
+    "headline": {
+      "highlight": "방이역",
+      "text": "에서 타면 덜 붐빌 거예요"
+    },
+    "last_train": null,
+    "options": [
+      {
+        "id": "walk_bangi",
+        "kind": "walk_to_other",
+        "recommended": true,
+        "title": "방이역에서 타기",
+        "subtitle": "한 정거장 걸어가기",
+        "station_id": "bangi",
+        "board_hour": "20",
+        "walk_min": null,
+        "expected": 247,
+        "level": "normal",
+        "compare_message": "평소 토요일과 비슷할 거예요"
+      },
+      {
+        "id": "now_olympic",
+        "kind": "board_now",
+        "recommended": false,
+        "title": "올림픽공원역에서 20시대에 타기",
+        "subtitle": "가장 가까운 역",
+        "station_id": "olympic_park",
+        "board_hour": "20",
+        "walk_min": null,
+        "expected": 1265,
+        "level": "crowded",
+        "compare_message": "평소의 2.6배"
+      },
+      {
+        "id": "later_olympic",
+        "kind": "wait_later",
+        "recommended": false,
+        "title": "올림픽공원역에서 21시 이후에 타기",
+        "subtitle": "1시간쯤 기다리기",
+        "station_id": "olympic_park",
+        "board_hour": "21",
+        "walk_min": null,
+        "expected": 643,
+        "level": "normal",
+        "compare_message": "20시대의 절반"
+      }
+    ]
+  }
+}

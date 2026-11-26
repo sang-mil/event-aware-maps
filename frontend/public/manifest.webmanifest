@@ -1,0 +1,11 @@
+{
+  "name": "틈길",
+  "short_name": "틈길",
+  "description": "공연이 끝나고 편안하게 집에 가요",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#F4F5F7",
+  "lang": "ko",
+  "icons": [{ "src": "brand/icon.png", "sizes": "482x458", "type": "image/png" }]
+}

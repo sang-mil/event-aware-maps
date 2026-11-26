@@ -1,0 +1,11 @@
+import { Suspense } from 'react';
+import { Loading } from '@/components/ui';
+import { Calendar } from '@/screens/Events';
+
+export default function Page() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Calendar />
+    </Suspense>
+  );
+}

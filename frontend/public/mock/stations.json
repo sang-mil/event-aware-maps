@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2025-08-01T00:00:00+09:00",
+  "data": [
+    {
+      "id": "olympic_park",
+      "name": "올림픽공원역",
+      "lines": [
+        "5",
+        "9"
+      ],
+      "lat": null,
+      "lng": null,
+      "has_data": true,
+      "data_lines": [
+        "5"
+      ]
+    },
+    {
+      "id": "bangi",
+      "name": "방이역",
+      "lines": [
+        "5"
+      ],
+      "lat": null,
+      "lng": null,
+      "has_data": true,
+      "data_lines": [
+        "5"
+      ]
+    },
+    {
+      "id": "mongchontoseong",
+      "name": "몽촌토성역",
+      "lines": [
+        "8"
+      ],
+      "lat": null,
+      "lng": null,
+      "has_data": false,
+      "data_lines": []
+    },
+    {
+      "id": "sports_complex",
+      "name": "종합운동장역",
+      "lines": [
+        "2",
+        "9"
+      ],
+      "lat": null,
+      "lng": null,
+      "has_data": false,
+      "data_lines": []
+    },
+    {
+      "id": "jamsil_saenae",
+      "name": "잠실새내역",
+      "lines": [
+        "2"
+      ],
+      "lat": null,
+      "lng": null,
+      "has_data": false,
+      "data_lines": []
+    },
+    {
+      "id": "hanseong_baekje",
+      "name": "한성백제역",
+      "lines": [
+        "9"
+      ],
+      "lat": null,
+      "lng": null,
+      "has_data": false,
+      "data_lines": []
+    }
+  ]
+}
