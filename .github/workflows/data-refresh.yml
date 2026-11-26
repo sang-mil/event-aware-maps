@@ -1,0 +1,90 @@
+# 데이터 갱신: KSPO 수집 → DB → 행사·혼잡·추천 계산 → 스키마 검증 → gh-pages 브랜치 data/ 에 발행.
+# - 인증키는 저장소 Secrets(KSPO_LINKED_KEY, KSPO_PERF_KEY)에서만 읽는다. 로그에 찍지 않는다.
+# - 승하차는 저장소의 요약 파일(backend/data/seed)을 쓴다.
+# - 어느 단계든 실패하면 발행하지 않아 gh-pages 의 기존 데이터가 그대로 남는다.
+# - gh-pages 의 data/ 폴더만 바꾼다(프런트 화면 파일은 건드리지 않음). force push 하지 않는다.
+# - 기준 시각(updated_at)만 다르고 내용이 같으면 커밋하지 않는다(기록이 쓸데없이 쌓이지 않게).
+name: data-refresh
+
+on:
+  schedule:
+    - cron: "0 21 * * *" # 매일 06:00 (한국 시간). GitHub 사정으로 몇 분 늦을 수 있음
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 의존성 설치
+        run: pip install -r backend/requirements.txt
+
+      - name: KSPO 수집 (5초에 1번 제한이라 몇 분 걸림)
+        env:
+          KSPO_LINKED_KEY: ${{ secrets.KSPO_LINKED_KEY }}
+          KSPO_PERF_KEY: ${{ secrets.KSPO_PERF_KEY }}
+        run: |
+          python backend/cli.py collect kspo_linked
+          python backend/cli.py collect kspo_perf
+
+      - name: DB 만들기 (승하차는 요약 파일)
+        run: python backend/cli.py build-db
+
+      - name: 계산하고 검증해서 만들기
+        run: |
+          AS_OF="$(TZ=Asia/Seoul date +%Y-%m-%dT%H:%M:%S)+09:00"
+          python backend/cli.py build --out site_data --as-of "$AS_OF"
+
+      - name: gh-pages 준비
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin gh-pages > /dev/null; then
+            git fetch --depth=1 origin gh-pages
+            git worktree add -B gh-pages pages origin/gh-pages
+          else
+            git worktree add --detach pages
+            git -C pages checkout --orphan gh-pages
+            git -C pages rm -rf --quiet .
+          fi
+
+      - name: 내용이 바뀌었는지 확인 (updated_at 제외)
+        id: diff
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          def load(d):
+              out = {}
+              for p in pathlib.Path(d).glob("*.json"):
+                  body = json.loads(p.read_text(encoding="utf-8"))
+                  body.pop("updated_at", None)
+                  out[p.name] = body
+              return out
+          changed = load("site_data") != load("pages/data")
+          print("바뀜" if changed else "내용 같음: 발행 생략")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"changed={'true' if changed else 'false'}\n")
+          PY
+
+      - name: gh-pages data/ 에 발행
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          rm -rf pages/data
+          mkdir -p pages/data
+          cp -r site_data/. pages/data/
+          touch pages/.nojekyll
+          cd pages
+          git add -A data .nojekyll
+          git commit -q -m "data: 데이터 갱신 $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M')"
+          git push origin gh-pages

@@ -1,0 +1,30 @@
+# 데이터 계약 검사: data-contract/ 가 바뀌면 스키마 문법과 목업 전부를 검사한다.
+# 빨간불이면 머지하지 않는다. 외부 API·인증키를 쓰지 않는다.
+name: ci-contract
+
+on:
+  pull_request:
+    paths:
+      - "data-contract/**"
+      - ".github/workflows/ci-contract.yml"
+  push:
+    branches: [main]
+    paths:
+      - "data-contract/**"
+      - ".github/workflows/ci-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 검사 도구 설치
+        run: pip install -r data-contract/requirements.txt
+      - name: 스키마·목업 검사
+        run: python data-contract/validate.py

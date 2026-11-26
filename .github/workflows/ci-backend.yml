@@ -1,0 +1,32 @@
+# 백엔드 테스트: backend/ 나 data-contract/ 가 바뀌면 pytest 를 돌린다.
+# 테스트는 가짜 fixtures 로만 돌아서 외부 API·인증키가 필요 없다.
+name: ci-backend
+
+on:
+  pull_request:
+    paths:
+      - "backend/**"
+      - "data-contract/**"
+      - ".github/workflows/ci-backend.yml"
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - "data-contract/**"
+      - ".github/workflows/ci-backend.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 의존성 설치
+        run: pip install -r backend/requirements.txt
+      - name: 테스트
+        run: python -m pytest backend -q
