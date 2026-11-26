@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { SourceNote } from '@/components/DataNote';
 import { getEvents, getForecast, postFeedback, serverReady, type Level } from '@/api';
 import {
   Headline,
@@ -187,6 +188,7 @@ export function Home() {
           </Link>
         )}
       </section>
+      <SourceNote />
       <TabBar active="home" />
 
       <TimeSheet

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { IBM_Plex_Sans_KR } from 'next/font/google';
+import { ReplayBanner } from '@/components/DataNote';
 import { ServiceWorker } from '@/components/ServiceWorker';
 import './globals.css';
 
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={plex.variable}>
       <body>
+        <ReplayBanner />
         {children}
         <ServiceWorker />
       </body>

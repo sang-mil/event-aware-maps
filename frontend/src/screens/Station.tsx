@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { alertKey, getStationForecast, hasAlert, pushReady, setAlert } from '@/api';
+import { SourceNote } from '@/components/DataNote';
 import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, Walk } from '@/components/ui';
 import { LEVEL, today, dateLabel, isoAt, requestPush, pushSupport, track } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
@@ -143,6 +144,7 @@ export function Station() {
           ))}
         </ul>
       </section>
+      <SourceNote />
 
       <BottomBar>
         {notifyHour !== null ? (

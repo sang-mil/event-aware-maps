@@ -12,37 +12,46 @@ import type {
 } from './types';
 
 export * from './types';
-export { ApiError, usingMock } from './client';
+export { ApiError, usingMock, usingStaticData } from './client';
 export type { ApiErrorCode, Loaded } from './client';
 
 // ── 읽기 API (API 명세서 3~6장) ──────────────────────────────
-// 첫 번째 인자는 실제 API 경로, 두 번째는 같은 조건의 목업 파일이에요.
+// 첫 번째 인자는 실제 API 경로, 두 번째는 같은 조건의 목업·정적 파일 이름이에요.
+// 정적 파일(GitHub Pages data/) 이름 규칙은 목업과 거의 같고, 다른 곳만 `data`에 따로 적어요.
 
-export const getStations = () => getJson<Station[]>('/stations', 'stations.json');
-export const getVenues = () => getJson<Venue[]>('/venues', 'venues.json');
+// 역·공연장 목록은 아직 발행되지 않아서 정적 파일 모드에서도 목업을 읽어요.
+export const getStations = () => getJson<Station[]>('/stations', { mock: 'stations.json', data: 'mock' });
+export const getVenues = () => getJson<Venue[]>('/venues', { mock: 'venues.json', data: 'mock' });
 
 /** GET /events?date= */
 export const getEvents = (date: string) =>
-  // 행사 없는 날은 서버가 200과 events: [] 를 줘요(명세 4.2). 목업에 그날 파일이 없을 때도 똑같이 빈 목록으로 다뤄요.
-  getJson<EventList>(`/events${qs({ date })}`, `events-${date}.json`, () => ({ date, events: [], next_event: null }));
+  // 행사 없는 날은 서버가 200과 events: [] 를 줘요(명세 4.2). 그날 파일이 없을 때도 똑같이 빈 목록으로 다뤄요.
+  getJson<EventList>(`/events${qs({ date })}`, {
+    mock: `events-${date}.json`,
+    empty: () => ({ date, events: [], next_event: null }),
+  });
 
 /**
  * GET /events/{id}
  * `variant`는 시안의 상태(E6 시간 변경, E7 취소, 경기 전/끝)를 미리 보기 위한 목업 전용 값이에요. 실제 API에는 보내지 않아요.
+ * 행사 상세 파일은 아직 발행되지 않아서, 정적 파일 모드에서는 '찾을 수 없음'이 돼요.
  */
 export const getEvent = (id: string, variant?: string) =>
-  getJson<EventDetail>(`/events/${encodeURIComponent(id)}`, `event-${id}${variant ? `-${variant}` : ''}.json`);
+  getJson<EventDetail>(`/events/${encodeURIComponent(id)}`, {
+    mock: `event-${id}${variant ? `-${variant}` : ''}.json`,
+    data: `event-${id}.json`,
+  });
 
 /** GET /calendar?month= */
 export const getCalendar = (month: string) =>
-  getJson<CalendarMonth>(`/calendar${qs({ month })}`, `calendar-${month}.json`, () => ({ month, days: [] }));
+  getJson<CalendarMonth>(`/calendar${qs({ month })}`, { mock: `calendar-${month}.json`, empty: () => ({ month, days: [] }) });
 
 /** GET /forecast?date= */
-export const getForecast = (date: string) => getJson<Forecast>(`/forecast${qs({ date })}`, `forecast-${date}.json`);
+export const getForecast = (date: string) => getJson<Forecast>(`/forecast${qs({ date })}`, { mock: `forecast-${date}.json` });
 
 /** GET /stations/{id}/forecast?date= */
 export const getStationForecast = (id: string, date: string) =>
-  getJson<StationForecast>(`/stations/${encodeURIComponent(id)}/forecast${qs({ date })}`, `station-${id}-${date}.json`);
+  getJson<StationForecast>(`/stations/${encodeURIComponent(id)}/forecast${qs({ date })}`, { mock: `station-${id}-${date}.json` });
 
 export interface CompareParams {
   fromType: 'venue' | 'station';
@@ -56,19 +65,49 @@ function compareQuery(p: CompareParams) {
   return qs({ from_type: p.fromType, from_id: p.fromId, to_station_id: p.toStationId, depart_at: p.departAt });
 }
 
+/** 올림픽공원 지역 공연장. 귀가 비교 파일은 지역(olympic_park) 단위로 발행돼요. */
+const OLYMPIC_PARK_VENUES = ['kspo_dome', 'olympic_hall', 'ticketlink_live_arena', 'woori_art_hall', 'muse_live', 'grass_88'];
+
+/**
+ * 정적 파일의 출발 지역. 지금은 올림픽공원 지역(올림픽공원역·그 지역 공연장)만 발행돼요.
+ * 다른 출발지는 null → '지원하지 않는 조건'.
+ */
+function compareArea(p: CompareParams): string | null {
+  if (p.fromType === 'station') return p.fromId === 'olympic_park' ? 'olympic_park' : null;
+  return OLYMPIC_PARK_VENUES.includes(p.fromId) ? 'olympic_park' : null;
+}
+
+/** 정적 파일 이름 앞부분: compare-olympic_park-2025-08-09-20 */
+function compareStem(p: CompareParams): string | null {
+  const area = compareArea(p);
+  return area ? `${area}-${p.departAt.slice(0, 10)}-${p.departAt.slice(11, 13)}` : null;
+}
+
 /**
  * GET /routes/compare
  * 목업은 출발지와 출발 시간대마다 파일이 따로 있어요: compare-{from_id}-{시}.json
+ * 정적 파일은 compare-{지역}-{날짜}-{시}.json 이고, 발행된 시간대(19~23시) 밖은 '지원하지 않는 조건'이에요.
  * `late`는 E4 막차 임박 시안을 보기 위한 목업 전용 값이에요.
  */
 export const getCompare = (p: CompareParams, late = false) => {
   const hour = p.departAt.slice(11, 13);
-  return getJson<Compare>(`/routes/compare${compareQuery(p)}`, `compare-${p.fromId}-${hour}${late ? '-late' : ''}.json`);
+  const stem = compareStem(p);
+  return getJson<Compare>(`/routes/compare${compareQuery(p)}`, {
+    mock: `compare-${p.fromId}-${hour}${late ? '-late' : ''}.json`,
+    data: stem && `compare-${stem}.json`,
+    missingIsUnsupported: true,
+  });
 };
 
 /** GET /routes/{option_id} — 비교와 같은 조건을 함께 보내요 */
-export const getRoute = (optionId: string, p: CompareParams) =>
-  getJson<RouteDetail>(`/routes/${encodeURIComponent(optionId)}${compareQuery(p)}`, `route-${p.fromId}-${optionId}.json`);
+export const getRoute = (optionId: string, p: CompareParams) => {
+  const stem = compareStem(p);
+  return getJson<RouteDetail>(`/routes/${encodeURIComponent(optionId)}${compareQuery(p)}`, {
+    mock: `route-${p.fromId}-${optionId}.json`,
+    data: stem && `route-${stem}-${optionId}.json`,
+    missingIsUnsupported: true,
+  });
+};
 
 // ── 쓰기 API (API 명세서 7~8장) ──────────────────────────────
 // 쓰기는 실제 서버가 있어야 해요. 서버가 없으면(목업) 아무것도 저장하지 않고, 화면은 "준비 중"으로 보여줘요.

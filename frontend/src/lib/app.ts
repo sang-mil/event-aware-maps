@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { subscribePush, type Level } from '@/api';
+import { subscribePush, usingStaticData, type Level } from '@/api';
 
 /**
  * 시안은 2025년 8월 9일(토) 20:00 을 "지금"으로 그렸어요.
@@ -16,7 +16,27 @@ export const DEMO_MONTH = '2025-08';
  * 오늘 날짜와 지금 시각. 실제 데이터가 연동되면 이 두 함수만 실제 시계로 바꿔요.
  * 화면 곳곳에 날짜·시간을 직접 적지 말고 이 함수를 써요.
  */
-export const today = () => DEMO_TODAY;
+export function today(): string {
+  if (!usingStaticData || typeof window === 'undefined') return DEMO_TODAY;
+  const fromUrl = new URLSearchParams(window.location.search).get('replay');
+  if (fromUrl && isReplayDate(fromUrl)) {
+    setReplayDate(fromUrl);
+    return fromUrl;
+  }
+  const saved = store<string>('replayDate');
+  return saved && isReplayDate(saved) ? saved : DEMO_TODAY;
+}
+
+/**
+ * 2025 리플레이: 발행된 실제 데이터는 2025년 것뿐이라, 그 해의 하루를 '오늘'로 골라 다시 봐요.
+ * 주소에 `?replay=2025-08-16` 을 붙이거나 화면 위 안내 띠에서 고르면 기기에만 저장돼요(서버로 보내지 않아요).
+ */
+export const REPLAY_MIN = '2025-01-01';
+export const REPLAY_MAX = '2025-12-31';
+const isReplayDate = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= REPLAY_MIN && d <= REPLAY_MAX;
+export function setReplayDate(date: string) {
+  if (isReplayDate(date)) store('replayDate', date);
+}
 /** 위치를 쓸 수 없을 때(E1)의 기준. "올림픽공원 기준으로 보여드려요" */
 export const DEFAULT_ORIGIN_STATION = 'olympic_park';
 export const nowMin = () => DEMO_NOW_MIN;
