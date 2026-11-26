@@ -97,21 +97,68 @@ export const Icon = {
 
 // ── 작은 표시 요소 ─────────────────────────────────────────
 
-/** 아직 확인하지 않은 값(점선 칸). 값이 있으면 그 값을 보여줘요. */
-export function Ph({ children, value }: { children: ReactNode; value?: ReactNode }) {
+/** 값이 없을 때 쓰는 말. 자리표시(00분, OO역 같은 시안용 예시)는 화면에 보여주지 않아요. */
+export const NA = '정보 없음';
+
+/**
+ * 데이터로 받은 값. 값이 없으면 시안용 예시(children) 대신 '정보 없음'을 보여줘요.
+ * `none`으로 '도보 시간 정보 없음'처럼 무엇이 없는지 적을 수 있어요.
+ */
+export function Ph({ value, none = NA }: { children?: ReactNode; value?: ReactNode; none?: string }) {
   if (value !== undefined && value !== null && value !== '') return <span className="t">{value}</span>;
-  return <span className="ph t">{children}</span>;
+  return <span className="na">{none}</span>;
 }
 
-export const Walk = ({ min }: { min: number | null | undefined }) => (
-  <>
-    도보 <Ph value={min != null ? `${min}분` : null}>00분</Ph>
-  </>
-);
+export const Walk = ({ min }: { min: number | null | undefined }) =>
+  min != null ? (
+    <>
+      도보 <span className="t">{min}분</span>
+    </>
+  ) : (
+    <span className="na">도보 시간 정보 없음</span>
+  );
 
-export const Time = ({ iso }: { iso: string | null | undefined }) => <Ph value={hhmm(iso ?? null)}>00:00</Ph>;
+export const Time = ({ iso, none }: { iso: string | null | undefined; none?: string }) => <Ph value={hhmm(iso ?? null)} none={none} />;
 
-export function LineBadge({ line, size = 40 }: { line: string; size?: number }) {
+export const AREA_LABEL: Record<string, string> = { olympic_park: '올림픽공원', jamsil: '잠실' };
+
+/** 역 이름. 역 목록을 못 받았으면 '역 정보 없음' */
+export const stationName = (st: Record<string, { name: string }>, id: string | null | undefined) => (id && st[id]?.name) || '역 정보 없음';
+
+/** 공연장 이름. 공연장이 정해지지 않았거나 목록에 없으면 '공연장 정보 없음' */
+export const venueName = (vn: Record<string, { name: string }>, id: string | null | undefined) => (id && vn[id]?.name) || '공연장 정보 없음';
+
+/** 행사 장소: "올림픽공원, KSPO DOME" 또는 "올림픽공원, 공연장 정보 없음" */
+export const placeLabel = (vn: Record<string, { name: string }>, e: { area: string; venue_id: string | null }) =>
+  `${AREA_LABEL[e.area] ?? '지역 정보 없음'}, ${venueName(vn, e.venue_id)}`;
+
+/** 행사 시간: 시작·끝 시각을 받은 그대로 보여주고, 없으면 없다고 적어요. 끝 시각이 추정이면 (추정)을 붙여요. */
+export function EventWhen({ e, start = true }: { e: { type: 'show' | 'game'; start_at: string | null; end_at: string | null; end_at_source: string | null }; start?: boolean }) {
+  const s = hhmm(e.start_at);
+  const end = hhmm(e.end_at);
+  if (e.type === 'game') return <>{s ? <><span className="t">{s}</span> 경기 시작</> : <span className="na">시작 시각 정보 없음</span>}</>;
+  return (
+    <>
+      {start && (s ? <>시작 <span className="t">{s}</span>, </> : <><span className="na">시작 시각 정보 없음</span>, </>)}
+      {end ? (
+        <>
+          <span className="t">{end}</span>에 끝나요{e.end_at_source === 'estimated' ? '(추정)' : ''}
+        </>
+      ) : (
+        <span className="na">끝나는 시각 정보 없음</span>
+      )}
+    </>
+  );
+}
+
+export function LineBadge({ line, size = 40 }: { line: string | undefined; size?: number }) {
+  if (!line)
+    return (
+      <span className="t line" style={{ width: size, height: size, background: '#EEF0F3', color: '#5F6573', fontSize: size >= 36 ? 15 : size >= 28 ? 12 : 11 }}>
+        <span aria-hidden="true">?</span>
+        <span className="sr">노선 정보 없음</span>
+      </span>
+    );
   const c = LINE[line] ?? { bg: '#9AA0AC', fg: '#FFFFFF' };
   return (
     <span

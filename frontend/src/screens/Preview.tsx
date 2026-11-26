@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { BackHeader } from '@/components/ui';
+import { usingStaticData } from '@/api';
 import { asset } from '@/lib/app';
 
 /** 화면 확인용 목록. 최종본 39개 화면을 한곳에서 열어 볼 수 있어요. */
@@ -84,7 +85,21 @@ const GROUPS: { title: string; items: [string, string, string][] }[] = [
   },
 ];
 
+/** 실제 데이터 모드에서는 시안용 예시(가짜 공연·숫자)가 보이지 않게 미리보기를 닫아 둬요 */
+function NoPreview() {
+  return (
+    <main className="screen">
+      <BackHeader href="/home/" />
+      <section className="intro">
+        <h1 className="h1 big">시안 미리보기는 목업 모드에서만 볼 수 있어요</h1>
+        <p className="lead">실제 데이터 화면에는 시안용 예시를 보여주지 않아요.</p>
+      </section>
+    </main>
+  );
+}
+
 export function PreviewIndex() {
+  if (usingStaticData) return <NoPreview />;
   return (
     <main className="screen">
       <section style={{ padding: '40px 24px 8px', display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -174,6 +189,7 @@ export function Brand() {
 
 /** 05 알림 미리보기 · 잠금화면 */
 export function Notifications() {
+  if (usingStaticData) return <NoPreview />;
   const items = [
     ['지금', '더보이즈 공연이 곧 끝나요', '20시대 올림픽공원역은 혼잡, 방이역은 보통일 거예요. 눌러서 귀가 방법을 비교해 보세요.', '웹 푸시, 관람 예정 알림. 누르면 귀가 방법 비교로 가요', '/compare/?from=noti&from_type=venue&from_id=kspo_dome&event=evt_20250809_kspo&depart=2025-08-09T20:00:00%2B09:00'],
     ['오늘 21:00', '21시예요. 올림픽공원역이 덜 붐빌 거예요', '20시대의 절반 수준으로 줄 거예요.', '웹 푸시, 출발 시간 알림. 누르면 역 상세로 가요', '/station/?id=olympic_park'],

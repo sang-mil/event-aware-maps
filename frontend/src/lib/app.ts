@@ -31,6 +31,11 @@ export function today(): string {
  * 2025 리플레이: 발행된 실제 데이터는 2025년 것뿐이라, 그 해의 하루를 '오늘'로 골라 다시 봐요.
  * 주소에 `?replay=2025-08-16` 을 붙이거나 화면 위 안내 띠에서 고르면 기기에만 저장돼요(서버로 보내지 않아요).
  */
+/**
+ * 시안 미리보기 상태(?state=...)를 읽어요. 실제 데이터 모드에서는 시안용 예시가 보이지 않게 항상 null 이에요.
+ */
+export const demoState = (q: { get(k: string): string | null }) => (usingStaticData ? null : q.get('state'));
+
 export const REPLAY_MIN = '2025-01-01';
 export const REPLAY_MAX = '2025-12-31';
 const isReplayDate = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= REPLAY_MIN && d <= REPLAY_MAX;

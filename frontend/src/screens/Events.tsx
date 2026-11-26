@@ -21,8 +21,13 @@ import {
   TabBar,
   Time,
   Walk,
+  AREA_LABEL,
+  EventWhen,
+  placeLabel,
+  stationName,
+  venueName,
 } from '@/components/ui';
-import { dateLabel, isIphone, pushSupport, requestPush, today, track, type PushSupport } from '@/lib/app';
+import { REPLAY_MAX, REPLAY_MIN, dateLabel, demoState, isIphone, pushSupport, requestPush, today, track, type PushSupport } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 const AREAS = [
@@ -40,22 +45,34 @@ export function Calendar() {
   const [area, setArea] = useState<string>('all');
   const [venue, setVenue] = useState<string>('all');
   const [picked, setPicked] = useState(today());
-  const month = picked.slice(0, 7);
+  const [month, setMonth] = useState(today().slice(0, 7));
   const cal = useLoad(() => getCalendar(month), [month]);
+  // 데이터가 있는 달(2025-01 ~ 2025-12) 안에서만 넘겨요
+  const shiftMonth = (delta: number) => {
+    const [yy, mm] = month.split('-').map(Number);
+    const d = new Date(Date.UTC(yy, mm - 1 + delta, 1));
+    const next = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+    if (next < REPLAY_MIN.slice(0, 7) || next > REPLAY_MAX.slice(0, 7)) return;
+    setMonth(next);
+    setPicked(`${next}-01`);
+  };
   // 일정이 없는 날은 목업 파일이 없어서 오류가 나요. 그때는 '일정 없음'으로 보여줘요.
   const events = useLoad(() => getEvents(picked), [picked]);
   const fc = useLoad(() => getForecast(picked), [picked]);
   const { st, vn, venues } = useRefs();
 
-  if (cal.status === 'loading') return <Loading />;
-  if (cal.status === 'error') return <LoadError code={cal.code} lastUpdatedAt={cal.lastUpdatedAt} onRetry={cal.retry} />;
+  // 달을 넘길 때 화면 전체를 '불러오는 중'으로 바꾸지 않고, 달력 칸 안에만 불러오는 중을 적어요.
+  // 그 달 파일이 없으면(not_found) 달력은 그대로 두고 '이 달은 데이터가 없어요'를 보여줘요
+  if (cal.status === 'error' && cal.code !== 'not_found') return <LoadError code={cal.code} lastUpdatedAt={cal.lastUpdatedAt} onRetry={cal.retry} />;
+  const calLoading = cal.status === 'loading';
+  const calDays = cal.status === 'ok' ? cal.value.data.days : null;
 
   const [y, m] = month.split('-').map(Number);
   const lead = new Date(Date.UTC(y, m - 1, 1)).getUTCDay();
   const daysIn = new Date(Date.UTC(y, m, 0)).getUTCDate();
   const dayInfo = (d: number) => {
     const date = `${month}-${String(d).padStart(2, '0')}`;
-    const info = cal.value.data.days.find((x) => x.date === date);
+    const info = calDays?.find((x) => x.date === date);
     if (!info) return { show: false, game: false };
     const src = venue !== 'all' ? info.by_venue[venue] : area !== 'all' ? info.by_area[area] : { show: info.has_show, game: info.has_game };
     return { show: !!src?.show, game: !!src?.game };
@@ -116,13 +133,13 @@ export function Calendar() {
       </div>
       <section className="card" style={{ padding: '8px 12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <button type="button" aria-label="이전 달" className="icon-btn" style={{ color: '#4A4F5C' }} disabled>
+          <button type="button" aria-label="이전 달" className="icon-btn" style={{ color: '#4A4F5C' }} disabled={month <= REPLAY_MIN.slice(0, 7)} onClick={() => shiftMonth(-1)}>
             <Icon.back />
           </button>
           <span className="t" style={{ fontSize: 17, fontWeight: 700 }}>
             {y}년 {m}월
           </span>
-          <button type="button" aria-label="다음 달" className="icon-btn" style={{ color: '#4A4F5C', transform: 'scaleX(-1)' }} disabled>
+          <button type="button" aria-label="다음 달" className="icon-btn" style={{ color: '#4A4F5C', transform: 'scaleX(-1)' }} disabled={month >= REPLAY_MAX.slice(0, 7)} onClick={() => shiftMonth(1)}>
             <Icon.back />
           </button>
         </div>
@@ -175,6 +192,11 @@ export function Calendar() {
             );
           })}
         </div>
+        {!calDays && (
+          <p role="status" style={{ margin: 0, padding: '4px 8px 0', fontSize: 14, color: calLoading ? '#5F6573' : '#8A5300' }}>
+            {calLoading ? '이 달 일정을 불러오는 중이에요' : '이 달은 데이터가 없어요'}
+          </p>
+        )}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 16px', padding: '4px 8px 0', fontSize: 13, color: '#4A4F5C' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#1F5FAF' }} />
@@ -198,9 +220,9 @@ export function Calendar() {
                   if (!slot) return null;
                   return (
                     <Link key={sid} className="row" href={`/station/?id=${sid}&date=${picked}`}>
-                      <LineBadge line={st[sid]?.lines[0] ?? '5'} />
+                      <LineBadge line={st[sid]?.lines[0]} />
                       <span className="main">
-                        <span className="title">{st[sid]?.name}</span>
+                        <span className="title">{stationName(st, sid)}</span>
                         <span className="sub">{slot.level === 'crowded' ? `공연이 끝나 ${slot.message}가 탈 거예요` : slot.message}</span>
                       </span>
                       <LevelBadge level={slot.level} />
@@ -220,18 +242,7 @@ export function Calendar() {
                   <span className="main">
                     <span className="title">{e.title}</span>
                     <span className="sub">
-                      {e.venue_id ? vn[e.venue_id]?.name : '잠실, 장소 확인 중'},{' '}
-                      {!e.linkable ? (
-                        '시간 확인 중'
-                      ) : e.type === 'game' ? (
-                        <>
-                          <Time iso={e.start_at} /> 경기 시작
-                        </>
-                      ) : (
-                        <>
-                          <Time iso={e.end_at} />에 끝나요
-                        </>
-                      )}
+                      {placeLabel(vn, e)}, <EventWhen e={e} start={false} />
                     </span>
                   </span>
                 </>
@@ -252,7 +263,7 @@ export function Calendar() {
       ) : (
         <section className="card pad" style={{ marginTop: 28, gap: 4, padding: '24px 20px' }}>
           <span style={{ fontSize: 17, fontWeight: 700 }}>
-            {venue === 'all' ? '이날은 등록된 공연과 경기가 없어요' : `이날 ${vn[venue]?.name}에는 일정이 없어요`}
+            {venue === 'all' ? '이날은 등록된 공연과 경기가 없어요' : `이날 ${venueName(vn, venue)}에는 일정이 없어요`}
           </span>
           <span style={{ fontSize: 14, color: '#5F6573' }}>역 혼잡도 평소와 비슷할 거예요</span>
         </section>
@@ -311,26 +322,15 @@ export function EventsToday() {
                 <span className="main">
                   <span className="title">{e.title}</span>
                   <span className="sub">
-                    {e.venue_id ? vn[e.venue_id]?.name : '잠실, 장소 확인 중'},{' '}
-                    {!e.linkable ? (
-                      '시간 확인 중'
-                    ) : e.type === 'game' ? (
-                      <>
-                        KBO 정규시즌, <Time iso={e.start_at} /> 시작
-                      </>
-                    ) : (
-                      <>
-                        시작 <Time iso={e.start_at} />, <Time iso={e.end_at} />에 끝나요
-                      </>
-                    )}
+                    {placeLabel(vn, e)}, <EventWhen e={e} />
                   </span>
                 </span>
               </span>
               <span className="divider" />
               <span style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 52, padding: '4px 20px' }}>
-                {ns ? <LineBadge line={st[ns.station_id]?.lines[0] ?? '2'} size={28} /> : <LineBadge line="2" size={28} />}
+                <LineBadge line={ns ? st[ns.station_id]?.lines[0] : undefined} size={28} />
                 <span style={{ flex: 1, minWidth: 0, fontSize: 15, fontWeight: 500 }}>
-                  {ns ? st[ns.station_id]?.name : '가까운 역 확인 중'} <span style={{ color: '#5F6573', fontWeight: 400 }}>끝날 무렵</span>
+                  {ns ? stationName(st, ns.station_id) : '가까운 역 정보 없음'} <span style={{ color: '#5F6573', fontWeight: 400 }}>끝날 무렵</span>
                 </span>
                 <LevelBadge level={ns?.level ?? 'no_data'} />
               </span>
@@ -362,7 +362,7 @@ export function EventScreen() {
   const q = useSearchParams();
   const id = q.get('id') ?? '';
   const from = q.get('from') ?? 'home';
-  const demo = q.get('state'); // changed | canceled | nopush | denied
+  const demo = demoState(q); // changed | canceled | nopush | denied
   const variant = demo === 'changed' || demo === 'canceled' ? demo : undefined;
   const res = useLoad(() => getEvent(id, variant), [id, variant]);
   const { st, vn } = useRefs();
@@ -433,13 +433,13 @@ export function EventScreen() {
           <span className="badge" style={{ background: '#E8F0FB', color: '#1F5FAF' }}>
             공연
           </span>
-          <span style={{ fontSize: 15, color: '#5F6573' }}>{e.area === 'olympic_park' ? '올림픽공원' : '잠실'}</span>
+          <span style={{ fontSize: 15, color: '#5F6573' }}>{AREA_LABEL[e.area] ?? '지역 정보 없음'}</span>
         </span>
       </section>
       <section className="card" style={{ marginTop: 16, padding: '6px 20px' }}>
         <dl className="dl">
           <dt>공연장</dt>
-          <dd>{e.venue_id ? vn[e.venue_id]?.name : '확인 중'}</dd>
+          <dd>{venueName(vn, e.venue_id)}</dd>
           <dt>날짜</dt>
           <dd>{dateLabel(e.date, true)}</dd>
           <dt>시작</dt>
@@ -448,7 +448,7 @@ export function EventScreen() {
           </dd>
           <dt>끝나는 시간</dt>
           <dd>
-            <Time iso={e.end_at} /> {e.end_at_source === 'estimated' && <span style={{ color: '#5F6573', fontWeight: 400 }}>예상</span>}
+            <Time iso={e.end_at} /> {e.end_at && e.end_at_source === 'estimated' && <span style={{ color: '#5F6573', fontWeight: 400 }}>(추정)</span>}
           </dd>
         </dl>
       </section>
@@ -527,44 +527,42 @@ export function EventScreen() {
       <section className="card">
         {block.stations.map((s) => (
           <Link key={s.station_id} className="row" href={`/station/?id=${s.station_id}`}>
-            <LineStack lines={st[s.station_id]?.lines ?? ['5']} />
+            <LineStack lines={st[s.station_id]?.lines ?? []} />
             <span className="main">
-              <span className="title">{st[s.station_id]?.name}</span>
+              <span className="title">{stationName(st, s.station_id)}</span>
               <span className="sub">
-                <Walk min={s.walk_min} />, {s.message}
+                <Walk min={s.walk_min} />
+                {s.message ? `, ${s.message}` : ''}
               </span>
             </span>
             <LevelBadge level={s.level} />
           </Link>
         ))}
+        {e.after_end.no_data_message && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 14, color: '#5F6573' }}>{e.after_end.no_data_message}</p>}
       </section>
 
       <SectionTitle>같은 날 송파 일정</SectionTitle>
       <ul className="card" style={{ listStyle: 'none' }}>
+        {e.same_day.length === 0 && (
+          <li className="row" style={{ minHeight: 56 }}>
+            <span className="na">같은 날 다른 일정이 없어요</span>
+          </li>
+        )}
         {e.same_day.map((s) => (
           <li key={s.id} className="row" style={{ minHeight: 64 }}>
             <span className="main">
               <span className="title">{s.title}</span>
               <span className="sub">
-                {!s.venue_id ? (
-                  '잠실, 장소와 시간 확인 중'
-                ) : s.type === 'game' ? (
-                  <>
-                    {vn[s.venue_id]?.name}, <Time iso={s.start_at} /> 시작
-                  </>
-                ) : (
-                  <>
-                    {vn[s.venue_id]?.name}, <Time iso={s.start_at} />부터 <Time iso={s.end_at} />까지
-                  </>
-                )}
+                {venueName(vn, s.venue_id)}, <EventWhen e={{ ...s, end_at_source: s.end_at_source ?? null }} />
               </span>
             </span>
           </li>
         ))}
       </ul>
       <BottomBar>
-        <Link href={`/search/?venue=${e.venue_id ?? ''}&event=${e.id}`} className="btn primary">
-          이 공연장에서 출발하기
+        {/* 공연장을 모르면 '이 공연장에서'라고 하지 않고 출발지를 고르는 화면으로 보내요 */}
+        <Link href={e.venue_id ? `/search/?venue=${e.venue_id}&event=${e.id}` : `/search/?event=${e.id}`} className="btn primary">
+          {e.venue_id ? '이 공연장에서 출발하기' : '귀갓길 찾기'}
         </Link>
       </BottomBar>
     </main>
@@ -614,7 +612,7 @@ const GAME = {
 export function GameScreen() {
   const q = useSearchParams();
   const id = q.get('id') ?? '';
-  const demo = q.get('state'); // before | end
+  const demo = demoState(q); // before | end
   const variant = demo === 'before' || demo === 'end' ? demo : undefined;
   const res = useLoad(() => getEvent(id, variant), [id, variant]);
   const { st, vn } = useRefs();
@@ -642,7 +640,7 @@ export function GameScreen() {
           <span className="badge" style={{ background: '#FFF0E6', color: '#B54708' }}>
             경기
           </span>
-          <span style={{ fontSize: 15, color: '#5F6573' }}>잠실</span>
+          <span style={{ fontSize: 15, color: '#5F6573' }}>{AREA_LABEL[e.area] ?? '지역 정보 없음'}</span>
         </span>
       </section>
       <section className="card pad" style={{ marginTop: 16, gap: 10 }}>
@@ -666,7 +664,7 @@ export function GameScreen() {
       <section className="card" style={{ marginTop: 12, padding: '6px 20px' }}>
         <dl className="dl">
           <dt>경기장</dt>
-          <dd>{e.venue_id ? vn[e.venue_id]?.name : '확인 중'}</dd>
+          <dd>{venueName(vn, e.venue_id)}</dd>
           <dt>날짜</dt>
           <dd>{dateLabel(e.date, true)}</dd>
           <dt>시작</dt>
@@ -679,9 +677,9 @@ export function GameScreen() {
       <section className="card">
         {e.after_end.end.stations.map((s) => (
           <Link key={s.station_id} className="row" href={`/station/?id=${s.station_id}`}>
-            <LineStack lines={st[s.station_id]?.lines ?? ['2']} />
+            <LineStack lines={st[s.station_id]?.lines ?? []} />
             <span className="main">
-              <span className="title">{st[s.station_id]?.name}</span>
+              <span className="title">{stationName(st, s.station_id)}</span>
               <span className="sub">
                 <Walk min={s.walk_min} />
               </span>
@@ -693,7 +691,7 @@ export function GameScreen() {
       </section>
       {e.crossing_note && (
         <Link href={`/station/?id=${e.crossing_note.station_id}`} className="card row" style={{ marginTop: 12, width: 'auto' }}>
-          <LineStack lines={st[e.crossing_note.station_id]?.lines ?? ['5', '9']} />
+          <LineStack lines={st[e.crossing_note.station_id]?.lines ?? []} />
           <span className="main">
             <span className="title" style={{ fontSize: 16 }}>
               {e.crossing_note.title}

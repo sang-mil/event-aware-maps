@@ -78,7 +78,16 @@ export interface EventDetail extends EventItem {
     later?: { hour_label: string | null; stations: AfterEndStation[] };
     no_data_message?: string;
   };
-  same_day: { id: string; title: string; venue_id: string | null; start_at: string | null; end_at: string | null; type: 'show' | 'game' }[];
+  same_day: {
+    id: string;
+    title: string;
+    venue_id: string | null;
+    start_at: string | null;
+    end_at: string | null;
+    /** 선택 필드(백엔드 #31). estimated 면 끝 시각에 (추정)을 붙여요. 없거나 null 이면 붙이지 않아요. */
+    end_at_source?: 'scheduled' | 'estimated' | null;
+    type: 'show' | 'game';
+  }[];
   crossing_note: { station_id: string; title: string; message: string } | null;
 }
 
