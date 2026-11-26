@@ -62,6 +62,7 @@
         "venue_id": "kspo_dome",
         "start_at": null,
         "end_at": null,
+        "end_at_source": null,
         "type": "show"
       },
       {
@@ -70,6 +71,7 @@
         "venue_id": "jamsil_baseball",
         "start_at": null,
         "end_at": null,
+        "end_at_source": null,
         "type": "game"
       },
       {
@@ -78,6 +80,7 @@
         "venue_id": null,
         "start_at": null,
         "end_at": null,
+        "end_at_source": null,
         "type": "show"
       }
     ],

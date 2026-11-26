@@ -36,6 +36,6 @@ def event_detail(ev: Event, same_day: list[Event], day: dict, nearest) -> dict:
         **event_item(ev, nearest, linkable=True),
         "after_end": after_end,
         "same_day": [{"id": o.id, "title": o.title, "venue_id": None, "start_at": None,
-                      "end_at": event_item(o)["end_at"], "type": "show"} for o in same_day if o.id != ev.id],
+                      "end_at": event_item(o)["end_at"], "end_at_source": "estimated", "type": "show"} for o in same_day if o.id != ev.id],
         "crossing_note": None,
     }

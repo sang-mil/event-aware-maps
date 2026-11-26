@@ -59,6 +59,7 @@ def test_event_detail_after_end_and_same_day():
     assert d["after_end"]["later"]["stations"][0]["level"] == "normal"
     assert "no_data_message" not in d["after_end"]
     assert [x["id"] for x in d["same_day"]] == [b.id]
+    assert d["same_day"][0]["end_at"] == "2099-01-10T21:00:00+09:00" and d["same_day"][0]["end_at_source"] == "estimated"
     assert d["crossing_note"] is None
 
 
