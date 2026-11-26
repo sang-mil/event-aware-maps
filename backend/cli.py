@@ -4,7 +4,7 @@
     python backend/cli.py collect kspo_perf                # KSPO 공연정보 전체
     python backend/cli.py collect subway_month --month 202510   # 지하철 월별·시간대별 승하차
     python backend/cli.py build-db                         # 원본(raw) → SQLite 한 파일 (backend/data/tumgil.db)
-    python backend/cli.py build                            # 행사 반영 → 혼잡 계산 → 추천 (다음 작업)
+    python backend/cli.py build --out 폴더 [--as-of 시각]   # 행사 반영 → calendar·events JSON 검증 후 발행 (혼잡·추천은 다음 작업)
     python backend/cli.py publish --src 폴더 --out 폴더      # src 의 JSON을 검증해 out 에 발행
 
 collect 는 인증키를 환경변수에서 읽고(backend/.env 파일이 있으면 그것도 읽음, 형식은 backend/env.example), 결과를 backend/data/raw/ 에 저장한다(이 폴더는 git에 올라가지 않음).
@@ -25,7 +25,8 @@ sys.path.insert(0, str(BACKEND))
 
 from collectors import CollectError, kspo, seoul_subway  # noqa: E402
 from normalize import db as normalize_db  # noqa: E402
-from publish import PublishError, publish  # noqa: E402
+from events import detect as ev_detect, load as ev_load, outputs as ev_outputs  # noqa: E402
+from publish import PublishError, publish, wrap  # noqa: E402
 
 RAW_DIR = BACKEND / "data" / "raw"
 DB_PATH = BACKEND / "data" / "tumgil.db"  # backend/.gitignore 로 git에 올라가지 않음
@@ -106,6 +107,25 @@ def cmd_build_db(raw_dir: Path, db_path: Path) -> int:
     return 0
 
 
+def cmd_build(db_path: Path, out: Path, as_of: datetime) -> int:
+    if not db_path.is_file():
+        print(f"DB가 없습니다. 먼저 build-db 를 실행하세요: {db_path}")
+        return 1
+    span = ev_load.date_range(db_path)
+    if span is None:
+        print("DB에 KSPO 연계 데이터가 없습니다.")
+        return 1
+    events = ev_detect.detect_events(ev_load.load_rows(db_path))
+    files = {name: wrap(data, as_of) for name, data in ev_outputs.build_files(events, *span).items()}
+    try:
+        written = publish(files, out)
+    except PublishError as e:
+        print(e)
+        return 1
+    print(f"공연 {len(events)}건 ({span[0]} ~ {span[1]}) → {len(written)}개 파일 발행: {out}")
+    return 0
+
+
 def cmd_publish(src: Path, out: Path) -> int:
     files = {p.name: json.loads(p.read_text(encoding="utf-8")) for p in sorted(src.glob("*.json"))}
     if not files:
@@ -131,7 +151,10 @@ def main(argv: list[str] | None = None) -> int:
     b = sub.add_parser("build-db", help="원본 → SQLite")
     b.add_argument("--raw-dir", type=Path, default=RAW_DIR)
     b.add_argument("--db", type=Path, default=DB_PATH)
-    sub.add_parser("build", help="행사 반영, 혼잡 계산, 추천 생성")
+    bd = sub.add_parser("build", help="행사 반영 → 화면용 JSON 발행")
+    bd.add_argument("--db", type=Path, default=DB_PATH)
+    bd.add_argument("--out", type=Path, required=True)
+    bd.add_argument("--as-of", type=datetime.fromisoformat, default=None, help="기준 시각 (예: 2025-08-09T18:00:00+09:00)")
     p = sub.add_parser("publish", help="검증 후 발행")
     p.add_argument("--src", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
@@ -139,6 +162,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "collect":
         return cmd_collect(args.source, args.month, args.raw_dir, args.page_size)
+    if args.command == "build":
+        as_of = args.as_of or datetime.now(KST)
+        if as_of.tzinfo is None:
+            print("--as-of 에는 시간대(+09:00)가 있어야 합니다.")
+            return 1
+        return cmd_build(args.db, args.out, as_of)
     if args.command == "build-db":
         return cmd_build_db(args.raw_dir, args.db)
     if args.command == "publish":
