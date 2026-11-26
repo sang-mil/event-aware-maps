@@ -1,7 +1,19 @@
 import type { Metadata, Viewport } from 'next';
+import { IBM_Plex_Sans_KR } from 'next/font/google';
 import './globals.css';
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
+// 글꼴은 빌드할 때 내려받아 우리 사이트에서 함께 배포해요.
+// 방문자 브라우저가 구글 서버에 접속하지 않아요(방문자 IP가 구글로 가지 않아요).
+// 한글 글꼴은 파일이 커서 미리 불러오기(preload)는 끄고, 필요한 글자 묶음만 그때그때 받아요.
+const plex = IBM_Plex_Sans_KR({
+  weight: ['400', '500', '600', '700'],
+  preload: false,
+  display: 'swap',
+  variable: '--font-plex',
+  fallback: ['system-ui', '-apple-system', 'sans-serif'],
+});
 
 export const metadata: Metadata = {
   title: '틈길',
@@ -19,15 +31,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
-        />
-      </head>
+    <html lang="ko" className={plex.variable}>
       <body>{children}</body>
     </html>
   );

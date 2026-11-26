@@ -17,7 +17,7 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); }
 body {
-  font-family: 'IBM Plex Sans KR', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-plex); /* layout.tsx 의 next/font 가 대체 글꼴까지 넣어 줘요 */
   color: var(--ink);
   letter-spacing: -0.02em;
   word-break: keep-all;
