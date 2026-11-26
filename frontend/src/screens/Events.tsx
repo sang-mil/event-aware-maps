@@ -61,9 +61,10 @@ export function Calendar() {
   const fc = useLoad(() => getForecast(picked), [picked]);
   const { st, vn, venues } = useRefs();
 
-  if (cal.status === 'loading') return <Loading />;
+  // 달을 넘길 때 화면 전체를 '불러오는 중'으로 바꾸지 않고, 달력 칸 안에만 불러오는 중을 적어요.
   // 그 달 파일이 없으면(not_found) 달력은 그대로 두고 '이 달은 데이터가 없어요'를 보여줘요
   if (cal.status === 'error' && cal.code !== 'not_found') return <LoadError code={cal.code} lastUpdatedAt={cal.lastUpdatedAt} onRetry={cal.retry} />;
+  const calLoading = cal.status === 'loading';
   const calDays = cal.status === 'ok' ? cal.value.data.days : null;
 
   const [y, m] = month.split('-').map(Number);
@@ -192,8 +193,8 @@ export function Calendar() {
           })}
         </div>
         {!calDays && (
-          <p role="status" style={{ margin: 0, padding: '4px 8px 0', fontSize: 14, color: '#8A5300' }}>
-            이 달은 데이터가 없어요
+          <p role="status" style={{ margin: 0, padding: '4px 8px 0', fontSize: 14, color: calLoading ? '#5F6573' : '#8A5300' }}>
+            {calLoading ? '이 달 일정을 불러오는 중이에요' : '이 달은 데이터가 없어요'}
           </p>
         )}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 16px', padding: '4px 8px 0', fontSize: 13, color: '#4A4F5C' }}>
@@ -552,7 +553,7 @@ export function EventScreen() {
             <span className="main">
               <span className="title">{s.title}</span>
               <span className="sub">
-                {venueName(vn, s.venue_id)}, <EventWhen e={{ ...s, end_at_source: null }} />
+                {venueName(vn, s.venue_id)}, <EventWhen e={{ ...s, end_at_source: s.end_at_source ?? null }} />
               </span>
             </span>
           </li>

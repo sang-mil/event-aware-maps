@@ -85,7 +85,7 @@ export function MapScreen() {
         </div>
         <span style={{ position: 'absolute', left: 226, top: 182, fontSize: 13, fontWeight: 700, color: '#2E6B3D' }}>올림픽공원</span>
         <span style={{ position: 'absolute', left: 28, top: 252, fontSize: 13, fontWeight: 700, color: '#4A4F5C' }}>잠실종합운동장</span>
-        <span style={{ position: 'absolute', right: 16, top: 130, fontSize: 12, color: '#4A4F5C', background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>지도 API 연동 전 개략도</span>
+        <span role="note" style={{ position: 'absolute', right: 16, top: 130, fontSize: 12, fontWeight: 700, color: '#8A5300', background: '#FFF2D1', padding: '3px 8px', borderRadius: 8 }}>실제 지도 아님 · 위치 정보 없음 · 대략적인 배치 그림</span>
         {MAP_VENUES.filter((v) => vn[v.id]).map((v) => {
           const e = ev.value.data.events.find((x) => x.venue_id === v.id);
           const game = e?.type === 'game';
@@ -508,13 +508,13 @@ export function RouteScreen() {
   return (
     <main className="screen">
       <BackHeader href={`/compare/?${back.toString()}`} />
-      <div role="img" aria-label={`지도 영역: ${originName}에서 ${boardName}까지 걷는 길`} style={{ margin: '0 16px', height: 220, borderRadius: 20, background: '#EEF0F3', position: 'relative', overflow: 'hidden' }}>
+      <div role="img" aria-label={`실제 지도가 아닌 대략적인 그림: ${originName}에서 ${boardName}까지`} style={{ margin: '0 16px', height: 220, borderRadius: 20, background: '#EEF0F3', position: 'relative', overflow: 'hidden' }}>
         <svg aria-hidden="true" width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
           <path d="M80 110 C 140 130, 200 150, 270 168" stroke="#4E3DBC" strokeWidth="4" strokeDasharray="2 8" strokeLinecap="round" fill="none" />
         </svg>
         <span style={{ position: 'absolute', left: 40, top: 86, fontSize: 13, fontWeight: 700, background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>{originName}</span>
         <span style={{ position: 'absolute', left: 244, top: 158, fontSize: 13, fontWeight: 700, background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>{boardName}</span>
-        <span style={{ position: 'absolute', right: 10, top: 10, fontSize: 12, color: '#4A4F5C', background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>지도 API 연동 영역</span>
+        <span role="note" style={{ position: 'absolute', right: 10, top: 10, fontSize: 12, fontWeight: 700, color: '#8A5300', background: '#FFF2D1', padding: '3px 8px', borderRadius: 8 }}>실제 지도 아님 · 위치 정보 없음</span>
       </div>
       <section style={{ padding: '20px 24px 8px', display: 'flex', flexDirection: 'column', gap: 10 }}>
         <h1 className="h1 big">
