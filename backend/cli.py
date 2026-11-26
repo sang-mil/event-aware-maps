@@ -4,7 +4,7 @@
     python backend/cli.py collect kspo_perf                # KSPO 공연정보 전체
     python backend/cli.py collect subway_month --month 202510   # 지하철 월별·시간대별 승하차
     python backend/cli.py build-db                         # 원본(raw) → SQLite 한 파일 (backend/data/tumgil.db)
-    python backend/cli.py build --out 폴더 [--as-of 시각]   # 행사 반영 → calendar·events JSON 검증 후 발행 (혼잡·추천은 다음 작업)
+    python backend/cli.py build --out 폴더 [--as-of 시각]   # 행사 반영·혼잡 계산 → calendar·events·forecast·station JSON 검증 후 발행 (귀가 추천은 다음 작업)
     python backend/cli.py backtest                         # 공연 날마다 그날을 빼고 예측해 실제와 비교 (혼잡 단계 적중률)
     python backend/cli.py publish --src 폴더 --out 폴더      # src 의 JSON을 검증해 out 에 발행
 
@@ -26,7 +26,7 @@ sys.path.insert(0, str(BACKEND))
 
 from collectors import CollectError, kspo, seoul_subway  # noqa: E402
 from normalize import db as normalize_db  # noqa: E402
-from congestion import backtest as cg_backtest, load as cg_load  # noqa: E402
+from congestion import backtest as cg_backtest, load as cg_load, model as cg_model, outputs as cg_outputs  # noqa: E402
 from events import detect as ev_detect, load as ev_load, outputs as ev_outputs  # noqa: E402
 from publish import PublishError, publish, wrap  # noqa: E402
 
@@ -118,7 +118,22 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime) -> int:
         print("DB에 KSPO 연계 데이터가 없습니다.")
         return 1
     events = ev_detect.detect_events(ev_load.load_rows(db_path))
-    files = {name: wrap(data, as_of) for name, data in ev_outputs.build_files(events, *span).items()}
+    obs, covered, exits = cg_load.load_inputs(db_path)
+    base = cg_model.Baselines(obs, covered, exits)
+    res = cg_model.residuals(obs, exits, base)
+    days: dict[str, dict] = {}
+
+    def day_of(d: str) -> dict:
+        if d not in days:
+            days[d] = cg_outputs.compute_day(d, obs, exits, base, res)
+        return days[d]
+
+    data = ev_outputs.build_files(events, *span, nearest=lambda ev: cg_outputs.nearest_level(day_of(ev.date), ev.exit_hour))
+    for d in sorted(name[len("events-"):-len(".json")] for name in list(data) if name.startswith("events-")):
+        data[f"forecast-{d}.json"] = cg_outputs.forecast(d, day_of(d), exits)
+        for sid in cg_outputs.STATIONS:
+            data[f"station-{sid}-{d}.json"] = cg_outputs.station_forecast(d, sid, day_of(d), exits)
+    files = {name: wrap(body, as_of) for name, body in data.items()}
     try:
         written = publish(files, out)
     except PublishError as e:
