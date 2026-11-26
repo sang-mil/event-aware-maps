@@ -25,6 +25,7 @@ MIN_SAMPLES = 20
 MON_THU = (0, 1, 2, 3)
 OFFSETS = (-2, -1, 0, 1)
 CROWDED, RELAXED = 1.5, 0.8
+EFFECT_MIN = 0.01  # 관객 1명당 0.01명(관객 1만 명이면 100명) 미만이면 공연 영향이 없는 역으로 본다
 
 Key = tuple[str, str]  # (역 id, 노선)
 
@@ -97,7 +98,9 @@ def coefficients(res: dict[tuple, list[tuple[str, float]]], exclude: str | None 
 
 
 def predict(d: str, key: Key, hour: int, exits: dict, base: Baselines, coefs: dict, exclude: str | None = None) -> dict:
-    """한 역·노선·시각의 예상. effect_unknown: 관객 수를 모르는 공연의 퇴장이 이 시각 근처에 있음."""
+    """한 역·노선·시각의 예상.
+    effect_unknown: 관객 수를 모르는 공연의 퇴장이 이 시각 근처에 있고, 이 역이 공연 영향을 받는 역일 때
+    (계수가 관객 1명당 EFFECT_MIN 명 이상)."""
     b, source = base.get(key, weekday(d), hour, exclude)
     if b is None:
         return {"baseline": None, "expected": None, "source": None, "effect_unknown": False}
@@ -107,7 +110,7 @@ def predict(d: str, key: Key, hour: int, exits: dict, base: Baselines, coefs: di
         if off in OFFSETS:
             if audience:
                 add += audience * coefs.get((key, off), 0.0)
-            else:
+            elif coefs.get((key, off), 0.0) >= EFFECT_MIN:
                 unknown = True
     return {"baseline": b, "expected": max(b + add, 0.0), "source": source, "effect_unknown": unknown}
 
