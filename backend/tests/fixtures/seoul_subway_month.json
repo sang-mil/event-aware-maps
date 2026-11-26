@@ -1,0 +1,10 @@
+{
+  "CardSubwayTime": {
+    "list_total_count": 2,
+    "RESULT": { "CODE": "INFO-000", "MESSAGE": "정상 처리되었습니다" },
+    "row": [
+      { "USE_MM": "209901", "SBWY_ROUT_LN_NM": "5호선", "STTN": "테스트역A", "HR_20_GET_ON_NOPE": 100.0, "HR_20_GET_OFF_NOPE": 50.0, "JOB_YMD": "20990201" },
+      { "USE_MM": "209901", "SBWY_ROUT_LN_NM": "9호선2~3단계", "STTN": "테스트역B", "HR_20_GET_ON_NOPE": 30.0, "HR_20_GET_OFF_NOPE": 10.0, "JOB_YMD": "20990201" }
+    ]
+  }
+}

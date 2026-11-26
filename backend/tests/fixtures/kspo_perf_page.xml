@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 가짜 테스트 값. 실제 응답 구조만 따름 -->
+<response>
+  <header><resultCode>0000</resultCode><resultMsg>OK</resultMsg></header>
+  <body>
+    <items>
+      <item>
+        <title>테스트 공연</title>
+        <regDate>2025-01-01 00:00:00</regDate>
+        <subjectKeyword>올림픽홀</subjectKeyword>
+        <extent>120분</extent>
+        <spatial>올림픽홀</spatial>
+        <temporalCoverage>19:30</temporalCoverage>
+      </item>
+    </items>
+    <numOfRows>1000</numOfRows>
+    <pageNo>1</pageNo>
+    <totalCount>1</totalCount>
+  </body>
+</response>
