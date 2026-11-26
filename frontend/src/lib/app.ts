@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { Level } from '@/api';
+import { subscribePush, type Level } from '@/api';
 
 /**
  * 시안은 2025년 8월 9일(토) 20:00 을 "지금"으로 그렸어요.
@@ -140,11 +140,13 @@ export function requestLocation(): Promise<boolean> {
   });
 }
 
+/** 알림 권한을 묻고, 허용되면 이 기기의 푸시 구독을 서버에 등록해요(서버가 있을 때만). */
 export async function requestPush(): Promise<boolean> {
   if (pushSupport() === 'unsupported') return false;
   const r = await Notification.requestPermission();
-  // TODO(BE): 허용되면 서비스 워커로 구독을 만들어 POST /push/subscriptions 로 보내요.
-  return r === 'granted';
+  if (r !== 'granted') return false;
+  await subscribePush();
+  return true;
 }
 
 // ── 측정 이벤트 (PRD 10장) ─────────────────────────────────

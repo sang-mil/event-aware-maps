@@ -59,8 +59,10 @@ function writeCache<T>(key: string, value: Envelope<T>) {
 /**
  * @param apiPath 실제 API 경로와 쿼리. 예: `/stations/bangi/forecast?date=2025-08-09`
  * @param mockFile 목업 파일 이름. 예: `station-bangi-2025-08-09.json`
+ * @param mockEmpty 목업 파일이 없을 때 돌려줄 '빈 결과'. 명세상 서버가 404 대신 빈 목록을 주는 API에만 써요
+ *                  (예: 행사 없는 날 GET /events → events: []). 실제 API에서는 쓰지 않아요.
  */
-export async function getJson<T>(apiPath: string, mockFile: string): Promise<Loaded<T>> {
+export async function getJson<T>(apiPath: string, mockFile: string, mockEmpty?: () => T): Promise<Loaded<T>> {
   const url = usingMock ? `${BASE}/mock/${mockFile}` : `${API_BASE}${apiPath}`;
   const key = usingMock ? mockFile : apiPath;
   let res: Response;
@@ -69,7 +71,10 @@ export async function getJson<T>(apiPath: string, mockFile: string): Promise<Loa
   } catch {
     return fromCacheOrThrow<T>(key);
   }
-  if (res.status === 404) throw new ApiError('not_found', null);
+  if (res.status === 404) {
+    if (usingMock && mockEmpty) return { data: mockEmpty(), updatedAt: new Date().toISOString(), fromCache: false };
+    throw new ApiError('not_found', null);
+  }
   if (res.status === 422) throw new ApiError('unsupported', null);
   if (!res.ok) return fromCacheOrThrow<T>(key);
   const body = (await res.json()) as Envelope<T>;

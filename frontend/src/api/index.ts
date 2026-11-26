@@ -1,4 +1,4 @@
-import { getJson, qs } from './client';
+import { getJson, qs, usingMock } from './client';
 import type {
   CalendarMonth,
   Compare,
@@ -22,7 +22,9 @@ export const getStations = () => getJson<Station[]>('/stations', 'stations.json'
 export const getVenues = () => getJson<Venue[]>('/venues', 'venues.json');
 
 /** GET /events?date= */
-export const getEvents = (date: string) => getJson<EventList>(`/events${qs({ date })}`, `events-${date}.json`);
+export const getEvents = (date: string) =>
+  // 행사 없는 날은 서버가 200과 events: [] 를 줘요(명세 4.2). 목업에 그날 파일이 없을 때도 똑같이 빈 목록으로 다뤄요.
+  getJson<EventList>(`/events${qs({ date })}`, `events-${date}.json`, () => ({ date, events: [], next_event: null }));
 
 /**
  * GET /events/{id}
@@ -32,7 +34,8 @@ export const getEvent = (id: string, variant?: string) =>
   getJson<EventDetail>(`/events/${encodeURIComponent(id)}`, `event-${id}${variant ? `-${variant}` : ''}.json`);
 
 /** GET /calendar?month= */
-export const getCalendar = (month: string) => getJson<CalendarMonth>(`/calendar${qs({ month })}`, `calendar-${month}.json`);
+export const getCalendar = (month: string) =>
+  getJson<CalendarMonth>(`/calendar${qs({ month })}`, `calendar-${month}.json`, () => ({ month, days: [] }));
 
 /** GET /forecast?date= */
 export const getForecast = (date: string) => getJson<Forecast>(`/forecast${qs({ date })}`, `forecast-${date}.json`);
@@ -68,59 +71,108 @@ export const getRoute = (optionId: string, p: CompareParams) =>
   getJson<RouteDetail>(`/routes/${encodeURIComponent(optionId)}${compareQuery(p)}`, `route-${p.fromId}-${optionId}.json`);
 
 // ── 쓰기 API (API 명세서 7~8장) ──────────────────────────────
-// 백엔드 서버가 아직 없어서, 지금은 기기에만 기록해요. 서버가 생기면 fetch 로 바꿔요.
+// 쓰기는 실제 서버가 있어야 해요. 서버가 없으면(목업) 아무것도 저장하지 않고, 화면은 "준비 중"으로 보여줘요.
 
-const LOCAL_ALERTS = 'tumgil:alerts';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? '';
+const VAPID_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? '';
 
-export type AlertKind = 'show_end' | 'game_end' | 'departure';
+/** 피드백 같은 쓰기 API를 쓸 수 있는지 (서버 주소가 있을 때) */
+export const serverReady = !usingMock;
+/** 웹 푸시 알림을 실제로 보낼 수 있는지 (서버 주소 + 푸시 공개 키가 있을 때) */
+export const pushReady = serverReady && !!VAPID_KEY;
 
-function readAlerts(): string[] {
+async function send(method: 'POST' | 'PUT' | 'DELETE', path: string, body?: unknown) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method,
+    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.status === 204 ? null : res.json().catch(() => null);
+}
+
+function local<T>(key: string, value?: T): T | null {
   try {
-    return JSON.parse(window.localStorage.getItem(LOCAL_ALERTS) ?? '[]') as string[];
+    if (value !== undefined) {
+      if (value === null) window.localStorage.removeItem(`tumgil:${key}`);
+      else window.localStorage.setItem(`tumgil:${key}`, JSON.stringify(value));
+      return value;
+    }
+    const raw = window.localStorage.getItem(`tumgil:${key}`);
+    return raw ? (JSON.parse(raw) as T) : null;
   } catch {
-    return [];
+    return null;
   }
 }
+
+/** 사람을 알 수 없는 기기 id. 알림을 묶는 데만 써요(명세 7.2). */
+function deviceId(): string {
+  let id = local<string>('deviceId');
+  if (!id) id = local('deviceId', `d_${crypto.randomUUID()}`)!;
+  return id;
+}
+
+/** POST /push/subscriptions — 알림 권한을 받은 뒤 이 기기의 푸시 구독을 서버에 등록해요 */
+export async function subscribePush(): Promise<boolean> {
+  if (!pushReady || !('serviceWorker' in navigator)) return false;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const sub =
+      (await reg.pushManager.getSubscription()) ??
+      (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: VAPID_KEY }));
+    await send('POST', '/push/subscriptions', { device_id: deviceId(), subscription: sub.toJSON() });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export type AlertKind = 'show_end' | 'game_end' | 'departure';
 
 export function alertKey(kind: AlertKind, target: string) {
   return `${kind}:${target}`;
 }
 
+/** 이 기기가 등록한 알림 예약 (화면 다시 열 때 버튼 상태를 맞추는 용도). 서버가 없으면 항상 꺼짐. */
 export function hasAlert(key: string) {
-  return readAlerts().includes(key);
+  if (!pushReady) return false;
+  return !!(local<Record<string, string>>('alerts') ?? {})[key];
 }
 
-/** POST /alerts · DELETE /alerts/{id} */
-export async function setAlert(key: string, on: boolean) {
-  const next = readAlerts().filter((k) => k !== key);
-  if (on) next.push(key);
+/** POST /alerts · DELETE /alerts/{id}. 실패하면 false 를 돌려주고 버튼은 바뀌지 않아요. */
+export async function setAlert(
+  key: string,
+  on: boolean,
+  body: { kind: AlertKind; event_id?: string; station_id?: string; notify_at?: string },
+): Promise<boolean> {
+  if (!pushReady) return false;
+  const map = local<Record<string, string>>('alerts') ?? {};
   try {
-    window.localStorage.setItem(LOCAL_ALERTS, JSON.stringify(next));
+    if (on) {
+      const res = (await send('POST', '/alerts', { device_id: deviceId(), ...body })) as { alert_id?: string } | null;
+      map[key] = res?.alert_id ?? key;
+    } else if (map[key]) {
+      await send('DELETE', `/alerts/${encodeURIComponent(map[key])}`);
+      delete map[key];
+    }
+    local('alerts', map);
+    return true;
   } catch {
-    /* 무시 */
+    return false;
   }
 }
 
-/** PUT /push/subscriptions/{device_id}/preferences */
+/** 알림 설정. 설정 화면 값은 기기에 두고, 서버가 있으면 서버에도 보내요(PUT .../preferences). */
 export async function savePreferences(prefs: { day_before: boolean; departure: boolean }) {
-  try {
-    window.localStorage.setItem('tumgil:prefs', JSON.stringify(prefs));
-  } catch {
-    /* 무시 */
-  }
+  local('prefs', prefs);
+  if (pushReady) await send('PUT', `/push/subscriptions/${deviceId()}/preferences`, prefs).catch(() => undefined);
 }
 
 export function loadPreferences(): { day_before: boolean; departure: boolean } {
-  try {
-    const raw = window.localStorage.getItem('tumgil:prefs');
-    if (raw) return JSON.parse(raw);
-  } catch {
-    /* 무시 */
-  }
-  return { day_before: true, departure: false };
+  return local<{ day_before: boolean; departure: boolean }>('prefs') ?? { day_before: true, departure: false };
 }
 
-/** POST /feedback — 누가 답했는지 알 수 없게 기기 id는 보내지 않아요 */
+/** POST /feedback — 누가 답했는지 알 수 없게 기기 id는 보내지 않아요. 서버가 없으면 false. */
 export async function postFeedback(body: {
   station_id: string;
   date: string;
@@ -128,6 +180,9 @@ export async function postFeedback(body: {
   predicted_level: string;
   answer: 'relaxed' | 'normal' | 'crowded' | 'not_used';
   event_id: string | null;
-}) {
-  if (process.env.NODE_ENV !== 'production') console.info('[POST /feedback]', body);
+}): Promise<boolean> {
+  if (!serverReady) return false;
+  return send('POST', '/feedback', body)
+    .then(() => true)
+    .catch(() => false);
 }

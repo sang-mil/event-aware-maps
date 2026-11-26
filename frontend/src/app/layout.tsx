@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { IBM_Plex_Sans_KR } from 'next/font/google';
+import { ServiceWorker } from '@/components/ServiceWorker';
 import './globals.css';
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
@@ -19,7 +20,13 @@ export const metadata: Metadata = {
   title: '틈길',
   description: '공연이 끝나고 편안하게 집에 가요. 덜 붐비는 역과 시간을 알려드려요.',
   manifest: `${base}/manifest.webmanifest`,
-  icons: { icon: `${base}/brand/icon.png`, apple: `${base}/brand/icon.png` },
+  icons: {
+    icon: [
+      { url: `${base}/brand/icon-192.png`, sizes: '192x192', type: 'image/png' },
+      { url: `${base}/brand/icon-512.png`, sizes: '512x512', type: 'image/png' },
+    ],
+    apple: `${base}/brand/apple-touch-icon.png`,
+  },
   appleWebApp: { capable: true, title: '틈길', statusBarStyle: 'default' },
 };
 
@@ -32,7 +39,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={plex.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ServiceWorker />
+      </body>
     </html>
   );
 }

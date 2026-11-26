@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { alertKey, getCalendar, getEvent, getEvents, getForecast, hasAlert, setAlert, type EventDetail, type EventItem } from '@/api';
+import { alertKey, getCalendar, getEvent, getEvents, getForecast, hasAlert, pushReady, setAlert, type EventDetail, type EventItem } from '@/api';
 import {
   BackHeader,
   BottomBar,
@@ -47,7 +47,7 @@ export function Calendar() {
   const { st, vn, venues } = useRefs();
 
   if (cal.status === 'loading') return <Loading />;
-  if (cal.status === 'error') return <Offline lastUpdatedAt={cal.lastUpdatedAt} onRetry={cal.retry} />;
+  if (cal.status === 'error') return <LoadError code={cal.code} lastUpdatedAt={cal.lastUpdatedAt} onRetry={cal.retry} />;
 
   const [y, m] = month.split('-').map(Number);
   const lead = new Date(Date.UTC(y, m - 1, 1)).getUTCDay();
@@ -268,7 +268,7 @@ export function EventsToday() {
   const res = useLoad(() => getEvents(today()), []);
   const { st, vn } = useRefs();
   if (res.status === 'loading') return <Loading />;
-  if (res.status === 'error') return <Offline lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} />;
+  if (res.status === 'error') return <LoadError code={res.code} lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} />;
   const all = res.value.data.events;
   const list = all.filter((e) => f === 'all' || e.type === f || e.area === f);
   const filters = [
@@ -379,7 +379,9 @@ export function EventScreen() {
   if (res.status === 'error') return <LoadError code={res.code} lastUpdatedAt={res.lastUpdatedAt} onRetry={res.retry} back={BACK[from] ?? '/home/'} />;
   const e = res.value.data;
   const canceled = e.status === 'canceled';
-  const noPush = push === 'unsupported' || push === 'denied';
+  // 알림 서버가 아직 없으면(pushReady=false) 푸시를 못 쓰는 경우와 똑같이 캘린더 추가를 권해요(05-2)
+  const notReady = !pushReady && demo !== 'nopush' && demo !== 'denied';
+  const noPush = push === 'unsupported' || push === 'denied' || notReady;
   const denied = push === 'denied';
   const block = tab === 'later' && e.after_end.later ? e.after_end.later : e.after_end.end;
 
@@ -389,7 +391,7 @@ export function EventScreen() {
       setPush(pushSupport());
       if (!ok) return;
     }
-    await setAlert(key, !going);
+    if (!(await setAlert(key, !going, { kind: 'show_end', event_id: id }))) return;
     if (!going) track('notify_on', { kind: 'show_end', event_id: id });
     setGoing(!going);
   };
@@ -477,7 +479,9 @@ export function EventScreen() {
               <span style={{ fontSize: 14, lineHeight: 1.45, color: '#5F6573' }}>
                 {denied
                   ? '브라우저 설정에서 알림을 켜거나, 캘린더에 넣어 두면 끝나기 30분 전에 알려드려요'
-                  : '휴대폰 캘린더에 넣어 두면 끝나기 30분 전에 알려드려요'}
+                  : notReady
+                    ? '앱 알림은 준비 중이에요. 휴대폰 캘린더에 넣어 두면 끝나기 30분 전에 알려드려요'
+                    : '휴대폰 캘린더에 넣어 두면 끝나기 30분 전에 알려드려요'}
               </span>
             </span>
           </span>
@@ -489,7 +493,7 @@ export function EventScreen() {
               {calMsg}
             </span>
           )}
-          {(denied || iphone || demo === 'nopush') && (
+          {!notReady && (denied || iphone || demo === 'nopush') && (
             <Link href={`/install/?from=event&event=${e.id}`} className="link-u">
               {denied ? '알림 다시 켜는 방법' : '홈 화면에 추가하면 실시간 알림도 받을 수 있어요'}
             </Link>
@@ -620,8 +624,9 @@ export function GameScreen() {
   const e = res.value.data;
   const g = GAME[e.game_state ?? 'before'];
   const toggle = async () => {
+    if (!pushReady) return;
     if (!on && pushSupport() !== 'granted' && !(await requestPush())) return;
-    await setAlert(key, !on);
+    if (!(await setAlert(key, !on, { kind: 'game_end', event_id: id }))) return;
     if (!on) track('notify_on', { kind: 'game_end', event_id: id });
     setOn(!on);
   };
@@ -644,11 +649,16 @@ export function GameScreen() {
         </span>
         <strong style={{ fontSize: 21 }}>{g.head}</strong>
         <span style={{ fontSize: 15, lineHeight: 1.55, color: '#4A4F5C' }}>{g.guide}</span>
-        {e.game_state === 'live' && (
-          <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn dark'} style={{ height: 48, borderRadius: 14, fontSize: 16, flex: 'none' }}>
-            {on ? '경기가 끝나면 알려드릴게요' : '경기 끝나면 알림 받기'}
-          </button>
-        )}
+        {e.game_state === 'live' &&
+          (pushReady ? (
+            <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn dark'} style={{ height: 48, borderRadius: 14, fontSize: 16, flex: 'none' }}>
+              {on ? '경기가 끝나면 알려드릴게요' : '경기 끝나면 알림 받기'}
+            </button>
+          ) : (
+            <button type="button" disabled aria-disabled="true" className="btn secondary" style={{ height: 48, borderRadius: 14, fontSize: 16, flex: 'none', cursor: 'default', opacity: 0.8 }}>
+              경기 끝 알림은 준비 중이에요
+            </button>
+          ))}
       </section>
       <section className="card" style={{ marginTop: 12, padding: '6px 20px' }}>
         <dl className="dl">

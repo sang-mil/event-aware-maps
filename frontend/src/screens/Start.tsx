@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BottomBar, Icon } from '@/components/ui';
+import { pushReady } from '@/api';
 import { asset, isIphone, pushSupport, requestLocation, requestPush, store, track, useLocationGranted } from '@/lib/app';
 
 /** 00 스플래시 */
@@ -46,8 +47,8 @@ export function Onboarding() {
   }, [locGranted]);
 
   const perms = [
-    { key: 'loc', title: '위치', sub: '내 주변 역과 도보 시간을 보여드려요', on: loc, ask: async () => setLoc(await requestLocation()) },
-    { key: 'noti', title: '알림', sub: '공연이 끝나기 전, 행사 전날에 알려드려요', on: noti, ask: async () => setNoti(await requestPush()) },
+    { key: 'loc', title: '위치', sub: '내 주변 역과 도보 시간을 보여드려요', on: loc, ask: async () => setLoc(await requestLocation()), ready: true },
+    { key: 'noti', title: '알림', sub: pushReady ? '공연이 끝나기 전, 행사 전날에 알려드려요' : '공연이 끝나기 전, 행사 전날 알림은 준비 중이에요', on: noti, ask: async () => setNoti(await requestPush()), ready: pushReady },
   ];
 
   return (
@@ -89,17 +90,17 @@ export function Onboarding() {
               type="button"
               aria-pressed={p.on}
               onClick={p.ask}
-              disabled={p.on}
+              disabled={p.on || !p.ready}
               className="chip"
-              style={{ minWidth: 72, fontSize: 14, background: p.on ? '#E9EBEF' : '#17171C', color: p.on ? '#2C303A' : '#FFFFFF' }}
+              style={{ minWidth: 72, fontSize: 14, background: p.on || !p.ready ? '#E9EBEF' : '#17171C', color: p.on || !p.ready ? '#2C303A' : '#FFFFFF' }}
             >
-              {p.on ? '허용됨' : '허용'}
+              {!p.ready ? '준비 중' : p.on ? '허용됨' : '허용'}
             </button>
           </div>
         ))}
       </section>
       <div style={{ padding: '14px 24px 0', display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {iphone && (
+        {iphone && pushReady && (
           <Link href="/install/?from=onboarding" className="link-u">
             아이폰이라면 홈 화면에 추가해야 알림을 받아요
           </Link>

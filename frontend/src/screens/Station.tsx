@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { alertKey, getStationForecast, hasAlert, setAlert } from '@/api';
+import { alertKey, getStationForecast, hasAlert, pushReady, setAlert } from '@/api';
 import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, Walk } from '@/components/ui';
-import { LEVEL, today, dateLabel, requestPush, pushSupport, track } from '@/lib/app';
+import { LEVEL, today, dateLabel, isoAt, requestPush, pushSupport, track } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 /** 02 · 02-1 역 상세, 02-2 · 02-3 고른 날짜, E3 혼잡 정보가 없는 역 */
@@ -75,11 +75,10 @@ export function Station() {
 
   const notifyHour = f.notify_hour ? Number(f.notify_hour) : null;
   const toggle = async () => {
-    if (!on && pushSupport() !== 'granted') {
-      const ok = await requestPush();
-      if (!ok) return;
-    }
-    await setAlert(key, !on);
+    if (!pushReady || notifyHour === null) return;
+    if (!on && pushSupport() !== 'granted' && !(await requestPush())) return;
+    const ok = await setAlert(key, !on, { kind: 'departure', station_id: id, notify_at: isoAt(date, notifyHour * 60) });
+    if (!ok) return;
     if (!on) track('notify_on', { kind: 'departure', station_id: id });
     setOn(!on);
   };
@@ -151,9 +150,16 @@ export function Station() {
             <Link href={`/search/?to=${id}`} className="btn secondary">
               길찾기
             </Link>
-            <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn primary'} style={{ flex: 2 }}>
-              {on ? `${notifyHour}시에 알려드릴게요` : `${notifyHour}시에 알림 받기`}
-            </button>
+            {pushReady ? (
+              <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn primary'} style={{ flex: 2 }}>
+                {on ? `${notifyHour}시에 알려드릴게요` : `${notifyHour}시에 알림 받기`}
+              </button>
+            ) : (
+              // 알림 서버가 붙기 전에는 켜진 것처럼 보이지 않게 막아 둬요
+              <button type="button" disabled aria-disabled="true" className="btn secondary" style={{ flex: 2, cursor: 'default', opacity: 0.8 }}>
+                {notifyHour}시 알림은 준비 중이에요
+              </button>
+            )}
           </>
         ) : (
           <Link href={`/search/?to=${id}`} className="btn primary">

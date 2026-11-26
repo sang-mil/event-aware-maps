@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getEvents, getForecast, postFeedback, type Level } from '@/api';
+import { getEvents, getForecast, postFeedback, serverReady, type Level } from '@/api';
 import {
   Headline,
   Icon,
   KindChip,
   LevelBadge,
   LineBadge,
+  LoadError,
   Loading,
   Offline,
   Ph,
@@ -55,14 +56,15 @@ export function Home() {
     if (demo === 'feedback') {
       // 시안(01-2) 미리보기용 예시 값이에요. 실제로는 비교 화면에서 고른 방법이 저장돼요.
       setFb({ station_id: 'bangi', station_name: '방이역', event_id: 'evt_20250809_kspo', event_title: '더보이즈 공연', date: today(), hour: '20', level: 'normal' });
-    } else {
+    } else if (serverReady) {
+      // 응답을 받을 서버가 있을 때만 물어봐요
       setFb(store<PendingFeedback>('pendingFeedback'));
     }
   }, [demo]);
 
   if (forecast.status === 'loading' || events.status === 'loading') return <Loading />;
-  if (forecast.status === 'error') return <Offline lastUpdatedAt={forecast.lastUpdatedAt} onRetry={forecast.retry} />;
-  if (events.status === 'error') return <Offline lastUpdatedAt={events.lastUpdatedAt} onRetry={events.retry} />;
+  if (forecast.status === 'error') return <LoadError code={forecast.code} lastUpdatedAt={forecast.lastUpdatedAt} onRetry={forecast.retry} />;
+  if (events.status === 'error') return <LoadError code={events.code} lastUpdatedAt={events.lastUpdatedAt} onRetry={events.retry} />;
 
   const f = forecast.value.data;
   const hour = String(Math.floor(at / 60)).padStart(2, '0');
@@ -212,12 +214,13 @@ export function Home() {
 /** 01-2 귀가 후 피드백 */
 function FeedbackSheet({ fb, onClose }: { fb: PendingFeedback; onClose: () => void }) {
   const [answer, setAnswer] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
   const close = () => {
     store('pendingFeedback', null);
     onClose();
   };
-  const send = (a: 'relaxed' | 'normal' | 'crowded' | 'not_used', label: string | null) => {
-    postFeedback({ station_id: fb.station_id, date: fb.date, hour: fb.hour, predicted_level: fb.level, answer: a, event_id: fb.event_id });
+  const send = async (a: 'relaxed' | 'normal' | 'crowded' | 'not_used', label: string | null) => {
+    setSaved(await postFeedback({ station_id: fb.station_id, date: fb.date, hour: fb.hour, predicted_level: fb.level, answer: a, event_id: fb.event_id }));
     track('feedback', { station_id: fb.station_id, hour: fb.hour, predicted_level: fb.level, answer: a });
     if (label) setAnswer(label);
     else close();
@@ -259,7 +262,9 @@ function FeedbackSheet({ fb, onClose }: { fb: PendingFeedback; onClose: () => vo
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '4px 0' }}>
             <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>고마워요</h2>
             <span style={{ fontSize: 15, lineHeight: 1.55, color: '#4A4F5C' }}>
-              ‘{answer}’{answer === '여유' ? '로' : '으로'} 기록했어요. 다음 예상에 반영할게요.
+              {saved
+                ? `‘${answer}’${answer === '여유' ? '로' : '으로'} 기록했어요. 다음 예상에 반영할게요.`
+                : '응답 저장은 아직 준비 중이에요. 서버가 연결되면 다음 예상에 반영할게요.'}
             </span>
           </div>
           <button type="button" className="btn primary" style={{ flex: 'none' }} onClick={close}>

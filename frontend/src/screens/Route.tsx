@@ -46,8 +46,8 @@ export function MapScreen() {
   const { st, vn } = useRefs();
   const [sel, setSel] = useState<string | null>(null);
   if (fc.status === 'loading' || ev.status === 'loading') return <Loading />;
-  if (fc.status === 'error') return <Offline lastUpdatedAt={fc.lastUpdatedAt} onRetry={fc.retry} />;
-  if (ev.status === 'error') return <Offline lastUpdatedAt={ev.lastUpdatedAt} onRetry={ev.retry} />;
+  if (fc.status === 'error') return <LoadError code={fc.code} lastUpdatedAt={fc.lastUpdatedAt} onRetry={fc.retry} />;
+  if (ev.status === 'error') return <LoadError code={ev.code} lastUpdatedAt={ev.lastUpdatedAt} onRetry={ev.retry} />;
 
   const hour = hourKey(nowMin()); // 지금 출발할 때의 예상
   const f = fc.value.data;

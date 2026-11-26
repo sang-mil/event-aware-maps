@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState, type ReactNode } from 'react';
-import { loadPreferences, savePreferences } from '@/api';
+import { loadPreferences, pushReady, savePreferences } from '@/api';
 import { BackHeader, Icon, Ph } from '@/components/ui';
 
 /** 01-3 설정 */
@@ -34,11 +34,21 @@ export function Settings() {
               <span className="title">{a.title}</span>
               <span className="sub">{a.sub}</span>
             </span>
-            <button type="button" role="switch" aria-checked={prefs[a.key]} aria-label={a.title} className="switch" onClick={() => toggle(a.key)}>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={pushReady && prefs[a.key]}
+              aria-label={a.title}
+              className="switch"
+              disabled={!pushReady}
+              style={pushReady ? undefined : { opacity: 0.5, cursor: 'default' }}
+              onClick={() => toggle(a.key)}
+            >
               <span />
             </button>
           </div>
         ))}
+        {!pushReady && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 14, color: '#8A5300' }}>알림은 준비 중이에요. 알림 서버가 연결되면 켤 수 있어요.</p>}
       </section>
       <div className="section-title">
         <h2>정보</h2>
