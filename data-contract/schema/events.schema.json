@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/events.schema.json",
+  "title": "그날의 행사 목록 (GET /events?date=)",
+  "description": "행사가 없는 날도 events: [] 로 내려준다. KBO 경기는 아직 수집하지 않으므로 경기 관련 값은 null 또는 no_data가 된다.",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/envelope" }],
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "date": { "$ref": "common.schema.json#/$defs/date" },
+        "events": { "type": "array", "items": { "$ref": "#/$defs/event_item_closed" } },
+        "next_event": {
+          "description": "행사가 없는 날 보여줄 다음 행사 안내. 모르는 값은 null",
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "id": { "type": ["string", "null"] },
+                "title": { "type": ["string", "null"] },
+                "venue_id": { "$ref": "common.schema.json#/$defs/id_or_null" },
+                "date": { "$ref": "common.schema.json#/$defs/date_or_null" }
+              },
+              "required": ["id", "title", "venue_id", "date"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["date", "events", "next_event"],
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "event_item": {
+      "type": "object",
+      "description": "행사 한 건. 행사 상세(event.schema.json)가 이것을 넓혀 쓰므로 여기서는 모르는 키를 막지 않는다.",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "$ref": "common.schema.json#/$defs/event_type" },
+        "title": { "type": "string" },
+        "venue_id": { "$ref": "common.schema.json#/$defs/id_or_null", "description": "시설을 특정할 수 없으면 null" },
+        "area": { "$ref": "common.schema.json#/$defs/area" },
+        "date": { "$ref": "common.schema.json#/$defs/date" },
+        "start_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+        "end_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+        "end_at_source": { "enum": ["scheduled", "estimated", null], "description": "종료 시각의 근거. scheduled 공식 일정, estimated 추정" },
+        "status": { "enum": ["scheduled", "changed", "canceled"] },
+        "change": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "prev_end_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+                "new_end_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+                "changed_at": { "$ref": "common.schema.json#/$defs/datetime" }
+              },
+              "required": ["prev_end_at", "new_end_at", "changed_at"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "game_state": { "enum": ["before", "live", "end", null], "description": "경기에서만 쓴다. 공연은 null" },
+        "nearest_station": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "station_id": { "$ref": "common.schema.json#/$defs/id" },
+                "level": { "$ref": "common.schema.json#/$defs/level" }
+              },
+              "required": ["station_id", "level"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "linkable": { "type": "boolean", "description": "상세 화면으로 들어갈 수 있는지" }
+      },
+      "required": ["id", "type", "title", "venue_id", "area", "date", "start_at", "end_at", "end_at_source", "status", "change", "game_state", "nearest_station", "linkable"]
+    },
+    "event_item_closed": {
+      "$ref": "#/$defs/event_item",
+      "unevaluatedProperties": false
+    }
+  }
+}

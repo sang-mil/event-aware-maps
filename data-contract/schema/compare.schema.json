@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/compare.schema.json",
+  "title": "귀가 방법 비교 (GET /routes/compare)",
+  "description": "출발지는 프리셋(시설 또는 역 id)으로만 받는다. 사용자 위치는 받지 않는다. options 순서는 서버가 정한다.",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/envelope" }],
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "condition_label": {
+          "type": "object",
+          "properties": {
+            "to_name": { "type": ["string", "null"] },
+            "hour_label": { "type": "string", "description": "예: 20시대 출발" }
+          },
+          "required": ["to_name", "hour_label"],
+          "additionalProperties": false
+        },
+        "headline": { "$ref": "common.schema.json#/$defs/headline" },
+        "last_train": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+                "minutes_left": { "type": ["integer", "null"], "minimum": 0 },
+                "imminent": { "type": "boolean", "description": "막차가 임박했는지" }
+              },
+              "required": ["at", "minutes_left", "imminent"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "$ref": "common.schema.json#/$defs/id" },
+              "kind": { "enum": ["walk_to_other", "board_now", "wait_later"], "description": "다른 역까지 걷기 / 지금 바로 타기 / 기다렸다 타기" },
+              "recommended": { "type": "boolean" },
+              "title": { "type": "string" },
+              "subtitle": { "type": "string" },
+              "station_id": { "$ref": "common.schema.json#/$defs/id" },
+              "board_hour": { "$ref": "common.schema.json#/$defs/hour" },
+              "walk_min": { "$ref": "common.schema.json#/$defs/minutes_or_null" },
+              "expected": { "$ref": "common.schema.json#/$defs/count_or_null" },
+              "level": { "$ref": "common.schema.json#/$defs/level" },
+              "compare_message": { "type": "string" }
+            },
+            "required": ["id", "kind", "recommended", "title", "subtitle", "station_id", "board_hour", "walk_min", "expected", "level", "compare_message"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["condition_label", "headline", "last_train", "options"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/calendar.schema.json",
+  "title": "월별 행사 달력 (GET /calendar?month=)",
+  "description": "행사가 있는 날만 days에 넣는다. 행사가 없는 달은 days: []",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/envelope" }],
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "month": { "$ref": "common.schema.json#/$defs/month" },
+        "days": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "$ref": "common.schema.json#/$defs/date" },
+              "has_show": { "type": "boolean" },
+              "has_game": { "type": "boolean" },
+              "count": { "type": "integer", "minimum": 0 },
+              "by_venue": {
+                "type": "object",
+                "description": "시설 id별 공연·경기 여부",
+                "propertyNames": { "$ref": "common.schema.json#/$defs/id" },
+                "additionalProperties": { "$ref": "#/$defs/kinds" }
+              },
+              "by_area": {
+                "type": "object",
+                "description": "구역별 공연·경기 여부",
+                "propertyNames": { "$ref": "common.schema.json#/$defs/area" },
+                "additionalProperties": { "$ref": "#/$defs/kinds" }
+              }
+            },
+            "required": ["date", "has_show", "has_game", "count", "by_venue", "by_area"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["month", "days"],
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "kinds": {
+      "type": "object",
+      "properties": { "show": { "type": "boolean" }, "game": { "type": "boolean" } },
+      "additionalProperties": false
+    }
+  }
+}

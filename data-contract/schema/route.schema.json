@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/route.schema.json",
+  "title": "선택한 귀가 방법의 상세 (GET /routes/{option_id})",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/envelope" }],
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "option_id": { "$ref": "common.schema.json#/$defs/id" },
+        "board_station_id": { "$ref": "common.schema.json#/$defs/id" },
+        "to_station_id": { "$ref": "common.schema.json#/$defs/id_or_null" },
+        "walk_min": { "$ref": "common.schema.json#/$defs/minutes_or_null" },
+        "distance_km": { "type": ["number", "null"], "minimum": 0 },
+        "arrive_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+        "last_train_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+        "level": { "$ref": "common.schema.json#/$defs/level" },
+        "message": { "type": "string" },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "enum": ["start", "walk", "board"] },
+              "title": { "type": "string" },
+              "detail": { "type": ["string", "null"] },
+              "exit_no": { "type": ["string", "null"] },
+              "direction": { "type": ["string", "null"] }
+            },
+            "required": ["type", "title", "detail", "exit_no", "direction"],
+            "additionalProperties": false
+          }
+        },
+        "compare": {
+          "type": "object",
+          "properties": {
+            "hour": { "$ref": "common.schema.json#/$defs/hour" },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "station_id": { "$ref": "common.schema.json#/$defs/id" },
+                  "expected": { "type": "number", "minimum": 0 }
+                },
+                "required": ["station_id", "expected"],
+                "additionalProperties": false
+              }
+            },
+            "note": { "type": "string" }
+          },
+          "required": ["hour", "items", "note"],
+          "additionalProperties": false
+        },
+        "map_links": {
+          "description": "지도 앱 링크. 형태 미정이라 지금은 null만 허용한다 (types.ts는 unknown). 형태가 정해지면 필드를 추가한다.",
+          "type": "null"
+        }
+      },
+      "required": ["option_id", "board_station_id", "to_station_id", "walk_min", "distance_km", "arrive_at", "last_train_at", "level", "message", "steps", "compare", "map_links"],
+      "additionalProperties": false
+    }
+  }
+}
