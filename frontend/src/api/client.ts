@@ -4,13 +4,21 @@ import type { Envelope } from './types';
  * 데이터는 이 파일을 통해서만 불러와요 (frontend/CLAUDE.md 규칙).
  *
  * - NEXT_PUBLIC_API_BASE 가 있으면 실제 API(`{API_BASE}/stations/...?date=...`)를 불러요. 조건은 쿼리로 그대로 보내요.
- * - 없으면 public/mock/ 의 목업 JSON을 읽어요. 목업은 조건마다 파일 이름이 달라서, 없는 조건이면 '찾을 수 없음'이 돼요.
+ * - NEXT_PUBLIC_DATA_BASE 가 있으면 GitHub Pages 에 매일 발행되는 정적 JSON 파일(`{DATA_BASE}/events-2025-08-09.json`)을 읽어요.
+ *   예: NEXT_PUBLIC_DATA_BASE=https://sang-mil.github.io/event-aware-maps/data
+ * - 둘 다 없으면 public/mock/ 의 목업 JSON을 읽어요. 목업은 조건마다 파일 이름이 달라서, 없는 조건이면 '찾을 수 없음'이 돼요.
  */
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? '';
+const DATA_BASE = (process.env.NEXT_PUBLIC_DATA_BASE ?? '').replace(/\/$/, '');
 const CACHE_PREFIX = 'tumgil:cache:';
 
-export const usingMock = !API_BASE;
+/** 실제 API 서버를 쓰는지 */
+const usingApi = !!API_BASE;
+/** 발행된 정적 JSON 파일을 읽는지 (API 서버가 있으면 서버가 먼저예요) */
+export const usingStaticData = !usingApi && !!DATA_BASE;
+/** 쓰기 API(피드백·알림)를 쓸 서버가 없는지. 정적 파일만 읽을 때도 서버는 없어요. */
+export const usingMock = !usingApi;
 
 /** offline: 연결 오류(E5) · not_found: 없는 역·행사, 또는 목업이 없는 조건 · unsupported: 지원하지 않는 시간대(422) */
 export type ApiErrorCode = 'offline' | 'not_found' | 'unsupported';
@@ -56,15 +64,35 @@ function writeCache<T>(key: string, value: Envelope<T>) {
   }
 }
 
+export interface JsonFiles<T> {
+  /** 목업 파일 이름. 예: `station-bangi-2025-08-09.json` */
+  mock: string;
+  /**
+   * 발행된 정적 파일 이름. 예: `compare-olympic_park-2025-08-09-20.json`
+   * - 문자열이면 `{DATA_BASE}/{이름}` 을 읽어요.
+   * - 'mock' 이면 아직 발행되지 않은 정보라서 목업을 그대로 읽어요(역·공연장 목록).
+   * - null 이면 발행되는 파일이 없는 조건이라 '지원하지 않는 조건'으로 처리해요.
+   */
+  data?: string | 'mock' | null;
+  /**
+   * 파일이 없을 때 돌려줄 '빈 결과'. 명세상 서버가 404 대신 빈 목록을 주는 API에만 써요
+   * (예: 행사 없는 날 GET /events → events: []). 실제 API에서는 쓰지 않아요.
+   */
+  empty?: () => T;
+  /** 정적 파일에서 파일이 없을 때(404) '찾을 수 없음' 대신 '지원하지 않는 조건'으로 보여줄지 */
+  missingIsUnsupported?: boolean;
+}
+
 /**
  * @param apiPath 실제 API 경로와 쿼리. 예: `/stations/bangi/forecast?date=2025-08-09`
- * @param mockFile 목업 파일 이름. 예: `station-bangi-2025-08-09.json`
- * @param mockEmpty 목업 파일이 없을 때 돌려줄 '빈 결과'. 명세상 서버가 404 대신 빈 목록을 주는 API에만 써요
- *                  (예: 행사 없는 날 GET /events → events: []). 실제 API에서는 쓰지 않아요.
+ * @param files 목업·정적 파일 이름
  */
-export async function getJson<T>(apiPath: string, mockFile: string, mockEmpty?: () => T): Promise<Loaded<T>> {
-  const url = usingMock ? `${BASE}/mock/${mockFile}` : `${API_BASE}${apiPath}`;
-  const key = usingMock ? mockFile : apiPath;
+export async function getJson<T>(apiPath: string, files: JsonFiles<T>): Promise<Loaded<T>> {
+  const dataFile = files.data === undefined ? files.mock : files.data;
+  if (usingStaticData && dataFile === null) throw new ApiError('unsupported', null);
+  const fromData = usingStaticData && dataFile !== 'mock';
+  const url = usingApi ? `${API_BASE}${apiPath}` : fromData ? `${DATA_BASE}/${dataFile}` : `${BASE}/mock/${files.mock}`;
+  const key = usingApi ? apiPath : fromData ? `data:${dataFile}` : files.mock;
   let res: Response;
   try {
     res = await fetch(url, { cache: 'no-store' });
@@ -72,7 +100,8 @@ export async function getJson<T>(apiPath: string, mockFile: string, mockEmpty?: 
     return fromCacheOrThrow<T>(key);
   }
   if (res.status === 404) {
-    if (usingMock && mockEmpty) return { data: mockEmpty(), updatedAt: new Date().toISOString(), fromCache: false };
+    if (!usingApi && files.empty) return { data: files.empty(), updatedAt: new Date().toISOString(), fromCache: false };
+    if (fromData && files.missingIsUnsupported) throw new ApiError('unsupported', null);
     throw new ApiError('not_found', null);
   }
   if (res.status === 422) throw new ApiError('unsupported', null);

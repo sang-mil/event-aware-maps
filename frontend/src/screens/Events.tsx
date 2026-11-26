@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { alertKey, getCalendar, getEvent, getEvents, getForecast, hasAlert, pushReady, setAlert, type EventDetail, type EventItem } from '@/api';
+import { alertKey, getCalendar, getEvent, getEvents, getForecast, hasAlert, pushReady, setAlert, type EventDetail, type EventItem, usingStaticData } from '@/api';
+import { SourceNote } from '@/components/DataNote';
 import {
   BackHeader,
   BottomBar,
@@ -21,7 +22,7 @@ import {
   Time,
   Walk,
 } from '@/components/ui';
-import { DEMO_MONTH, dateLabel, isIphone, pushSupport, requestPush, today, track, type PushSupport } from '@/lib/app';
+import { dateLabel, isIphone, pushSupport, requestPush, today, track, type PushSupport } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 const AREAS = [
@@ -39,7 +40,7 @@ export function Calendar() {
   const [area, setArea] = useState<string>('all');
   const [venue, setVenue] = useState<string>('all');
   const [picked, setPicked] = useState(today());
-  const month = DEMO_MONTH;
+  const month = picked.slice(0, 7);
   const cal = useLoad(() => getCalendar(month), [month]);
   // 일정이 없는 날은 목업 파일이 없어서 오류가 나요. 그때는 '일정 없음'으로 보여줘요.
   const events = useLoad(() => getEvents(picked), [picked]);
@@ -256,7 +257,8 @@ export function Calendar() {
           <span style={{ fontSize: 14, color: '#5F6573' }}>역 혼잡도 평소와 비슷할 거예요</span>
         </section>
       )}
-      <p className="note">지금은 2025년 8월 9일 일정만 들어 있어요.</p>
+      {!usingStaticData && <p className="note">지금은 2025년 8월 9일 일정만 들어 있어요.</p>}
+      <SourceNote />
       <TabBar active="calendar" />
     </main>
   );
@@ -348,6 +350,7 @@ export function EventsToday() {
         {list.length === 0 && <div style={{ background: '#FFFFFF', borderRadius: 20, padding: '28px 20px', fontSize: 16, color: '#4A4F5C' }}>이 조건의 일정이 오늘은 없어요</div>}
       </div>
       <p className="note">역 상태는 공연이 끝날 무렵의 예상이에요.</p>
+      <SourceNote />
     </main>
   );
 }

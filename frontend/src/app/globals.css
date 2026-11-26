@@ -135,3 +135,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
   .rise.late { animation-delay: 0.2s; }
 }
 @keyframes rise { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* 2025 리플레이 안내 띠 · 데이터 출처 */
+.replay-banner { max-width: var(--max); margin: 0 auto; padding: 6px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; color: #4A4F5C; background: #EEF0F3; }
+.replay-banner input { font: inherit; font-size: 13px; border: 1px solid #D5D8DE; border-radius: 8px; padding: 2px 6px; background: #FFFFFF; color: inherit; }
+.source-note { font-size: 12px; }
