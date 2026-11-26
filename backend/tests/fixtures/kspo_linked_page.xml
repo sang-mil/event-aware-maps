@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 가짜 테스트 값. 실제 응답 구조만 따름 -->
+<response>
+  <header><resultCode>0000</resultCode><resultMsg>OK</resultMsg></header>
+  <body>
+    <items>
+      <item>
+        <TITLE>공연명:테스트공연,공연관람객수:100</TITLE>
+        <URL>https://example.invalid</URL>
+        <LOCAL_ID>1</LOCAL_ID>
+        <ISSUED_DATE>2025-01-01 20:00:00</ISSUED_DATE>
+        <DESCRIPTION>주차대수:10,방문객:50, 기온:1.0, 풍향:1.0, 강수량:, 습도:10,휴일:</DESCRIPTION>
+        <COLLECTED_DATE>2025-01-02 00:00:00</COLLECTED_DATE>
+        <REG_DT>2025-01-02 00:00:00</REG_DT>
+      </item>
+      <item>
+        <TITLE>공연명:,공연관람객수:0</TITLE>
+        <URL>https://example.invalid</URL>
+        <LOCAL_ID>2</LOCAL_ID>
+        <ISSUED_DATE>2025-01-01 21:00:00</ISSUED_DATE>
+        <DESCRIPTION>주차대수:5,방문객:20, 기온:0.5, 풍향:2.0, 강수량:0.0, 습도:20,휴일:</DESCRIPTION>
+        <COLLECTED_DATE>2025-01-02 00:00:00</COLLECTED_DATE>
+        <REG_DT>2025-01-02 00:00:00</REG_DT>
+      </item>
+    </items>
+    <numOfRows>1000</numOfRows>
+    <pageNo>1</pageNo>
+    <totalCount>2</totalCount>
+  </body>
+</response>
