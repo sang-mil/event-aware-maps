@@ -92,13 +92,23 @@ def test_http_429_message_has_no_key(monkeypatch):
 
     from collectors import http
 
+    import io
+    from email.message import Message
+
     def raise_429(req, timeout):
-        raise urllib.error.HTTPError(req.full_url, 429, "Too Many Requests", {}, None)
+        hdrs = Message()
+        hdrs["X-RateLimit-Remaining-Day"] = "0"
+        hdrs["Content-Type"] = "application/json"
+        body = io.BytesIO(b'{"message":"API rate limit exceeded"}')
+        raise urllib.error.HTTPError(req.full_url, 429, "Too Many Requests", hdrs, body)
 
     monkeypatch.setattr(urllib.request, "urlopen", raise_429)
     with pytest.raises(CollectError) as e:
         http.get_text(kspo.page_url("linked", SECRET, 1), "kspo_linked")
     assert "429" in str(e.value) and "--page-size" in str(e.value)
+    assert "X-RateLimit-Remaining-Day=0" in str(e.value)
+    assert "API rate limit exceeded" in str(e.value)
+    assert "Content-Type" not in str(e.value)
     assert SECRET not in str(e.value)
 
 
