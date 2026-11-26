@@ -11,7 +11,7 @@ import os
 import sqlite3
 from pathlib import Path
 
-from . import kspo, ridership
+from . import kspo, ridership, seed
 
 SCHEMA = """
 CREATE TABLE ridership_daily (          -- 서울교통공사 일별 시간대별 CSV
@@ -36,8 +36,9 @@ CREATE TABLE meta (name TEXT PRIMARY KEY, value TEXT);
 """
 
 
-def build(raw_dir: Path, db_path: Path) -> dict:
-    """raw_dir 의 원본을 읽어 db_path 를 새로 만든다. 표별 건수와 건너뛴 사유를 돌려준다."""
+def build(raw_dir: Path, db_path: Path, seed_path: Path | None = None) -> dict:
+    """raw_dir 의 원본을 읽어 db_path 를 새로 만든다. 표별 건수와 건너뛴 사유를 돌려준다.
+    원본 CSV(raw_dir/csv)가 없으면 승하차는 seed_path(요약 파일)에서 읽는다."""
     report: dict = {"skipped": {}, "sources": []}
     tmp = db_path.with_suffix(".db.tmp")
     tmp.unlink(missing_ok=True)
@@ -45,7 +46,12 @@ def build(raw_dir: Path, db_path: Path) -> dict:
     con = sqlite3.connect(tmp)
     try:
         con.executescript(SCHEMA)
-        for path in sorted((raw_dir / "csv").glob("*.csv")):
+        csv_files = sorted((raw_dir / "csv").glob("*.csv"))
+        if not csv_files and seed_path is not None and seed_path.is_file():
+            con.executemany("INSERT INTO ridership_daily (date, station_id, line, hour, board, alight) VALUES (?,?,?,?,?,?)",
+                            seed.load(seed_path))
+            report["sources"].append(seed_path.name)
+        for path in csv_files:
             rows, skipped = ridership.parse_daily_csv(ridership.read_csv_text(path))
             try:
                 con.executemany("INSERT INTO ridership_daily (date, station_id, line, hour, board, alight) VALUES (?,?,?,?,?,?)", rows)
