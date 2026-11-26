@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2025-08-09T18:05:00+09:00",
+  "data": {
+    "option_id": "later_olympic",
+    "board_station_id": "olympic_park",
+    "to_station_id": null,
+    "walk_min": null,
+    "distance_km": null,
+    "arrive_at": null,
+    "last_train_at": null,
+    "level": "normal",
+    "message": "20시대의 절반 수준으로 탈 거예요",
+    "steps": [
+      {
+        "type": "start",
+        "title": "출발",
+        "detail": "21시대 출발",
+        "exit_no": null,
+        "direction": null
+      },
+      {
+        "type": "walk",
+        "title": "올림픽공원역까지 걷기",
+        "detail": null,
+        "exit_no": null,
+        "direction": null
+      },
+      {
+        "type": "board",
+        "title": "올림픽공원역에서 타기",
+        "detail": "5",
+        "exit_no": null,
+        "direction": null
+      }
+    ],
+    "compare": {
+      "hour": "20",
+      "items": [
+        {
+          "station_id": "olympic_park",
+          "expected": 1265
+        },
+        {
+          "station_id": "bangi",
+          "expected": 247
+        }
+      ],
+      "note": "같은 5호선이라 갈아타지 않고 이어서 가요. 다만 21시대엔 방이역도 377명으로 늘 거예요."
+    },
+    "map_links": null
+  }
+}

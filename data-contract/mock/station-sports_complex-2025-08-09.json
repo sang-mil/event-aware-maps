@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2025-08-09T18:05:00+09:00",
+  "data": {
+    "date": "2025-08-09",
+    "focus_hour": "20",
+    "focus_level": "no_data",
+    "headline": null,
+    "description": null,
+    "slots": [],
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": {
+      "message": "현재는 5호선 올림픽공원역과 방이역 기록만 반영돼 있어요. 8호선과 9호선은 데이터를 연동하는 대로 추가할게요.",
+      "nearby": [
+        {
+          "station_id": "bangi",
+          "level": "normal",
+          "walk_min": null
+        },
+        {
+          "station_id": "olympic_park",
+          "level": "crowded",
+          "walk_min": null
+        }
+      ]
+    },
+    "station_id": "sports_complex"
+  }
+}

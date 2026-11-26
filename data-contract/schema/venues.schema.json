@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/venues.schema.json",
+  "title": "시설 목록 (GET /venues)",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/envelope" }],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/id" },
+          "name": { "type": "string" },
+          "area": { "$ref": "common.schema.json#/$defs/area" },
+          "lat": { "$ref": "common.schema.json#/$defs/coord_or_null" },
+          "lng": { "$ref": "common.schema.json#/$defs/coord_or_null" },
+          "nearby_stations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "station_id": { "$ref": "common.schema.json#/$defs/id" },
+                "walk_min": { "$ref": "common.schema.json#/$defs/minutes_or_null" }
+              },
+              "required": ["station_id", "walk_min"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["id", "name", "area", "lat", "lng", "nearby_stations"],
+        "additionalProperties": false
+      }
+    }
+  }
+}

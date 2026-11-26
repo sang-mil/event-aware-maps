@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/forecast.schema.json",
+  "title": "그날의 시간대별 역 예상 (GET /forecast?date=)",
+  "description": "순서(ranking)는 서버가 정한다. 화면은 순서를 바꾸지 않는다.",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/envelope" }],
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "date": { "$ref": "common.schema.json#/$defs/date" },
+        "day_label": { "type": "string", "description": "예: 8월 9일 (토)" },
+        "has_event": { "type": "boolean" },
+        "focus_hour": { "$ref": "common.schema.json#/$defs/hour", "description": "그날 가장 중요한 시간대(행사가 끝나는 시간대)" },
+        "supported_hours": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/hour" } },
+        "summaries": {
+          "type": "object",
+          "description": "시간대별 한 줄 요약",
+          "propertyNames": { "$ref": "common.schema.json#/$defs/hour" },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "highlight": { "type": ["string", "null"] },
+              "text": { "type": "string" },
+              "best_station_id": { "$ref": "common.schema.json#/$defs/id_or_null" }
+            },
+            "required": ["highlight", "text", "best_station_id"],
+            "additionalProperties": false
+          }
+        },
+        "ranking": {
+          "type": "object",
+          "description": "시간대별 역 순서 (역 id 목록)",
+          "propertyNames": { "$ref": "common.schema.json#/$defs/hour" },
+          "additionalProperties": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/id" } }
+        },
+        "stations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "station_id": { "$ref": "common.schema.json#/$defs/id" },
+              "slots": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/slot" } }
+            },
+            "required": ["station_id", "slots"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["date", "day_label", "has_event", "focus_hour", "supported_hours", "summaries", "ranking", "stations"],
+      "additionalProperties": false
+    }
+  }
+}

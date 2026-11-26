@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/stations.schema.json",
+  "title": "역 목록 (GET /stations)",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/envelope" }],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/id" },
+          "name": { "type": "string" },
+          "lines": { "type": "array", "items": { "type": "string" }, "description": "지나는 노선 번호" },
+          "lat": { "$ref": "common.schema.json#/$defs/coord_or_null" },
+          "lng": { "$ref": "common.schema.json#/$defs/coord_or_null" },
+          "has_data": { "type": "boolean", "description": "혼잡 예상을 보여줄 데이터가 있는지" },
+          "data_lines": { "type": "array", "items": { "type": "string" }, "description": "데이터가 반영된 노선" }
+        },
+        "required": ["id", "name", "lines", "lat", "lng", "has_data", "data_lines"],
+        "additionalProperties": false
+      }
+    }
+  }
+}

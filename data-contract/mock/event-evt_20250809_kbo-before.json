@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2025-08-09T18:05:00+09:00",
+  "data": {
+    "id": "evt_20250809_kbo",
+    "type": "game",
+    "title": "한화 대 LG",
+    "venue_id": "jamsil_baseball",
+    "area": "jamsil",
+    "date": "2025-08-09",
+    "start_at": null,
+    "end_at": null,
+    "end_at_source": null,
+    "status": "scheduled",
+    "change": null,
+    "game_state": "before",
+    "nearest_station": {
+      "station_id": "sports_complex",
+      "level": "no_data"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": null,
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null
+          }
+        ]
+      },
+      "no_data_message": "2호선과 9호선 승차 데이터를 연동하면 보여드려요"
+    },
+    "same_day": [
+      {
+        "id": "evt_20250809_kspo",
+        "title": "더보이즈 공연",
+        "venue_id": "kspo_dome",
+        "start_at": null,
+        "end_at": null,
+        "type": "show"
+      },
+      {
+        "id": "evt_20250809_hall",
+        "title": "강다니엘 공연",
+        "venue_id": "olympic_hall",
+        "start_at": null,
+        "end_at": null,
+        "type": "show"
+      },
+      {
+        "id": "evt_20250809_jamsil_concert",
+        "title": "영탁 콘서트",
+        "venue_id": null,
+        "start_at": null,
+        "end_at": null,
+        "type": "show"
+      }
+    ],
+    "crossing_note": {
+      "station_id": "olympic_park",
+      "title": "같은 날 올림픽공원에서 공연이 끝나요",
+      "message": "9호선으로 올림픽공원역을 지난다면 20~21시 혼잡을 확인하세요"
+    }
+  }
+}

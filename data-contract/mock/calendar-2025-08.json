@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2025-08-09T18:05:00+09:00",
+  "data": {
+    "month": "2025-08",
+    "days": [
+      {
+        "date": "2025-08-09",
+        "has_show": true,
+        "has_game": true,
+        "count": 4,
+        "by_venue": {
+          "kspo_dome": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "jamsil_baseball": {
+            "game": true
+          }
+        },
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          },
+          "jamsil": {
+            "show": true,
+            "game": true
+          }
+        }
+      }
+    ]
+  }
+}

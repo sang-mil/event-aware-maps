@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/station-forecast.schema.json",
+  "title": "한 역의 그날 예상 (GET /stations/{id}/forecast?date=)",
+  "description": "데이터가 없는 역은 slots: [], focus_level: no_data, no_data 안에 안내와 근처 역을 담는다.",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/envelope" }],
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "station_id": { "$ref": "common.schema.json#/$defs/id" },
+        "date": { "$ref": "common.schema.json#/$defs/date" },
+        "focus_hour": { "$ref": "common.schema.json#/$defs/hour" },
+        "focus_level": { "$ref": "common.schema.json#/$defs/level" },
+        "headline": { "anyOf": [{ "$ref": "common.schema.json#/$defs/headline" }, { "type": "null" }] },
+        "description": { "type": ["string", "null"] },
+        "slots": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/slot" } },
+        "alternatives_title": { "type": ["string", "null"], "description": "예: 20시대에 타야 한다면" },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "station_id": { "$ref": "common.schema.json#/$defs/id" },
+              "level": { "$ref": "common.schema.json#/$defs/level" },
+              "walk_min": { "$ref": "common.schema.json#/$defs/minutes_or_null" },
+              "message": { "type": "string" }
+            },
+            "required": ["station_id", "level", "walk_min", "message"],
+            "additionalProperties": false
+          }
+        },
+        "notify_hour": {
+          "anyOf": [{ "$ref": "common.schema.json#/$defs/hour" }, { "type": "null" }],
+          "description": "알림을 권할 시간대. 없으면 null"
+        },
+        "no_data": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" },
+                "nearby": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "station_id": { "$ref": "common.schema.json#/$defs/id" },
+                      "level": { "$ref": "common.schema.json#/$defs/level" },
+                      "walk_min": { "$ref": "common.schema.json#/$defs/minutes_or_null" }
+                    },
+                    "required": ["station_id", "level", "walk_min"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": ["message", "nearby"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["station_id", "date", "focus_hour", "focus_level", "headline", "description", "slots", "alternatives_title", "alternatives", "notify_hour", "no_data"],
+      "additionalProperties": false
+    }
+  }
+}

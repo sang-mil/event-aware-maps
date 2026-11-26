@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/event.schema.json",
+  "title": "행사 상세 (GET /events/{id})",
+  "allOf": [{ "$ref": "common.schema.json#/$defs/envelope" }],
+  "properties": {
+    "data": {
+      "$ref": "events.schema.json#/$defs/event_item",
+      "properties": {
+        "after_end": {
+          "type": "object",
+          "description": "끝난 직후(end)와 그다음 시간대(later)의 근처 역 예상",
+          "properties": {
+            "end": { "$ref": "#/$defs/after_end_block" },
+            "later": { "$ref": "#/$defs/after_end_block" },
+            "no_data_message": { "type": "string", "description": "데이터가 없을 때 보여줄 안내" }
+          },
+          "required": ["end"],
+          "additionalProperties": false
+        },
+        "same_day": {
+          "type": "array",
+          "description": "같은 날의 다른 행사",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "title": { "type": "string" },
+              "venue_id": { "$ref": "common.schema.json#/$defs/id_or_null" },
+              "start_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+              "end_at": { "$ref": "common.schema.json#/$defs/datetime_or_null" },
+              "type": { "$ref": "common.schema.json#/$defs/event_type" }
+            },
+            "required": ["id", "title", "venue_id", "start_at", "end_at", "type"],
+            "additionalProperties": false
+          }
+        },
+        "crossing_note": {
+          "description": "다른 행사 때문에 지나가는 역이 붐빌 수 있다는 안내",
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "station_id": { "$ref": "common.schema.json#/$defs/id" },
+                "title": { "type": "string" },
+                "message": { "type": "string" }
+              },
+              "required": ["station_id", "title", "message"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["after_end", "same_day", "crossing_note"],
+      "unevaluatedProperties": false
+    }
+  },
+  "$defs": {
+    "after_end_block": {
+      "type": "object",
+      "properties": {
+        "hour_label": { "type": ["string", "null"], "description": "예: 20~21시 예상" },
+        "stations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "station_id": { "$ref": "common.schema.json#/$defs/id" },
+              "level": { "$ref": "common.schema.json#/$defs/level" },
+              "message": { "type": ["string", "null"] },
+              "walk_min": { "$ref": "common.schema.json#/$defs/minutes_or_null" }
+            },
+            "required": ["station_id", "level", "message", "walk_min"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["hour_label", "stations"],
+      "additionalProperties": false
+    }
+  }
+}
