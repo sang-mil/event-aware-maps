@@ -17,6 +17,7 @@ from collectors import CollectError, kspo, seoul_subway  # noqa: E402
 
 FIX = Path(__file__).parent / "fixtures"
 SECRET = "TEST-KEY-123"
+NO_WAIT = lambda seconds: None  # noqa: E731  테스트에서는 실제로 기다리지 않음
 
 
 def fixture(name: str) -> str:
@@ -61,7 +62,7 @@ def test_kspo_fetch_all_pages_and_key_in_query_only():
         page = int(parse_qs(urlparse(url).query)["pageNo"][0])
         return kspo_xml(kspo.PAGE_SIZE if page == 1 else 5, kspo.PAGE_SIZE + 5)
 
-    result = kspo.fetch_all("linked", SECRET, get=fake_get)
+    result = kspo.fetch_all("linked", SECRET, get=fake_get, wait=NO_WAIT)
     assert result["total"] == kspo.PAGE_SIZE + 5
     assert len(result["items"]) == kspo.PAGE_SIZE + 5
     assert len(calls) == 2
@@ -70,7 +71,7 @@ def test_kspo_fetch_all_pages_and_key_in_query_only():
 
 def test_kspo_short_page_stops_instead_of_skipping():
     with pytest.raises(CollectError):
-        kspo.fetch_all("perf", SECRET, get=lambda url, source: kspo_xml(100, 5000))
+        kspo.fetch_all("perf", SECRET, get=lambda url, source: kspo_xml(100, 5000), wait=NO_WAIT)
 
 
 def test_kspo_page_size_is_used_in_url_and_paging():
@@ -81,7 +82,7 @@ def test_kspo_page_size_is_used_in_url_and_paging():
         calls.append((q["numOfRows"][0], q["pageNo"][0]))
         return kspo_xml(100 if q["pageNo"][0] != "3" else 50, 250)
 
-    result = kspo.fetch_all("linked", SECRET, get=fake_get, page_size=100)
+    result = kspo.fetch_all("linked", SECRET, get=fake_get, page_size=100, wait=NO_WAIT)
     assert len(result["items"]) == 250
     assert calls == [("100", "1"), ("100", "2"), ("100", "3")]
 
@@ -105,11 +106,38 @@ def test_http_429_message_has_no_key(monkeypatch):
     monkeypatch.setattr(urllib.request, "urlopen", raise_429)
     with pytest.raises(CollectError) as e:
         http.get_text(kspo.page_url("linked", SECRET, 1), "kspo_linked")
-    assert "429" in str(e.value) and "--page-size" in str(e.value)
+    assert "429" in str(e.value)
     assert "X-RateLimit-Remaining-Day=0" in str(e.value)
     assert "API rate limit exceeded" in str(e.value)
     assert "Content-Type" not in str(e.value)
     assert SECRET not in str(e.value)
+
+
+def test_kspo_waits_between_pages_and_retries_429():
+    from collectors.http import RateLimited
+
+    waits, state = [], {"n": 0}
+
+    def flaky_get(url, source):
+        state["n"] += 1
+        if state["n"] == 2:  # 두 번째 요청만 한도 초과
+            raise RateLimited("kspo_linked: HTTP 429")
+        page = parse_qs(urlparse(url).query)["pageNo"][0]
+        return kspo_xml(10 if page == "1" else 5, 15)
+
+    result = kspo.fetch_all("linked", SECRET, get=flaky_get, page_size=10, wait=waits.append)
+    assert len(result["items"]) == 15
+    assert waits == [kspo.MIN_INTERVAL_SEC, kspo.MIN_INTERVAL_SEC]  # 페이지 사이 1번 + 재시도 전 1번
+
+
+def test_kspo_gives_up_after_retries():
+    from collectors.http import RateLimited
+
+    def always_429(url, source):
+        raise RateLimited("kspo_linked: HTTP 429")
+
+    with pytest.raises(RateLimited):
+        kspo.fetch_all("linked", SECRET, get=always_429, wait=NO_WAIT)
 
 
 # ── 서울 지하철 ────────────────────────────────────────
@@ -157,7 +185,7 @@ def test_cli_collect_needs_key(tmp_path, monkeypatch, capsys):
 def test_cli_collect_saves_raw_without_key(tmp_path, monkeypatch, capsys):
     monkeypatch.setenv("KSPO_LINKED_KEY", SECRET)
     real_fetch_all = kspo.fetch_all
-    monkeypatch.setattr(kspo, "fetch_all", lambda kind, key: real_fetch_all(
+    monkeypatch.setattr(kspo, "fetch_all", lambda kind, key, **kw: real_fetch_all(
         kind, key, get=lambda url, source: fixture("kspo_linked_page.xml")))
     assert cli.main(["collect", "kspo_linked", "--raw-dir", str(tmp_path)]) == 0
     saved = (tmp_path / "kspo_linked.json").read_text(encoding="utf-8")

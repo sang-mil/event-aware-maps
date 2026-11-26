@@ -67,7 +67,12 @@ def cmd_collect(source: str, month: str | None, raw_dir: Path, page_size: int | 
             name = f"subway_month_{month}.json"
         else:
             extra = {"page_size": page_size} if page_size else {}
-            result = kspo.fetch_all(source.removeprefix("kspo_"), key, **extra)
+            print(f"{source}: 서버 제한(5초에 1번) 때문에 {kspo.MIN_INTERVAL_SEC:.0f}초 간격으로 받습니다.", flush=True)
+            result = kspo.fetch_all(
+                source.removeprefix("kspo_"), key,
+                on_page=lambda page, got, total: print(f"  {page}페이지: {got}/{total}건", flush=True),
+                **extra,
+            )
             name = f"{source}.json"
     except CollectError as e:
         print(f"수집 실패: {e}")
