@@ -1,4 +1,4 @@
-import { getJson, qs, usingMock } from './client';
+import { getJson, getRealtimeJson, qs, usingMock, usingRealtimeApi } from './client';
 import type {
   CalendarMonth,
   Compare,
@@ -6,13 +6,15 @@ import type {
   EventList,
   Forecast,
   RouteDetail,
+  RealtimeAreaId,
+  RealtimeCrowd,
   Station,
   StationForecast,
   Venue,
 } from './types';
 
 export * from './types';
-export { ApiError, usingMock, usingStaticData } from './client';
+export { ApiError, usingMock, usingRealtimeApi, usingStaticData } from './client';
 export type { ApiErrorCode, Loaded } from './client';
 
 // ── 읽기 API (API 명세서 3~6장) ──────────────────────────────
@@ -47,6 +49,9 @@ export const getCalendar = (month: string) => getJson<CalendarMonth>(`/calendar$
 
 /** GET /forecast?date= */
 export const getForecast = (date: string) => getJson<Forecast>(`/forecast${qs({ date })}`, { mock: `forecast-${date}.json` });
+
+/** 서울시 실시간 장소 인구 혼잡도. 역 승차량 예측과 별도로 보여줘요. */
+export const getRealtimeCrowd = (area: RealtimeAreaId) => getRealtimeJson<RealtimeCrowd>(`/api/realtime/${area}`);
 
 /** GET /stations/{id}/forecast?date= */
 export const getStationForecast = (id: string, date: string) =>
