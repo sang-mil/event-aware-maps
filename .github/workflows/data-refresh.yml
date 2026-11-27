@@ -38,6 +38,15 @@ jobs:
           python backend/cli.py collect kspo_linked
           python backend/cli.py collect kspo_perf
 
+      - name: KOPIS 앞으로 30일 공연 수집 (실패하면 2025 다시 보기만 발행)
+        env:
+          KOPIS_API_KEY: ${{ secrets.KOPIS_API_KEY }}
+        run: |
+          if ! python backend/cli.py collect kopis --days 30; then
+            rm -f backend/data/raw/kopis_upcoming.json
+            echo "KOPIS 수집 실패: 앞으로의 공연 없이 계속합니다"
+          fi
+
       - name: DB 만들기 (승하차는 요약 파일)
         run: python backend/cli.py build-db
 

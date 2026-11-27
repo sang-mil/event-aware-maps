@@ -27,15 +27,26 @@ class Event:
     title: str
     hours: list[int] = field(default_factory=list)
     audience: int | None = None
+    # 아래는 KOPIS 공연처럼 공연장·시작 시각을 아는 경우에만 채운다 (KSPO 기록 공연은 기본값)
+    venue_id: str | None = None
+    area: str = "olympic_park"
+    start_at: str | None = None
+    end_at: str | None = None
+    ext_id: str | None = None
+    source: str = "kspo"
+    audience_estimated: bool = False  # 관객 수가 실측이 아니라 객석 × 비율 추정인지
 
     @property
     def id(self) -> str:
+        if self.ext_id:
+            return self.ext_id
         digest = hashlib.sha1(self.title.encode("utf-8")).hexdigest()[:6]
         return f"evt_{self.date.replace('-', '')}_{digest}"
 
     @property
-    def exit_hour(self) -> int:
-        return max(self.hours)
+    def exit_hour(self) -> int | None:
+        """끝나는(퇴장) 시간대. 모르면 None."""
+        return max(self.hours) if self.hours else None
 
 
 def _clean(title: str) -> str:

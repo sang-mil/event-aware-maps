@@ -20,18 +20,19 @@ import argparse
 import json
 import os
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 BACKEND = Path(__file__).resolve().parent
 sys.path.insert(0, str(BACKEND))
 
-from collectors import CollectError, kspo, realtime_log, seoul_subway  # noqa: E402
+from collectors import CollectError, kopis as kopis_collector, kspo, realtime_log, seoul_subway  # noqa: E402
 from normalize import db as normalize_db, seed as normalize_seed  # noqa: E402
 from congestion import anomalies as cg_anomalies, backtest as cg_backtest, load as cg_load, model as cg_model, outputs as cg_outputs  # noqa: E402
 from recommend import backtest as rc_backtest, compare as rc_compare  # noqa: E402
 from maps import walk_routes  # noqa: E402
 import reference  # noqa: E402
+from events import calibrate as ev_calibrate, kopis as ev_kopis
 from events import detail as ev_detail, detect as ev_detect, load as ev_load, outputs as ev_outputs  # noqa: E402
 from publish import PublishError, publish, wrap  # noqa: E402
 
@@ -61,17 +62,25 @@ KEY_ENV = {
     "kspo_linked": "KSPO_LINKED_KEY",
     "kspo_perf": "KSPO_PERF_KEY",
     "subway_month": "SEOUL_KEY",
+    "kopis": "KOPIS_API_KEY",
 }
 
 
-def cmd_collect(source: str, month: str | None, raw_dir: Path, page_size: int | None = None) -> int:
+def cmd_collect(source: str, month: str | None, raw_dir: Path, page_size: int | None = None,
+                start: str | None = None, days: int = 30, name: str | None = None) -> int:
     env = KEY_ENV[source]
     key = os.environ.get(env, "").strip()
     if not key:
         print(f"환경변수 {env} 에 인증키가 없습니다.")
         return 1
     try:
-        if source == "subway_month":
+        if source == "kopis":
+            begin = date.fromisoformat(start) if start else datetime.now(KST).date()
+            result = kopis_collector.fetch_range(key, begin, days)
+            name = name or "kopis_upcoming.json"
+            print(f"kopis: {begin} 부터 {days}일, 대상 시설 공연 {len(result['performances'])}건")
+            result["total"] = len(result["performances"])
+        elif source == "subway_month":
             if not month:
                 print("subway_month 는 --month YYYYMM 이 필요합니다.")
                 return 1
@@ -96,7 +105,7 @@ def cmd_collect(source: str, month: str | None, raw_dir: Path, page_size: int | 
     tmp = target.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
     os.replace(tmp, target)
-    count = len(result.get("items", result.get("rows", [])))
+    count = len(result.get("items", result.get("rows", result.get("performances", []))))
     print(f"{source}: {count}건 저장 (전체 {result['total']}건) → {target}")
     return 0
 
@@ -127,7 +136,46 @@ def cmd_export_seed(db_path: Path, out: Path) -> int:
 WALK_ROUTES_PATH = BACKEND / "data" / "raw" / "walk-routes.json"  # data-refresh 가 gh-pages 에서 받아 둠 (git 제외)
 
 
-def cmd_build(db_path: Path, out: Path, as_of: datetime, walk_path: Path = WALK_ROUTES_PATH) -> int:
+FILL_RATIO_PATH = BACKEND / "reference" / "fill_ratio.json"
+
+
+def cmd_calibrate_fill(db_path: Path, kopis_raw: Path, out: Path) -> int:
+    """2025 KSPO 실제 관람객수와 KOPIS 객석 수를 짝지어 객석 대비 관객 비율을 계산해 저장."""
+    if not db_path.is_file() or not kopis_raw.is_file():
+        print("DB 또는 KOPIS 2025 수집 파일이 없습니다.")
+        return 1
+    kspo = ev_detect.detect_events(ev_load.load_rows(db_path))
+    raw = json.loads(kopis_raw.read_text(encoding="utf-8"))
+    seats = ev_kopis.instances(raw, fill={"*": 1.0})  # audience 자리에 객석 수
+    pairs = ev_calibrate.match(kspo, seats)
+    result = ev_calibrate.ratios(pairs)
+    body = {"method": "KSPO 2025 실제 관람객수 ÷ KOPIS 공연장 객석 수, 같은 날짜·제목으로 짝지은 공연의 중앙값",
+            "computed_at": datetime.now(KST).isoformat(timespec="seconds"), **result,
+            "pairs": [{k: p[k] for k in ("date", "kspo_title", "kopis_title", "venue_id", "audience", "seats")} for p in pairs]}
+    out.write_text(json.dumps(body, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(f"짝지은 공연 {len(pairs)}건, 비율 {result['ratio']}, 표본 {result['samples']} → {out}")
+    return 0 if pairs else 1
+
+
+KOPIS_UPCOMING_PATH = RAW_DIR / "kopis_upcoming.json"  # collect kopis 결과 (git 제외)
+JAMSIL_STATIONS = ("sports_complex", "jamsil_saenae")
+
+
+def load_upcoming(path: Path, as_of: datetime) -> tuple[list, str | None, str | None]:
+    """KOPIS 수집 결과 → 오늘(as_of)부터 수집 기간 끝까지의 공연 회차. 없으면 빈 목록."""
+    if not path.is_file():
+        return [], None, None
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    fill = json.loads(FILL_RATIO_PATH.read_text(encoding="utf-8"))["ratio"] if FILL_RATIO_PATH.is_file() else {}
+    start = max(as_of.date(), date.fromisoformat(raw["window"]["start"]))
+    end = date.fromisoformat(raw["window"]["end"])
+    if start > end:
+        return [], None, None
+    return ev_kopis.instances(raw, fill, start, end), start.isoformat(), end.isoformat()
+
+
+def cmd_build(db_path: Path, out: Path, as_of: datetime, walk_path: Path = WALK_ROUTES_PATH,
+              kopis_path: Path = KOPIS_UPCOMING_PATH) -> int:
     if not db_path.is_file():
         print(f"DB가 없습니다. 먼저 build-db 를 실행하세요: {db_path}")
         return 1
@@ -137,6 +185,14 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime, walk_path: Path = WALK_
         return 1
     events = ev_detect.detect_events(ev_load.load_rows(db_path))
     obs, covered, exits = cg_load.load_inputs(db_path)
+    upcoming, up_start, up_end = load_upcoming(kopis_path, as_of)
+    # 앞으로의 공연: 행사 효과는 올림픽공원 공연에서만 학습했으므로 올림픽공원 공연만 예측에 넣는다.
+    # 잠실 공연은 예측에 넣지 않고, 근처 역의 그 시간대를 '공연 영향 미반영(uncertain)'으로 표시한다.
+    for e in upcoming:
+        if e.area == "olympic_park" and e.exit_hour is not None:
+            exits.setdefault(e.date, []).append((e.exit_hour, e.audience))
+    if upcoming:
+        print(f"KOPIS 앞으로의 공연 {len(upcoming)}회차 ({up_start} ~ {up_end}) 사용")
     days: dict[str, dict] = {}
 
     def day_of(d: str) -> dict:
@@ -145,10 +201,20 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime, walk_path: Path = WALK_
             base = cg_model.Baselines(obs, covered, exits, as_of=d)
             res = cg_model.residuals(obs, exits, base, as_of=d)
             days[d] = cg_outputs.compute_day(d, obs, exits, base, res)
+            for e in upcoming:
+                if e.date == d and e.area != "olympic_park" and e.exit_hour is not None:
+                    for sid in JAMSIL_STATIONS:
+                        for h in (e.exit_hour - 1, e.exit_hour, e.exit_hour + 1):
+                            if days[d][sid].get(h):
+                                days[d][sid][h]["effect_unknown"] = True
         return days[d]
 
-    nearest = lambda ev: cg_outputs.nearest_level(day_of(ev.date), ev.exit_hour)  # noqa: E731
+    def nearest(ev):
+        station = ev_outputs.nearest_station_id(ev)
+        return cg_outputs.nearest_level(day_of(ev.date), ev.exit_hour, station) if station else None
     data = ev_outputs.build_files(events, *span, nearest=nearest, linkable=True)
+    if upcoming:
+        data.update(ev_outputs.build_files(upcoming, up_start, up_end, nearest=nearest, linkable=True))
     data["stations.json"] = reference.stations(set(obs))
     try:
         walk = walk_routes.load_lookup(walk_path)
@@ -157,11 +223,13 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime, walk_path: Path = WALK_
         return 1
     print(f"도보 경로 {len(walk)}개 조합 사용" if walk else "도보 경로 파일 없음: 도보 시간은 '정보 없음'으로 둡니다")
     data["venues.json"] = reference.venues(walk)
-    for ev in events:
-        same = [o for o in events if o.date == ev.date]
-        data[f"event-{ev.id}.json"] = ev_detail.event_detail(ev, same, day_of(ev.date), nearest)
+    for group in (events, upcoming):
+        for ev in group:
+            same = [o for o in group if o.date == ev.date]
+            data[f"event-{ev.id}.json"] = ev_detail.event_detail(ev, same, day_of(ev.date), nearest, walk)
+    show_days = {e.date for e in upcoming}
     for d in sorted(name[len("events-"):-len(".json")] for name in list(data) if name.startswith("events-")):
-        data[f"forecast-{d}.json"] = cg_outputs.forecast(d, day_of(d), exits)
+        data[f"forecast-{d}.json"] = cg_outputs.forecast(d, day_of(d), exits, has_event=bool(exits.get(d)) or d in show_days)
         for sid in cg_outputs.STATIONS:
             data[f"station-{sid}-{d}.json"] = cg_outputs.station_forecast(d, sid, day_of(d), exits)
         if exits.get(d):  # 귀가 방법 비교는 공연 날만
@@ -172,7 +240,7 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime, walk_path: Path = WALK_
     except PublishError as e:
         print(e)
         return 1
-    print(f"공연 {len(events)}건 ({span[0]} ~ {span[1]}) → {len(written)}개 파일 발행: {out}")
+    print(f"공연 {len(events)}건 ({span[0]} ~ {span[1]}) + 앞으로 {len(upcoming)}회차 → {len(written)}개 파일 발행: {out}")
     return 0
 
 
@@ -263,6 +331,9 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--month", help="YYYYMM (subway_month 전용)")
     c.add_argument("--raw-dir", type=Path, default=RAW_DIR)
     c.add_argument("--page-size", type=int, help="KSPO 한 번에 받을 건수 (기본 1000)")
+    c.add_argument("--start", help="kopis 전용: 시작 날짜 YYYY-MM-DD (기본 오늘)")
+    c.add_argument("--days", type=int, default=30, help="kopis 전용: 며칠 치 (기본 30)")
+    c.add_argument("--name", help="저장 파일 이름 (kopis 기본 kopis_upcoming.json)")
     b = sub.add_parser("build-db", help="원본 → SQLite")
     b.add_argument("--raw-dir", type=Path, default=RAW_DIR)
     b.add_argument("--db", type=Path, default=DB_PATH)
@@ -275,6 +346,7 @@ def main(argv: list[str] | None = None) -> int:
     bd.add_argument("--out", type=Path, required=True)
     bd.add_argument("--as-of", type=datetime.fromisoformat, default=None, help="기준 시각 (예: 2025-08-09T18:00:00+09:00)")
     bd.add_argument("--walk-routes", type=Path, default=WALK_ROUTES_PATH, help="발행된 walk-routes.json (없으면 도보 시간 null)")
+    bd.add_argument("--kopis", type=Path, default=KOPIS_UPCOMING_PATH, help="collect kopis 결과 (없으면 2025 다시 보기만)")
     bt = sub.add_parser("backtest", help="혼잡 단계 적중률 검증")
     bt.add_argument("--db", type=Path, default=DB_PATH)
     rb = sub.add_parser("recommend-backtest", help="추천 1순위를 실제 승차로 검증")
@@ -286,6 +358,10 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("publish", help="검증 후 발행")
     p.add_argument("--src", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
+    cf = sub.add_parser("calibrate-fill", help="2025 자료로 객석 대비 관객 비율 계산")
+    cf.add_argument("--db", type=Path, default=DB_PATH)
+    cf.add_argument("--kopis-raw", type=Path, default=RAW_DIR / "kopis_2025.json")
+    cf.add_argument("--out", type=Path, default=FILL_RATIO_PATH)
     rl = sub.add_parser("log-realtime", help="실시간 지역 혼잡(live-api Worker)을 날짜별 기록에 덧붙이기")
     rl.add_argument("--base-url", required=True, help="live-api Worker 주소")
     rl.add_argument("--out-dir", type=Path, required=True)
@@ -294,7 +370,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.command == "collect":
-        return cmd_collect(args.source, args.month, args.raw_dir, args.page_size)
+        return cmd_collect(args.source, args.month, args.raw_dir, args.page_size, args.start, args.days, args.name)
     if args.command == "backtest":
         return cmd_backtest(args.db)
     if args.command == "recommend-backtest":
@@ -306,13 +382,15 @@ def main(argv: list[str] | None = None) -> int:
         if as_of.tzinfo is None:
             print("--as-of 에는 시간대(+09:00)가 있어야 합니다.")
             return 1
-        return cmd_build(args.db, args.out, as_of, args.walk_routes)
+        return cmd_build(args.db, args.out, as_of, args.walk_routes, args.kopis)
     if args.command == "build-db":
         return cmd_build_db(args.raw_dir, args.db, args.seed)
     if args.command == "export-seed":
         return cmd_export_seed(args.db, args.out)
     if args.command == "publish":
         return cmd_publish(args.src, args.out)
+    if args.command == "calibrate-fill":
+        return cmd_calibrate_fill(args.db, args.kopis_raw, args.out)
     if args.command == "log-realtime":
         written, errors = realtime_log.collect(args.base_url, args.out_dir)
         for e in errors:
