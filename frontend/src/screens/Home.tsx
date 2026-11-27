@@ -174,7 +174,7 @@ export function Home() {
           </>
         )}
         <p className="note" style={{ margin: 0, padding: '0 16px 14px', lineHeight: 1.5 }}>
-          서울시가 추정한 장소 인구 정보예요. 역 승차 인원이나 열차 안 혼잡도와는 달라요.
+          위의 역 혼잡 예측은 선택한 2025년 날짜 기준이고, 이 값은 현재 관측 기준이에요. 서울시가 추정한 장소 인구라 역 승차 인원이나 열차 안 혼잡도와는 달라요.
         </p>
       </section>
 
