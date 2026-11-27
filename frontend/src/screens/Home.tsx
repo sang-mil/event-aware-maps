@@ -176,16 +176,14 @@ export function Home() {
           </>
         )}
         <p className="note" style={{ margin: 0, padding: '0 16px 14px', lineHeight: 1.5 }}>
-          위의 역 혼잡 예측은 선택한 2025년 날짜 기준이고, 이 값은 현재 관측 기준이에요. 서울시가 추정한 장소 인구라 역 승차 인원이나 열차 안 혼잡도와는 달라요.
+          역 혼잡 예상은 과거 승하차·공연 자료와 오늘 공연 일정을 바탕으로 계산해요. 현장 혼잡은 서울시의 현재 관측값이라 두 정보의 기준이 달라요.
         </p>
       </section>
 
       <SectionTitle right={<Link href="/events/">전체</Link>}>오늘 공연과 경기</SectionTitle>
       <section className="card">
         {ev.events.length > 0 ? (
-          ev.events
-            .filter((e, i, arr) => arr.findIndex((x) => x.type === e.type) === i)
-            .map((e) => {
+          ev.events.map((e) => {
               const inner = (
                 <>
                   <KindChip type={e.type} />

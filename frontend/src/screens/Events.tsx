@@ -28,7 +28,7 @@ import {
   venueName,
   UncertainMark,
 } from '@/components/ui';
-import { REPLAY_MAX, REPLAY_MIN, dateLabel, demoState, isIphone, pushSupport, requestPush, today, track, type PushSupport } from '@/lib/app';
+import { DEMO_MONTH, DEMO_TODAY, dateLabel, demoState, isIphone, pushSupport, replayDate, requestPush, today, track, type PushSupport } from '@/lib/app';
 import { useLoad, useRefs, useWalkMin } from '@/lib/useLoad';
 
 const AREAS = [
@@ -41,19 +41,39 @@ function eventHref(e: { id: string; type: 'show' | 'game' }, from: string) {
   return e.type === 'game' ? `/game/?id=${e.id}` : `/event/?id=${e.id}&from=${from}`;
 }
 
+function selectableMonths(date: string) {
+  const months: string[] = [];
+  for (let month = 1; month <= 12; month += 1) months.push(`2025-${String(month).padStart(2, '0')}`);
+  const [year, month] = date.split('-').map(Number);
+  for (const offset of [0, 1]) {
+    const value = new Date(Date.UTC(year, month - 1 + offset, 1));
+    months.push(`${value.getUTCFullYear()}-${String(value.getUTCMonth() + 1).padStart(2, '0')}`);
+  }
+  return [...new Set(months)].sort();
+}
+
 /** 03 캘린더 탭 */
 export function Calendar() {
   const [area, setArea] = useState<string>('all');
   const [venue, setVenue] = useState<string>('all');
-  const [picked, setPicked] = useState(today());
-  const [month, setMonth] = useState(today().slice(0, 7));
+  // 서버 HTML과 첫 브라우저 화면의 날짜를 맞춘 뒤, 실제 한국 날짜로 전환해요.
+  const [picked, setPicked] = useState(DEMO_TODAY);
+  const [month, setMonth] = useState(DEMO_MONTH);
+  const [months, setMonths] = useState(() => selectableMonths(DEMO_TODAY));
+  const [dateReady, setDateReady] = useState(false);
+  useEffect(() => {
+    const activeDate = replayDate() ?? today();
+    setPicked(activeDate);
+    setMonth(activeDate.slice(0, 7));
+    setMonths(selectableMonths(today()));
+    setDateReady(true);
+  }, []);
   const cal = useLoad(() => getCalendar(month), [month]);
-  // 데이터가 있는 달(2025-01 ~ 2025-12) 안에서만 넘겨요
+  // 2025년 관측 범위부터 오늘이 속한 달의 다음 달까지 이동해요.
   const shiftMonth = (delta: number) => {
-    const [yy, mm] = month.split('-').map(Number);
-    const d = new Date(Date.UTC(yy, mm - 1 + delta, 1));
-    const next = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
-    if (next < REPLAY_MIN.slice(0, 7) || next > REPLAY_MAX.slice(0, 7)) return;
+    const index = months.indexOf(month);
+    const next = months[index + delta];
+    if (!next) return;
     setMonth(next);
     setPicked(`${next}-01`);
   };
@@ -61,6 +81,8 @@ export function Calendar() {
   const events = useLoad(() => getEvents(picked), [picked]);
   const fc = useLoad(() => getForecast(picked), [picked]);
   const { st, vn, venues } = useRefs();
+
+  if (!dateReady) return <Loading />;
 
   // 달을 넘길 때 화면 전체를 '불러오는 중'으로 바꾸지 않고, 달력 칸 안에만 불러오는 중을 적어요.
   // 그 달 파일이 없으면(not_found) 달력은 그대로 두고 '이 달은 데이터가 없어요'를 보여줘요
@@ -134,13 +156,13 @@ export function Calendar() {
       </div>
       <section className="card" style={{ padding: '8px 12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <button type="button" aria-label="이전 달" className="icon-btn" style={{ color: '#4A4F5C' }} disabled={month <= REPLAY_MIN.slice(0, 7)} onClick={() => shiftMonth(-1)}>
+          <button type="button" aria-label="이전 달" className="icon-btn" style={{ color: '#4A4F5C' }} disabled={months.indexOf(month) <= 0} onClick={() => shiftMonth(-1)}>
             <Icon.back />
           </button>
           <span className="t" style={{ fontSize: 17, fontWeight: 700 }}>
             {y}년 {m}월
           </span>
-          <button type="button" aria-label="다음 달" className="icon-btn" style={{ color: '#4A4F5C', transform: 'scaleX(-1)' }} disabled={month >= REPLAY_MAX.slice(0, 7)} onClick={() => shiftMonth(1)}>
+          <button type="button" aria-label="다음 달" className="icon-btn" style={{ color: '#4A4F5C', transform: 'scaleX(-1)' }} disabled={months.indexOf(month) >= months.length - 1} onClick={() => shiftMonth(1)}>
             <Icon.back />
           </button>
         </div>
