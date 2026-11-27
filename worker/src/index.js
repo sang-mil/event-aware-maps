@@ -5,7 +5,7 @@ const AREAS = Object.freeze({
 
 const CACHE_SECONDS = 300;
 const SOURCE = "서울특별시 공공데이터 · 서울시 실시간 도시데이터";
-const KOPIS_API = "http://www.kopis.or.kr/openApi/restful";
+const KOPIS_API = "https://kopis.or.kr/openApi/restful";
 
 function normalizeCityData(payload) {
   const city = payload?.CITYDATA;
