@@ -11,7 +11,7 @@ import pytest
 BACKEND = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND))
 
-from congestion import backtest, model  # noqa: E402
+from congestion import anomalies, backtest, model  # noqa: E402
 
 KEY = ("olympic_park", "5")
 
@@ -90,3 +90,29 @@ def test_backtest_leave_one_out_on_fake_world():
     assert r["accuracy"] == 1.0                            # 규칙대로 만든 가짜 세상이라 모두 맞음
     assert r["crowded_recall"] == 1.0
     assert r["naive_accuracy"] == pytest.approx(3 / 4)     # 기준선만 쓰면 퇴장 시각을 놓침
+
+
+def test_non_event_anomalies_find_spikes_without_calling_them_events():
+    obs, covered, exits = make_world()
+    second = ("bangi", "5")
+    obs[second] = {point: 100 for point in obs[KEY]}
+    spike_day = "2099-01-06"  # 공연 기록 없는 수요일
+    obs[KEY][(spike_day, 20)] = 200
+    obs[second][(spike_day, 20)] = 180
+    base = model.Baselines(obs, covered, exits)
+
+    findings = anomalies.find_non_event_anomalies(
+        obs, covered, exits, base, ["olympic_park", "bangi"], hours=range(20, 21)
+    )
+
+    assert {(item["date"], item["station_id"]) for item in findings} == {
+        (spike_day, "olympic_park"), (spike_day, "bangi")
+    }
+    assert all(item["ratio"] >= 1.5 for item in findings)
+
+    history_base = model.Baselines(obs, covered, exits, as_of=spike_day)
+    history_only = anomalies.find_non_event_anomalies(
+        obs, covered, exits, history_base, ["olympic_park", "bangi"],
+        hours=range(20, 21), as_of=spike_day,
+    )
+    assert all(item["date"] < spike_day for item in history_only)
