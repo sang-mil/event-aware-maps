@@ -132,6 +132,22 @@ def test_http_429_message_has_no_key(monkeypatch):
     assert SECRET not in str(e.value)
 
 
+def test_http_500_is_retryable_without_exposing_key(monkeypatch):
+    import urllib.error
+    import urllib.request
+
+    from collectors.http import RetryableServerError
+
+    def raise_500(req, timeout):
+        raise urllib.error.HTTPError(req.full_url, 500, "Internal Server Error", {}, None)
+
+    monkeypatch.setattr(urllib.request, "urlopen", raise_500)
+    with pytest.raises(RetryableServerError) as e:
+        kspo.get_text(kspo.page_url("linked", SECRET, 1), "kspo_linked")
+    assert "HTTP 500" in str(e.value)
+    assert SECRET not in str(e.value)
+
+
 def test_kspo_waits_between_pages_and_retries_429():
     from collectors.http import RateLimited
 
@@ -147,6 +163,39 @@ def test_kspo_waits_between_pages_and_retries_429():
     result = kspo.fetch_all("linked", SECRET, get=flaky_get, page_size=10, wait=waits.append)
     assert len(result["items"]) == 15
     assert waits == [kspo.MIN_INTERVAL_SEC, kspo.MIN_INTERVAL_SEC]  # 페이지 사이 1번 + 재시도 전 1번
+
+
+def test_kspo_retries_transient_500_without_breaking_page_spacing():
+    from collectors.http import RetryableServerError
+
+    waits, state = [], {"n": 0}
+
+    def flaky_get(url, source):
+        state["n"] += 1
+        page = int(parse_qs(urlparse(url).query)["pageNo"][0])
+        if page == 2 and state["n"] == 2:
+            raise RetryableServerError("kspo_linked: HTTP 500")
+        return kspo_xml(10 if page == 1 else 5, 15)
+
+    result = kspo.fetch_all("linked", SECRET, get=flaky_get, page_size=10, wait=waits.append)
+    assert len(result["items"]) == 15
+    assert state["n"] == 3
+    assert waits == [kspo.MIN_INTERVAL_SEC, kspo.MIN_INTERVAL_SEC]
+
+
+def test_kspo_stops_after_bounded_500_retries():
+    from collectors.http import RetryableServerError
+
+    waits, calls = [], []
+
+    def always_500(url, source):
+        calls.append(url)
+        raise RetryableServerError("kspo_linked: HTTP 500")
+
+    with pytest.raises(RetryableServerError):
+        kspo.fetch_all("linked", SECRET, get=always_500, wait=waits.append)
+    assert len(calls) == kspo.RETRIES_ON_SERVER_ERROR + 1
+    assert waits == [kspo.MIN_INTERVAL_SEC, kspo.MIN_INTERVAL_SEC * 2]
 
 
 def test_kspo_gives_up_after_retries():
