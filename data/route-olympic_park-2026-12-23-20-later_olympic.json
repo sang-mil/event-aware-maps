@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "option_id": "later_olympic",
+    "board_station_id": "olympic_park",
+    "to_station_id": null,
+    "walk_min": null,
+    "distance_km": null,
+    "arrive_at": null,
+    "last_train_at": null,
+    "level": "crowded",
+    "message": "599명, 평소의 1.7배예요",
+    "steps": [
+      {
+        "type": "start",
+        "title": "출발",
+        "detail": "20시대 출발",
+        "exit_no": null,
+        "direction": null
+      },
+      {
+        "type": "walk",
+        "title": "올림픽공원역까지 걷기",
+        "detail": null,
+        "exit_no": null,
+        "direction": null
+      },
+      {
+        "type": "board",
+        "title": "올림픽공원역에서 21시대에 타기",
+        "detail": "5·9호선",
+        "exit_no": null,
+        "direction": null
+      }
+    ],
+    "compare": {
+      "hour": "21",
+      "items": [
+        {
+          "station_id": "olympic_park",
+          "expected": 599
+        },
+        {
+          "station_id": "bangi",
+          "expected": 411
+        }
+      ],
+      "note": "21시대 예상: 올림픽공원역 599명, 방이역 411명"
+    },
+    "map_links": null,
+    "walk_by_venue": {
+      "kspo_dome": {
+        "walk_min": 12,
+        "distance_m": 783
+      },
+      "olympic_hall": {
+        "walk_min": 9,
+        "distance_m": 571
+      },
+      "ticketlink_live_arena": {
+        "walk_min": 10,
+        "distance_m": 607
+      },
+      "woori_art_hall": {
+        "walk_min": 13,
+        "distance_m": 824
+      },
+      "muse_live": {
+        "walk_min": 14,
+        "distance_m": 874
+      },
+      "grass_88": {
+        "walk_min": 16,
+        "distance_m": 1062
+      }
+    }
+  }
+}

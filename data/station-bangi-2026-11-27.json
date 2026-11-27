@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "station_id": "bangi",
+    "date": "2026-11-27",
+    "focus_hour": "21",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "21시대",
+      "text": "에 타기 좋아요"
+    },
+    "description": "공연이 끝나는 21시대엔 평소와 비슷하게 탈 거예요.\n22시대엔 398명으로 비슷해요.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 344,
+        "baseline": 404,
+        "ratio": 0.9,
+        "level": "normal",
+        "message": "344명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "20",
+        "expected": 288,
+        "baseline": 350,
+        "ratio": 0.8,
+        "level": "normal",
+        "message": "288명, 평소의 0.8배예요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "21",
+        "expected": 397,
+        "baseline": 413,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "397명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "22",
+        "expected": 398,
+        "baseline": 431,
+        "ratio": 0.9,
+        "level": "normal",
+        "message": "398명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "23",
+        "expected": 87,
+        "baseline": 87,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "87명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
+      }
+    ]
+  }
+}

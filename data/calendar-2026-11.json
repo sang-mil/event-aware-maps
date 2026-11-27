@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "month": "2026-11",
+    "days": [
+      {
+        "date": "2026-11-27",
+        "has_show": true,
+        "has_game": false,
+        "count": 5,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-11-28",
+        "has_show": true,
+        "has_game": false,
+        "count": 8,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-11-29",
+        "has_show": true,
+        "has_game": false,
+        "count": 7,
+        "by_venue": {
+          "woori_art_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          },
+          "jamsil": {
+            "show": true
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261128_pf292160_1900",
+    "type": "show",
+    "title": "겨울왕국 [서울]",
+    "venue_id": "charlotte_theater",
+    "area": "jamsil",
+    "date": "2026-11-28",
+    "start_at": "2026-11-28T19:00:00+09:00",
+    "end_at": "2026-11-28T21:15:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": null,
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "1,242명, 평소의 1.2배예요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "1,033명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "386명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "867명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20261128_pf292160_1400",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-11-28T14:00:00+09:00",
+        "end_at": "2026-11-28T16:15:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261128_pf286543_1500",
+        "title": "백 번째 리뷰",
+        "venue_id": "muse_live",
+        "start_at": "2026-11-28T15:00:00+09:00",
+        "end_at": "2026-11-28T16:20:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261128_pf293285_1500",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-11-28T15:00:00+09:00",
+        "end_at": "2026-11-28T17:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261128_pf302131_1800",
+        "title": "다이나믹 듀오 단독 콘서트: 가끔씩 오래 보자 [서울]",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-11-28T18:00:00+09:00",
+        "end_at": null,
+        "end_at_source": null,
+        "type": "show"
+      },
+      {
+        "id": "evt_20261128_pf301499_1800",
+        "title": "조용필 & 위대한 탄생 전국투어 콘서트 [서울]",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-11-28T18:00:00+09:00",
+        "end_at": "2026-11-28T20:10:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261128_pf293285_1900",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-11-28T19:00:00+09:00",
+        "end_at": "2026-11-28T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261128_pf307442_1930",
+        "title": "제37회 이건음악회: 아비 아비탈 초청 연주회",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-11-28T19:30:00+09:00",
+        "end_at": "2026-11-28T21:20:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

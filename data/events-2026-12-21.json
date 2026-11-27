@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "date": "2026-12-21",
+    "events": [
+      {
+        "id": "evt_20261221_pf303358_1930",
+        "type": "show",
+        "title": "크리스마스 지브리 & 디즈니 OST 콘서트",
+        "venue_id": "lotte_concert_hall",
+        "area": "jamsil",
+        "date": "2026-12-21",
+        "start_at": "2026-12-21T19:30:00+09:00",
+        "end_at": "2026-12-21T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": null,
+        "linkable": true
+      }
+    ],
+    "next_event": null
+  }
+}

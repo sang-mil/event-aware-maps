@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "station_id": "jamsil_saenae",
+    "date": "2026-12-01",
+    "focus_hour": "20",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "20시대",
+      "text": "에 타기 좋아요"
+    },
+    "description": "20시대엔 평소와 비슷하게 탈 거예요.\n21시대엔 920명으로 줄어요.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 1167,
+        "baseline": 1167,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "1,167명, 평소와 비슷해요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "20",
+        "expected": 973,
+        "baseline": 973,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "973명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": true,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "21",
+        "expected": 920,
+        "baseline": 920,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "920명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": true,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "22",
+        "expected": 847,
+        "baseline": 847,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "847명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": true,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "23",
+        "expected": 428,
+        "baseline": 428,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "428명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      }
+    ]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261202_pf281769_1130",
+    "type": "show",
+    "title": "오르간 오딧세이",
+    "venue_id": "lotte_concert_hall",
+    "area": "jamsil",
+    "date": "2026-12-02",
+    "start_at": "2026-12-02T11:30:00+09:00",
+    "end_at": "2026-12-02T12:40:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": null,
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "12~13시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
+          }
+        ]
+      },
+      "no_data_message": "12시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20261202_pf292160_1930",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-02T19:30:00+09:00",
+        "end_at": "2026-12-02T21:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261202_pf303596_1930",
+        "title": "블루노트 도쿄 올스타 재즈 오케스트라 with LISA ONO 내한공연",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-12-02T19:30:00+09:00",
+        "end_at": "2026-12-02T21:10:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261202_pf293285_1930",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-02T19:30:00+09:00",
+        "end_at": "2026-12-02T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

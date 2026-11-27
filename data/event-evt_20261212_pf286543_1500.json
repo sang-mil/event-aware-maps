@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261212_pf286543_1500",
+    "type": "show",
+    "title": "백 번째 리뷰",
+    "venue_id": "muse_live",
+    "area": "olympic_park",
+    "date": "2026-12-12",
+    "start_at": "2026-12-12T15:00:00+09:00",
+    "end_at": "2026-12-12T16:20:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "no_data"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "16~17시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "no_data",
+            "message": null,
+            "walk_min": 14,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "no_data",
+            "message": null,
+            "walk_min": 14,
+            "uncertain": false
+          }
+        ]
+      },
+      "no_data_message": "16시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20261212_pf292160_1400",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-12T14:00:00+09:00",
+        "end_at": "2026-12-12T16:15:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261212_pf293285_1500",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-12T15:00:00+09:00",
+        "end_at": "2026-12-12T17:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261212_pf304126_1700",
+        "title": "박지현 팬콘서트, 멤버쉽 시즌2: 박지현 어워즈 [서울]",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-12-12T17:00:00+09:00",
+        "end_at": "2026-12-12T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261212_pf302745_1800",
+        "title": "DAVICHI CONCERT: IN OUR SCENES",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-12-12T18:00:00+09:00",
+        "end_at": "2026-12-12T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261212_pf292160_1900",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-12T19:00:00+09:00",
+        "end_at": "2026-12-12T21:15:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261212_pf293285_1900",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-12T19:00:00+09:00",
+        "end_at": "2026-12-12T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261219_pf304645_1800",
+    "type": "show",
+    "title": "자우림 단독 콘서트: MIDNIGHT EXPRESS [서울]",
+    "venue_id": "olympic_hall",
+    "area": "olympic_park",
+    "date": "2026-12-19",
+    "start_at": "2026-12-19T18:00:00+09:00",
+    "end_at": "2026-12-19T20:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "20~21시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "2,151명, 평소의 5.7배예요",
+            "walk_min": 9,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "320명, 평소와 비슷해요",
+            "walk_min": 15,
+            "uncertain": false
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "846명, 평소의 2.5배예요",
+            "walk_min": 9,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "391명, 평소와 비슷해요",
+            "walk_min": 15,
+            "uncertain": false
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20261219_pf292160_1400",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-19T14:00:00+09:00",
+        "end_at": "2026-12-19T16:15:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261219_pf286543_1500",
+        "title": "백 번째 리뷰",
+        "venue_id": "muse_live",
+        "start_at": "2026-12-19T15:00:00+09:00",
+        "end_at": "2026-12-19T16:20:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261219_pf293285_1500",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-19T15:00:00+09:00",
+        "end_at": "2026-12-19T17:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261219_pf307107_1800",
+        "title": "DAY6 Special Concert: The Present",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-12-19T18:00:00+09:00",
+        "end_at": null,
+        "end_at_source": null,
+        "type": "show"
+      },
+      {
+        "id": "evt_20261219_pf307353_1800",
+        "title": "XIA Musical Concert with Orchestra Vol.9",
+        "venue_id": "ticketlink_live_arena",
+        "start_at": "2026-12-19T18:00:00+09:00",
+        "end_at": "2026-12-19T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261219_pf292160_1900",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-19T19:00:00+09:00",
+        "end_at": "2026-12-19T21:15:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261219_pf293285_1900",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-19T19:00:00+09:00",
+        "end_at": "2026-12-19T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261219_pf302798_1930",
+        "title": "시네마 오케스트라 슈퍼콘서트: 영화를 듣는 밤 with 오르간",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-12-19T19:30:00+09:00",
+        "end_at": "2026-12-19T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

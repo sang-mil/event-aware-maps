@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261205_pf292160_1400",
+    "type": "show",
+    "title": "겨울왕국 [서울]",
+    "venue_id": "charlotte_theater",
+    "area": "jamsil",
+    "date": "2026-12-05",
+    "start_at": "2026-12-05T14:00:00+09:00",
+    "end_at": "2026-12-05T16:15:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": null,
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "16~17시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
+          }
+        ]
+      },
+      "no_data_message": "16시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20261205_pf303318_1130",
+        "title": "롯데콘서트홀 마티네콘서트, 아이와 함께 듣는 겨울의 클래식 동화: 비발디에서 디즈니까지",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-12-05T11:30:00+09:00",
+        "end_at": "2026-12-05T12:40:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261205_pf286543_1500",
+        "title": "백 번째 리뷰",
+        "venue_id": "muse_live",
+        "start_at": "2026-12-05T15:00:00+09:00",
+        "end_at": "2026-12-05T16:20:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261205_pf293285_1500",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-05T15:00:00+09:00",
+        "end_at": "2026-12-05T17:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261205_pf297746_1600",
+        "title": "이승철 40주년 콘서트, THE VOICE: LEE SEUNG CHU [서울]",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-12-05T16:00:00+09:00",
+        "end_at": "2026-12-05T18:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261205_pf300888_1800",
+        "title": "김장훈 전국투어 콘서트: 원맨쇼 [서울]",
+        "venue_id": "jamsil_student_gym",
+        "start_at": "2026-12-05T18:00:00+09:00",
+        "end_at": "2026-12-05T19:50:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261205_pf302170_1800",
+        "title": "비 (RAIN) 콘서트: THE SMOKE",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-12-05T18:00:00+09:00",
+        "end_at": "2026-12-05T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261205_pf292160_1900",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-05T19:00:00+09:00",
+        "end_at": "2026-12-05T21:15:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261205_pf293285_1900",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-05T19:00:00+09:00",
+        "end_at": "2026-12-05T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261205_pf300669_1930",
+        "title": "헐리우드 인 블록버스터 [서울]",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-12-05T19:30:00+09:00",
+        "end_at": "2026-12-05T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

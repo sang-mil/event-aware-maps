@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "date": "2026-12-06",
+    "events": [
+      {
+        "id": "evt_20261206_pf293285_1400",
+        "type": "show",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "area": "olympic_park",
+        "date": "2026-12-06",
+        "start_at": "2026-12-06T14:00:00+09:00",
+        "end_at": "2026-12-06T16:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "no_data"
+        },
+        "linkable": true
+      },
+      {
+        "id": "evt_20261206_pf292160_1500",
+        "type": "show",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "area": "jamsil",
+        "date": "2026-12-06",
+        "start_at": "2026-12-06T15:00:00+09:00",
+        "end_at": "2026-12-06T17:15:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": null,
+        "linkable": true
+      },
+      {
+        "id": "evt_20261206_pf286543_1500",
+        "type": "show",
+        "title": "백 번째 리뷰",
+        "venue_id": "muse_live",
+        "area": "olympic_park",
+        "date": "2026-12-06",
+        "start_at": "2026-12-06T15:00:00+09:00",
+        "end_at": "2026-12-06T16:20:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "no_data"
+        },
+        "linkable": true
+      },
+      {
+        "id": "evt_20261206_pf300888_1600",
+        "type": "show",
+        "title": "김장훈 전국투어 콘서트: 원맨쇼 [서울]",
+        "venue_id": "jamsil_student_gym",
+        "area": "jamsil",
+        "date": "2026-12-06",
+        "start_at": "2026-12-06T16:00:00+09:00",
+        "end_at": "2026-12-06T17:50:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "sports_complex",
+          "level": "no_data"
+        },
+        "linkable": true
+      },
+      {
+        "id": "evt_20261206_pf297746_1600",
+        "type": "show",
+        "title": "이승철 40주년 콘서트, THE VOICE: LEE SEUNG CHU [서울]",
+        "venue_id": "kspo_dome",
+        "area": "olympic_park",
+        "date": "2026-12-06",
+        "start_at": "2026-12-06T16:00:00+09:00",
+        "end_at": "2026-12-06T18:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "no_data"
+        },
+        "linkable": true
+      },
+      {
+        "id": "evt_20261206_pf302383_1700",
+        "type": "show",
+        "title": "러브액츄얼리 인 콘서트 [서울]",
+        "venue_id": "lotte_concert_hall",
+        "area": "jamsil",
+        "date": "2026-12-06",
+        "start_at": "2026-12-06T17:00:00+09:00",
+        "end_at": "2026-12-06T19:40:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": null,
+        "linkable": true
+      },
+      {
+        "id": "evt_20261206_pf302170_1700",
+        "type": "show",
+        "title": "비 (RAIN) 콘서트: THE SMOKE",
+        "venue_id": "olympic_hall",
+        "area": "olympic_park",
+        "date": "2026-12-06",
+        "start_at": "2026-12-06T17:00:00+09:00",
+        "end_at": "2026-12-06T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": true
+      }
+    ],
+    "next_event": null
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "date": "2026-12-14",
+    "events": [
+      {
+        "id": "evt_20261214_pf303693_2000",
+        "type": "show",
+        "title": "류이치 사카모토 트리뷰트 콘서트 [서울]",
+        "venue_id": "lotte_concert_hall",
+        "area": "jamsil",
+        "date": "2026-12-14",
+        "start_at": "2026-12-14T20:00:00+09:00",
+        "end_at": "2026-12-14T22:00:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": null,
+        "linkable": true
+      }
+    ],
+    "next_event": null
+  }
+}

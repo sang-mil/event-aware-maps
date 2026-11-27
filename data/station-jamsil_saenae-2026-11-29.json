@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "station_id": "jamsil_saenae",
+    "date": "2026-11-29",
+    "focus_hour": "19",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "19시대",
+      "text": "에 타기 좋아요"
+    },
+    "description": "공연이 끝나는 19시대엔 평소와 비슷하게 탈 거예요.\n20시대엔 1,059명으로 줄어요.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 1226,
+        "baseline": 1164,
+        "ratio": 1.1,
+        "level": "normal",
+        "message": "1,226명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "20",
+        "expected": 1059,
+        "baseline": 968,
+        "ratio": 1.1,
+        "level": "normal",
+        "message": "1,059명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": true,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "21",
+        "expected": 935,
+        "baseline": 935,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "935명, 평소와 비슷해요",
+        "recommended": true,
+        "uncertain": true,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "22",
+        "expected": 859,
+        "baseline": 859,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "859명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": true,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "23",
+        "expected": 317,
+        "baseline": 317,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "317명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      }
+    ]
+  }
+}

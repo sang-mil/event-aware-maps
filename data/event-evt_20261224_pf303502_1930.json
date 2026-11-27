@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261224_pf303502_1930",
+    "type": "show",
+    "title": "대니 구 크리스마스 콘서트: HOME [서울 송파]",
+    "venue_id": "lotte_concert_hall",
+    "area": "jamsil",
+    "date": "2026-12-24",
+    "start_at": "2026-12-24T19:30:00+09:00",
+    "end_at": "2026-12-24T21:10:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": null,
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "2,270명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "1,054명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "801명, 평소의 1.3배예요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "1,068명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20261224_pf307297_1930",
+        "title": "THE BOYZ CONCERT: ZENERATION Ⅲ",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-12-24T19:30:00+09:00",
+        "end_at": "2026-12-24T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261224_pf292160_1930",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-24T19:30:00+09:00",
+        "end_at": "2026-12-24T21:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261224_pf293285_1930",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-24T19:30:00+09:00",
+        "end_at": "2026-12-24T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261224_pf302732_2000",
+        "title": "박진영 콘서트: WET",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-12-24T20:00:00+09:00",
+        "end_at": null,
+        "end_at_source": null,
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

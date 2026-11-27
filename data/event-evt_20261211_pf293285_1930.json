@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261211_pf293285_1930",
+    "type": "show",
+    "title": "최현우 30주년 기념 공연: LEGACY",
+    "venue_id": "woori_art_hall",
+    "area": "olympic_park",
+    "date": "2026-12-11",
+    "start_at": "2026-12-11T19:30:00+09:00",
+    "end_at": "2026-12-11T21:30:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "1,352명, 평소의 4.1배예요",
+            "walk_min": 13,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "407명, 평소와 비슷해요",
+            "walk_min": 23,
+            "uncertain": false
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "395명, 평소의 1.6배예요",
+            "walk_min": 13,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "419명, 평소와 비슷해요",
+            "walk_min": 23,
+            "uncertain": false
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20261211_pf292160_1430",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-11T14:30:00+09:00",
+        "end_at": "2026-12-11T16:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261211_pf304126_1900",
+        "title": "박지현 팬콘서트, 멤버쉽 시즌2: 박지현 어워즈 [서울]",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-12-11T19:00:00+09:00",
+        "end_at": "2026-12-11T21:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261211_pf292160_1930",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-11T19:30:00+09:00",
+        "end_at": "2026-12-11T21:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261211_pf301446_1930",
+        "title": "더 베스트 오브 라흐마니노프 with 일리야 라쉬코프스키 & 세르게이 타라소프",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-12-11T19:30:00+09:00",
+        "end_at": "2026-12-11T22:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

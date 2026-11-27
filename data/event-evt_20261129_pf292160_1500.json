@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261129_pf292160_1500",
+    "type": "show",
+    "title": "겨울왕국 [서울]",
+    "venue_id": "charlotte_theater",
+    "area": "jamsil",
+    "date": "2026-11-29",
+    "start_at": "2026-11-29T15:00:00+09:00",
+    "end_at": "2026-11-29T17:15:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": null,
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "17~18시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
+          }
+        ]
+      },
+      "no_data_message": "17시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20261129_pf293285_1400",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-11-29T14:00:00+09:00",
+        "end_at": "2026-11-29T16:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261129_pf286543_1500",
+        "title": "백 번째 리뷰",
+        "venue_id": "muse_live",
+        "start_at": "2026-11-29T15:00:00+09:00",
+        "end_at": "2026-11-29T16:20:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261129_pf303616_1500",
+        "title": "어쌔신 크리드 심포닉 콘서트: ASSASIN'S CREED SYMPHONIC ADVENTURE",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-11-29T15:00:00+09:00",
+        "end_at": "2026-11-29T17:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261129_pf302131_1700",
+        "title": "다이나믹 듀오 단독 콘서트: 가끔씩 오래 보자 [서울]",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-11-29T17:00:00+09:00",
+        "end_at": null,
+        "end_at_source": null,
+        "type": "show"
+      },
+      {
+        "id": "evt_20261129_pf301499_1700",
+        "title": "조용필 & 위대한 탄생 전국투어 콘서트 [서울]",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-11-29T17:00:00+09:00",
+        "end_at": "2026-11-29T19:10:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261129_pf303616_1930",
+        "title": "어쌔신 크리드 심포닉 콘서트: ASSASIN'S CREED SYMPHONIC ADVENTURE",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-11-29T19:30:00+09:00",
+        "end_at": "2026-11-29T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

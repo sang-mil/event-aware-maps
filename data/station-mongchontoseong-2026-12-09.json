@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "station_id": "mongchontoseong",
+    "date": "2026-12-09",
+    "focus_hour": "21",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "21시대",
+      "text": "에 타기 좋아요"
+    },
+    "description": "공연이 끝나는 21시대엔 평소와 비슷하게 탈 거예요.\n22시대엔 273명으로 줄어요.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 427,
+        "baseline": 432,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "427명, 평소와 비슷해요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "20",
+        "expected": 338,
+        "baseline": 340,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "338명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "21",
+        "expected": 345,
+        "baseline": 345,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "345명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "22",
+        "expected": 273,
+        "baseline": 272,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "273명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "23",
+        "expected": 119,
+        "baseline": 119,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "119명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      }
+    ]
+  }
+}

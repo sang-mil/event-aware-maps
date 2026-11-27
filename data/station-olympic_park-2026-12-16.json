@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "station_id": "olympic_park",
+    "date": "2026-12-16",
+    "focus_hour": "21",
+    "alternatives_title": "21시대에 타야 한다면",
+    "alternatives": [
+      {
+        "station_id": "bangi",
+        "level": "normal",
+        "walk_min": 18,
+        "transfer_note": "같은 5호선이라 갈아타지 않아요",
+        "message": "411명, 평소와 비슷해요",
+        "uncertain": false
+      },
+      {
+        "station_id": "mongchontoseong",
+        "level": "normal",
+        "walk_min": 34,
+        "transfer_note": null,
+        "message": "345명, 평소와 비슷해요",
+        "uncertain": false
+      },
+      {
+        "station_id": "hanseong_baekje",
+        "level": "normal",
+        "walk_min": 30,
+        "transfer_note": "같은 9호선이라 갈아타지 않아요",
+        "message": "102명, 평소와 비슷해요",
+        "uncertain": false
+      }
+    ],
+    "notify_hour": "19",
+    "no_data": null,
+    "focus_level": "crowded",
+    "headline": {
+      "highlight": "19시대",
+      "text": "에 타면 덜 붐벼요"
+    },
+    "description": "공연이 끝나는 21시대엔 평소의 1.7배가 탈 거예요.\n22시대엔 그 절반 정도로 줄어요.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 474,
+        "baseline": 479,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "474명, 평소와 비슷해요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "20",
+        "expected": 423,
+        "baseline": 374,
+        "ratio": 1.1,
+        "level": "normal",
+        "message": "423명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "21",
+        "expected": 599,
+        "baseline": 346,
+        "ratio": 1.7,
+        "level": "crowded",
+        "message": "599명, 평소의 1.7배예요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "22",
+        "expected": 296,
+        "baseline": 258,
+        "ratio": 1.1,
+        "level": "normal",
+        "message": "296명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      },
+      {
+        "hour": "23",
+        "expected": 76,
+        "baseline": 76,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "76명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
+      }
+    ]
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261220_pf292160_1500",
+    "type": "show",
+    "title": "겨울왕국 [서울]",
+    "venue_id": "charlotte_theater",
+    "area": "jamsil",
+    "date": "2026-12-20",
+    "start_at": "2026-12-20T15:00:00+09:00",
+    "end_at": "2026-12-20T17:15:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": null,
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "17~18시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
+          }
+        ]
+      },
+      "no_data_message": "17시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20261220_pf293285_1400",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-20T14:00:00+09:00",
+        "end_at": "2026-12-20T16:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261220_pf286543_1500",
+        "title": "백 번째 리뷰",
+        "venue_id": "muse_live",
+        "start_at": "2026-12-20T15:00:00+09:00",
+        "end_at": "2026-12-20T16:20:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261220_pf307107_1700",
+        "title": "DAY6 Special Concert: The Present",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-12-20T17:00:00+09:00",
+        "end_at": null,
+        "end_at_source": null,
+        "type": "show"
+      },
+      {
+        "id": "evt_20261220_pf307353_1700",
+        "title": "XIA Musical Concert with Orchestra Vol.9",
+        "venue_id": "ticketlink_live_arena",
+        "start_at": "2026-12-20T17:00:00+09:00",
+        "end_at": "2026-12-20T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261220_pf304645_1700",
+        "title": "자우림 단독 콘서트: MIDNIGHT EXPRESS [서울]",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-12-20T17:00:00+09:00",
+        "end_at": "2026-12-20T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261220_pf303758_1700",
+        "title": "크리스마스 지브리 탱고",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-12-20T17:00:00+09:00",
+        "end_at": "2026-12-20T18:50:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

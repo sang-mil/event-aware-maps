@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "station_id": "sports_complex",
+    "date": "2026-12-26",
+    "focus_hour": "19",
+    "alternatives_title": null,
+    "alternatives": [],
+    "notify_hour": null,
+    "no_data": null,
+    "focus_level": "normal",
+    "headline": {
+      "highlight": "19시대",
+      "text": "에 타기 좋아요"
+    },
+    "description": "공연이 끝나는 19시대엔 평소의 1.2배가 탈 거예요.\n20시대엔 760명으로 줄어요.",
+    "slots": [
+      {
+        "hour": "19",
+        "expected": 825,
+        "baseline": 663,
+        "ratio": 1.2,
+        "level": "normal",
+        "message": "825명, 평소의 1.2배예요",
+        "recommended": false,
+        "uncertain": true,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "20",
+        "expected": 760,
+        "baseline": 531,
+        "ratio": 1.4,
+        "level": "normal",
+        "message": "760명, 평소의 1.4배예요",
+        "recommended": false,
+        "uncertain": true,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "21",
+        "expected": 1130,
+        "baseline": 1056,
+        "ratio": 1.1,
+        "level": "normal",
+        "message": "1,130명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": true,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "22",
+        "expected": 386,
+        "baseline": 370,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "386명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": true,
+        "baseline_basis": "weekday_fallback"
+      },
+      {
+        "hour": "23",
+        "expected": 159,
+        "baseline": 159,
+        "ratio": 1.0,
+        "level": "normal",
+        "message": "159명, 평소와 비슷해요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
+      }
+    ]
+  }
+}

@@ -1,0 +1,679 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "month": "2026-12",
+    "days": [
+      {
+        "date": "2026-12-01",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-02",
+        "has_show": true,
+        "has_game": false,
+        "count": 4,
+        "by_venue": {
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-03",
+        "has_show": true,
+        "has_game": false,
+        "count": 3,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-04",
+        "has_show": true,
+        "has_game": false,
+        "count": 5,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-05",
+        "has_show": true,
+        "has_game": false,
+        "count": 10,
+        "by_venue": {
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "jamsil_student_gym": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-06",
+        "has_show": true,
+        "has_game": false,
+        "count": 7,
+        "by_venue": {
+          "woori_art_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "jamsil_student_gym": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          },
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-08",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-09",
+        "has_show": true,
+        "has_game": false,
+        "count": 4,
+        "by_venue": {
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-10",
+        "has_show": true,
+        "has_game": false,
+        "count": 2,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-11",
+        "has_show": true,
+        "has_game": false,
+        "count": 5,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-12",
+        "has_show": true,
+        "has_game": false,
+        "count": 7,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-13",
+        "has_show": true,
+        "has_game": false,
+        "count": 5,
+        "by_venue": {
+          "woori_art_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          },
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-14",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {
+          "lotte_concert_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-15",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-16",
+        "has_show": true,
+        "has_game": false,
+        "count": 4,
+        "by_venue": {
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-17",
+        "has_show": true,
+        "has_game": false,
+        "count": 3,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-18",
+        "has_show": true,
+        "has_game": false,
+        "count": 6,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "ticketlink_live_arena": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-19",
+        "has_show": true,
+        "has_game": false,
+        "count": 9,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "ticketlink_live_arena": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-20",
+        "has_show": true,
+        "has_game": false,
+        "count": 7,
+        "by_venue": {
+          "woori_art_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "ticketlink_live_arena": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          },
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-21",
+        "has_show": true,
+        "has_game": false,
+        "count": 1,
+        "by_venue": {
+          "lotte_concert_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-22",
+        "has_show": true,
+        "has_game": false,
+        "count": 3,
+        "by_venue": {
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-23",
+        "has_show": true,
+        "has_game": false,
+        "count": 3,
+        "by_venue": {
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-24",
+        "has_show": true,
+        "has_game": false,
+        "count": 5,
+        "by_venue": {
+          "kspo_dome": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          },
+          "jamsil": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-25",
+        "has_show": true,
+        "has_game": false,
+        "count": 8,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "ticketlink_live_arena": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-26",
+        "has_show": true,
+        "has_game": false,
+        "count": 9,
+        "by_venue": {
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "woori_art_hall": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "olympic_hall": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          },
+          "ticketlink_live_arena": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "jamsil": {
+            "show": true
+          },
+          "olympic_park": {
+            "show": true
+          }
+        }
+      }
+    ]
+  }
+}

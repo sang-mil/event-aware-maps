@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261217_pf299383_1930",
+    "type": "show",
+    "title": "한경아르떼필하모닉 송년음악회",
+    "venue_id": "lotte_concert_hall",
+    "area": "jamsil",
+    "date": "2026-12-17",
+    "start_at": "2026-12-17T19:30:00+09:00",
+    "end_at": "2026-12-17T21:30:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": null,
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "2,112명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "992명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "629명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "976명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20261217_pf292160_1930",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-17T19:30:00+09:00",
+        "end_at": "2026-12-17T21:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261217_pf293285_1930",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-17T19:30:00+09:00",
+        "end_at": "2026-12-17T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

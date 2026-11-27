@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261225_pf293285_1930",
+    "type": "show",
+    "title": "최현우 30주년 기념 공연: LEGACY",
+    "venue_id": "woori_art_hall",
+    "area": "olympic_park",
+    "date": "2026-12-25",
+    "start_at": "2026-12-25T19:30:00+09:00",
+    "end_at": "2026-12-25T21:30:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "1,146명, 평소의 3.5배예요",
+            "walk_min": 13,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "367명, 평소와 비슷해요",
+            "walk_min": 23,
+            "uncertain": false
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "normal",
+            "message": "279명, 평소의 1.2배예요",
+            "walk_min": 13,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "428명, 평소와 비슷해요",
+            "walk_min": 23,
+            "uncertain": false
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20261225_pf292160_1430",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-25T14:30:00+09:00",
+        "end_at": "2026-12-25T16:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261225_pf303355_1430",
+        "title": "크리스마스 콘서트: 유키 구라모토와 친구들",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-12-25T14:30:00+09:00",
+        "end_at": "2026-12-25T16:10:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261225_pf302732_1700",
+        "title": "박진영 콘서트: WET",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-12-25T17:00:00+09:00",
+        "end_at": null,
+        "end_at_source": null,
+        "type": "show"
+      },
+      {
+        "id": "evt_20261225_pf307297_1800",
+        "title": "THE BOYZ CONCERT: ZENERATION Ⅲ",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-12-25T18:00:00+09:00",
+        "end_at": "2026-12-25T20:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261225_pf307364_1830",
+        "title": "CRUSH CONCERT: CRUSH H♥UR",
+        "venue_id": "ticketlink_live_arena",
+        "start_at": "2026-12-25T18:30:00+09:00",
+        "end_at": "2026-12-25T20:30:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261225_pf303355_1900",
+        "title": "크리스마스 콘서트: 유키 구라모토와 친구들",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-12-25T19:00:00+09:00",
+        "end_at": "2026-12-25T20:40:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261225_pf292160_1930",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-25T19:30:00+09:00",
+        "end_at": "2026-12-25T21:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

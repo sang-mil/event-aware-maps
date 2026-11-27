@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261218_pf307353_1930",
+    "type": "show",
+    "title": "XIA Musical Concert with Orchestra Vol.9",
+    "venue_id": "ticketlink_live_arena",
+    "area": "olympic_park",
+    "date": "2026-12-18",
+    "start_at": "2026-12-18T19:30:00+09:00",
+    "end_at": "2026-12-18T21:30:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "crowded"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "1,691명, 평소의 5.1배예요",
+            "walk_min": 10,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "389명, 평소와 비슷해요",
+            "walk_min": 19,
+            "uncertain": false
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "crowded",
+            "message": "1,190명, 평소의 4.9배예요",
+            "walk_min": 10,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "normal",
+            "message": "412명, 평소와 비슷해요",
+            "walk_min": 19,
+            "uncertain": false
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20261218_pf292160_1430",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-18T14:30:00+09:00",
+        "end_at": "2026-12-18T16:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261218_pf307107_1900",
+        "title": "DAY6 Special Concert: The Present",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-12-18T19:00:00+09:00",
+        "end_at": null,
+        "end_at_source": null,
+        "type": "show"
+      },
+      {
+        "id": "evt_20261218_pf292160_1930",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-18T19:30:00+09:00",
+        "end_at": "2026-12-18T21:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261218_pf293285_1930",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "start_at": "2026-12-18T19:30:00+09:00",
+        "end_at": "2026-12-18T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261218_pf304645_2000",
+        "title": "자우림 단독 콘서트: MIDNIGHT EXPRESS [서울]",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-12-18T20:00:00+09:00",
+        "end_at": "2026-12-18T22:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

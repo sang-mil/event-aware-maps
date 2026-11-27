@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261127_pf277408_1930",
+    "type": "show",
+    "title": "서울시향 얍 판 츠베덴의 말러 교향곡 4번",
+    "venue_id": "lotte_concert_hall",
+    "area": "jamsil",
+    "date": "2026-11-27",
+    "start_at": "2026-11-27T19:30:00+09:00",
+    "end_at": "2026-11-27T21:10:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": null,
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "21~22시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "1,213명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "997명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "542명, 평소의 1.5배예요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "951명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      }
+    },
+    "same_day": [
+      {
+        "id": "evt_20261127_pf292160_1430",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-11-27T14:30:00+09:00",
+        "end_at": "2026-11-27T16:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261127_pf301499_1900",
+        "title": "조용필 & 위대한 탄생 전국투어 콘서트 [서울]",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-11-27T19:00:00+09:00",
+        "end_at": "2026-11-27T21:10:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261127_pf292160_1930",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-11-27T19:30:00+09:00",
+        "end_at": "2026-11-27T21:45:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261127_pf302131_2000",
+        "title": "다이나믹 듀오 단독 콘서트: 가끔씩 오래 보자 [서울]",
+        "venue_id": "olympic_hall",
+        "start_at": "2026-11-27T20:00:00+09:00",
+        "end_at": null,
+        "end_at_source": null,
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

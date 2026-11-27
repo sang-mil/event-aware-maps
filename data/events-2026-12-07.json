@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "date": "2026-12-07",
+    "events": [],
+    "next_event": {
+      "id": "evt_20261208_pf292160_1930",
+      "title": "겨울왕국 [서울]",
+      "venue_id": "charlotte_theater",
+      "date": "2026-12-08"
+    }
+  }
+}

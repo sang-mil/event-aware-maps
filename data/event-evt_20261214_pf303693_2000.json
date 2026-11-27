@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "id": "evt_20261214_pf303693_2000",
+    "type": "show",
+    "title": "류이치 사카모토 트리뷰트 콘서트 [서울]",
+    "venue_id": "lotte_concert_hall",
+    "area": "jamsil",
+    "date": "2026-12-14",
+    "start_at": "2026-12-14T20:00:00+09:00",
+    "end_at": "2026-12-14T22:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": null,
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "22~23시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "292명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "724명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      },
+      "later": {
+        "hour_label": "23~24시 예상",
+        "stations": [
+          {
+            "station_id": "sports_complex",
+            "level": "normal",
+            "message": "123명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          },
+          {
+            "station_id": "jamsil_saenae",
+            "level": "normal",
+            "message": "341명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": true
+          }
+        ]
+      }
+    },
+    "same_day": [],
+    "crossing_note": null
+  }
+}

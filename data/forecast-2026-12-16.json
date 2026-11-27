@@ -1,0 +1,438 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "date": "2026-12-16",
+    "day_label": "12월 16일 (수)",
+    "has_event": true,
+    "focus_hour": "21",
+    "supported_hours": [
+      "19",
+      "20",
+      "21",
+      "22",
+      "23"
+    ],
+    "summaries": {
+      "19": {
+        "highlight": "19시",
+        "text": "엔 방이역이\n가장 덜 붐빌 거예요",
+        "best_station_id": "bangi"
+      },
+      "20": {
+        "highlight": "20시",
+        "text": "엔 방이역이\n가장 덜 붐빌 거예요",
+        "best_station_id": "bangi"
+      },
+      "21": {
+        "highlight": "21시",
+        "text": "엔 방이역이\n가장 덜 붐빌 거예요",
+        "best_station_id": "bangi"
+      },
+      "22": {
+        "highlight": "22시",
+        "text": "엔 방이역이\n가장 덜 붐빌 거예요",
+        "best_station_id": "bangi"
+      },
+      "23": {
+        "highlight": "23시",
+        "text": "엔 한성백제역이\n가장 덜 붐빌 거예요",
+        "best_station_id": "hanseong_baekje"
+      }
+    },
+    "ranking": {
+      "19": [
+        "bangi",
+        "olympic_park",
+        "hanseong_baekje",
+        "mongchontoseong"
+      ],
+      "20": [
+        "bangi",
+        "mongchontoseong",
+        "hanseong_baekje",
+        "olympic_park"
+      ],
+      "21": [
+        "bangi",
+        "mongchontoseong",
+        "hanseong_baekje",
+        "olympic_park"
+      ],
+      "22": [
+        "bangi",
+        "mongchontoseong",
+        "hanseong_baekje",
+        "olympic_park"
+      ],
+      "23": [
+        "hanseong_baekje",
+        "olympic_park",
+        "bangi",
+        "mongchontoseong"
+      ]
+    },
+    "stations": [
+      {
+        "station_id": "olympic_park",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 474,
+            "baseline": 479,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "474명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "20",
+            "expected": 423,
+            "baseline": 374,
+            "ratio": 1.1,
+            "level": "normal",
+            "message": "423명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "21",
+            "expected": 599,
+            "baseline": 346,
+            "ratio": 1.7,
+            "level": "crowded",
+            "message": "599명, 평소의 1.7배예요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "22",
+            "expected": 296,
+            "baseline": 258,
+            "ratio": 1.1,
+            "level": "normal",
+            "message": "296명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "23",
+            "expected": 76,
+            "baseline": 76,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "76명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          }
+        ]
+      },
+      {
+        "station_id": "bangi",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 391,
+            "baseline": 396,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "391명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "20",
+            "expected": 324,
+            "baseline": 330,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "324명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "21",
+            "expected": 411,
+            "baseline": 412,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "411명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "22",
+            "expected": 439,
+            "baseline": 442,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "439명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "23",
+            "expected": 87,
+            "baseline": 87,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "87명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          }
+        ]
+      },
+      {
+        "station_id": "mongchontoseong",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 427,
+            "baseline": 432,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "427명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "20",
+            "expected": 338,
+            "baseline": 340,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "338명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "21",
+            "expected": 345,
+            "baseline": 345,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "345명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "22",
+            "expected": 273,
+            "baseline": 272,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "273명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "23",
+            "expected": 119,
+            "baseline": 119,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "119명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          }
+        ]
+      },
+      {
+        "station_id": "sports_complex",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 717,
+            "baseline": 719,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "717명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "20",
+            "expected": 801,
+            "baseline": 800,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "801명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": true,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "21",
+            "expected": 2353,
+            "baseline": 2338,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "2,353명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": true,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "22",
+            "expected": 617,
+            "baseline": 601,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "617명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": true,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "23",
+            "expected": 185,
+            "baseline": 185,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "185명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          }
+        ]
+      },
+      {
+        "station_id": "jamsil_saenae",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 1143,
+            "baseline": 1154,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "1,143명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "20",
+            "expected": 945,
+            "baseline": 946,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "945명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": true,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "21",
+            "expected": 960,
+            "baseline": 954,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "960명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": true,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "22",
+            "expected": 928,
+            "baseline": 920,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "928명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": true,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "23",
+            "expected": 470,
+            "baseline": 470,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "470명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          }
+        ]
+      },
+      {
+        "station_id": "hanseong_baekje",
+        "slots": [
+          {
+            "hour": "19",
+            "expected": 144,
+            "baseline": 145,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "144명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "20",
+            "expected": 115,
+            "baseline": 114,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "115명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "21",
+            "expected": 102,
+            "baseline": 100,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "102명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "22",
+            "expected": 79,
+            "baseline": 79,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "79명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          },
+          {
+            "hour": "23",
+            "expected": 26,
+            "baseline": 26,
+            "ratio": 1.0,
+            "level": "normal",
+            "message": "26명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
+          }
+        ]
+      }
+    ]
+  }
+}

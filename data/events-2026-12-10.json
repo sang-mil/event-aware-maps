@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T20:24:37+09:00",
+  "data": {
+    "date": "2026-12-10",
+    "events": [
+      {
+        "id": "evt_20261210_pf292160_1930",
+        "type": "show",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "area": "jamsil",
+        "date": "2026-12-10",
+        "start_at": "2026-12-10T19:30:00+09:00",
+        "end_at": "2026-12-10T21:45:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": null,
+        "linkable": true
+      },
+      {
+        "id": "evt_20261210_pf293285_1930",
+        "type": "show",
+        "title": "최현우 30주년 기념 공연: LEGACY",
+        "venue_id": "woori_art_hall",
+        "area": "olympic_park",
+        "date": "2026-12-10",
+        "start_at": "2026-12-10T19:30:00+09:00",
+        "end_at": "2026-12-10T21:30:00+09:00",
+        "end_at_source": "estimated",
+        "status": "scheduled",
+        "change": null,
+        "game_state": null,
+        "nearest_station": {
+          "station_id": "olympic_park",
+          "level": "crowded"
+        },
+        "linkable": true
+      }
+    ],
+    "next_event": null
+  }
+}
