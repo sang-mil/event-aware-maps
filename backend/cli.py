@@ -27,7 +27,7 @@ sys.path.insert(0, str(BACKEND))
 
 from collectors import CollectError, kspo, seoul_subway  # noqa: E402
 from normalize import db as normalize_db, seed as normalize_seed  # noqa: E402
-from congestion import backtest as cg_backtest, load as cg_load, model as cg_model, outputs as cg_outputs  # noqa: E402
+from congestion import anomalies as cg_anomalies, backtest as cg_backtest, load as cg_load, model as cg_model, outputs as cg_outputs  # noqa: E402
 from recommend import compare as rc_compare  # noqa: E402
 import reference  # noqa: E402
 from events import detail as ev_detail, detect as ev_detect, load as ev_load, outputs as ev_outputs  # noqa: E402
@@ -187,6 +187,28 @@ def cmd_backtest(db_path: Path) -> int:
     return 0
 
 
+def cmd_anomalies(db_path: Path, min_ratio: float, as_of: str | None = None) -> int:
+    """2025 KSPO 관측일 중 공연 기록이 없는 혼잡 후보를 출력한다."""
+    if not db_path.is_file():
+        print(f"DB가 없습니다. 먼저 build-db 를 실행하세요: {db_path}")
+        return 1
+    obs, covered, exits = cg_load.load_inputs(db_path)
+    base = cg_model.Baselines(obs, covered, exits, as_of=as_of)
+    findings = cg_anomalies.find_non_event_anomalies(
+        obs, covered, exits, base, cg_outputs.STATIONS, min_ratio=min_ratio, as_of=as_of
+    )
+    if not findings:
+        print(f"공연 기록 없는 날짜에서 기준선 {min_ratio:.1f}배 이상 혼잡 후보가 없습니다.")
+        return 0
+    dates = sorted({item["date"] for item in findings})
+    print(f"원인 미상 혼잡 후보: {len(dates)}일, 역·시각 {len(findings)}건 (기준선 {min_ratio:.1f}배 이상)")
+    print("이 후보는 KSPO에 공연 기록이 없다는 뜻이며, 혼잡 원인은 확인되지 않았습니다.")
+    for item in sorted(findings, key=lambda x: (-x["ratio"], x["date"], x["hour"], x["station_id"]))[:30]:
+        print(f"  {item['date']} {item['hour']:02d}시 {item['station_id']}: "
+              f"실측 {item['actual']:.0f}명 / 기준 {item['baseline']:.0f}명 ({item['ratio']:.1f}배)")
+    return 0
+
+
 def cmd_publish(src: Path, out: Path) -> int:
     files = {p.name: json.loads(p.read_text(encoding="utf-8")) for p in sorted(src.glob("*.json"))}
     if not files:
@@ -222,6 +244,10 @@ def main(argv: list[str] | None = None) -> int:
     bd.add_argument("--as-of", type=datetime.fromisoformat, default=None, help="기준 시각 (예: 2025-08-09T18:00:00+09:00)")
     bt = sub.add_parser("backtest", help="혼잡 단계 적중률 검증")
     bt.add_argument("--db", type=Path, default=DB_PATH)
+    an = sub.add_parser("anomalies", help="공연 기록 없는 혼잡 후보 찾기")
+    an.add_argument("--db", type=Path, default=DB_PATH)
+    an.add_argument("--min-ratio", type=float, default=1.5, help="평소 기준선 대비 후보 비율 (기본 1.5)")
+    an.add_argument("--as-of", help="이 날짜 이전 자료만 분석 (YYYY-MM-DD)")
     p = sub.add_parser("publish", help="검증 후 발행")
     p.add_argument("--src", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
@@ -231,6 +257,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_collect(args.source, args.month, args.raw_dir, args.page_size)
     if args.command == "backtest":
         return cmd_backtest(args.db)
+    if args.command == "anomalies":
+        return cmd_anomalies(args.db, args.min_ratio, args.as_of)
     if args.command == "build":
         as_of = args.as_of or datetime.now(KST)
         if as_of.tzinfo is None:
