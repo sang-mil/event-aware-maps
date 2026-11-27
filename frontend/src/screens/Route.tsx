@@ -129,7 +129,15 @@ export function MapScreen() {
           {!sel ? (
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{best && st[best] ? `${st[best].name}이 가장 덜 붐빌 거예요` : '주변 역 예상이에요'}</h2>
+                <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{best && st[best] ? (
+                    <>
+                      {st[best].name}이
+                      <br />
+                      가장 덜 붐빌 거예요
+                    </>
+                  ) : (
+                    '주변 역 예상이에요'
+                  )}</h2>
                 <span style={{ fontSize: 15, color: '#5F6573' }}>
                   {view.fallback ? `지금은 예상이 없는 시간이라, 행사가 끝나는 ${Number(hour)}시대 예상이에요` : `${Number(hour)}시대에 출발할 때의 예상이에요`}
                 </span>

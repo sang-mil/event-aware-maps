@@ -206,9 +206,13 @@ export function KindChip({ type, size = 40 }: { type: 'show' | 'game'; size?: nu
   );
 }
 
+/**
+ * 한 문장 제목. 데이터 문장에 줄바꿈(\n)이 있으면 그 자리에서 줄을 나눠요.
+ * 줄은 역 이름이 들어간 부분 바로 뒤에서 나눠요(역 이름이 길어도 첫 줄에 통째로, 둘째 줄은 결론).
+ */
 export function Headline({ highlight, text, size = 24 }: { highlight: string | null; text: string; size?: number }) {
   return (
-    <h1 className="h1" style={{ fontSize: size }}>
+    <h1 className="h1" style={{ fontSize: size, whiteSpace: 'pre-line' }}>
       {highlight && <span className="accent">{highlight}</span>}
       {text}
     </h1>
