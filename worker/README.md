@@ -25,6 +25,26 @@
 
 서울 API는 장소명 하나씩 조회하며, 현재 Worker는 이 두 장소만 요청할 수 있게 제한합니다. 장소명이 공식 장소 목록과 다르면 `AREAS`의 값을 공식 목록에 맞춰 바꿔야 합니다.
 
+## 응답에 포함하는 정보
+
+Worker는 원본 응답 전체를 브라우저로 전달하지 않습니다. 장소명·장소 코드와 현재 혼잡 단계·안내 문구·추정 인구 범위·관측 시각만 골라 아래 모양으로 반환합니다.
+
+```json
+{
+  "area": { "name": null, "code": null },
+  "crowd": {
+    "level": null,
+    "message": null,
+    "population_min": null,
+    "population_max": null,
+    "observed_at": null
+  },
+  "source": "서울특별시 공공데이터 · 서울시 실시간 도시데이터"
+}
+```
+
+각 값은 서울시 응답에 값이 있을 때만 채우며, 성별·연령별 비율, 상권, 날씨, 교통 등 화면에 쓰지 않는 원본 항목은 전달하지 않습니다. 인구 범위는 역 승차 인원이나 열차 내부 혼잡도가 아니라 해당 장소의 추정 인구입니다.
+
 ## GitHub Actions
 
 기존 `data-refresh.yml`은 KSPO 자료로 일일 예보 JSON을 만드는 배치라 그대로 둡니다. 실시간 도시데이터 키를 GitHub Actions Secret에도 복사할 필요는 없습니다. 이 Worker는 Cloudflare 런타임 Secret을 사용합니다.
