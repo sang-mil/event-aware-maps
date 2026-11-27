@@ -13,6 +13,7 @@ SCHEMA_DIR = Path(__file__).resolve().parents[2] / "data-contract" / "schema"
 
 # 발행 파일 이름 앞부분 → 스키마 이름 (data-contract/mock 과 같은 규칙)
 PREFIX_TO_SCHEMA = [
+    ("walk-routes.json", "walk-routes"),
     ("stations.json", "stations"),
     ("venues.json", "venues"),
     ("events-", "events"),

@@ -9,7 +9,7 @@ BACKEND = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND))
 
 from publish.schema import errors_of  # noqa: E402
-from recommend import compare  # noqa: E402
+from recommend import backtest as recommendation_backtest, compare  # noqa: E402
 
 D = "2099-01-10"
 
@@ -80,3 +80,39 @@ def test_no_data_hour_is_skipped():
     day = {"olympic_park": {h: None for h in range(19, 24)}, "bangi": {h: None for h in range(19, 24)}}
     assert compare.compare(day, 20) is None
     assert compare.build_files(D, day) == {}
+
+
+def test_recommendation_backtest_uses_as_of_data_and_returns_reproducible_score():
+    from datetime import date, timedelta
+
+    obs = {("olympic_park", "5"): {}, ("bangi", "5"): {}}
+    covered, exits = set(), {}
+    start = date(2099, 1, 5)
+    for i in range(30 * 7):
+        day = (start + timedelta(days=i)).isoformat()
+        covered.add(day)
+        is_saturday = (start + timedelta(days=i)).weekday() == 5
+        for hour in range(19, 24):
+            obs[("olympic_park", "5")][(day, hour)] = 400 if is_saturday and hour == 20 else 100
+            obs[("bangi", "5")][(day, hour)] = 100
+        if is_saturday:
+            exits[day] = [(20, 1000)]
+
+    cutoff = "2099-04-01"
+    result = recommendation_backtest.run(obs, covered, exits, through=cutoff)
+    future_changed = {key: dict(series) for key, series in obs.items()}
+    for key, series in future_changed.items():
+        for point in list(series):
+            if point[0] > cutoff:
+                series[point] += 1_000_000
+    exits_changed = {
+        day: [(hour, audience * 100 if audience is not None else None) for hour, audience in events]
+        for day, events in exits.items()
+    }
+    after_future_change = recommendation_backtest.run(future_changed, covered, exits_changed, through=cutoff)
+
+    assert result["validation"] == "as_of"
+    assert result["cases"] > 0
+    assert 0 <= result["accuracy"] <= 1
+    assert sum(result["recommended_options"].values()) == result["cases"]
+    assert result == after_future_change

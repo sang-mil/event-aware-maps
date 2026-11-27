@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getCompare, getEvents, getForecast, getRoute, type CompareOption, type CompareParams } from '@/api';
+import { getCompare, getEvents, getForecast, getRoute, getWalkRoutes, type CompareOption, type CompareParams } from '@/api';
 import {
   BackHeader,
   BottomBar,
@@ -26,6 +26,7 @@ import {
 } from '@/components/ui';
 import { DEFAULT_ORIGIN_STATION, demoState, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track, viewTime } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
+import { KakaoWalkMap } from '@/components/KakaoWalkMap';
 
 /** 지도 위 배치 (지도 API를 정하기 전 개략도, 390px 화면 기준 좌표) */
 const MAP_STATIONS: { id: string; x: number; y: number }[] = [
@@ -501,6 +502,7 @@ export function RouteScreen() {
   const back = new URLSearchParams(q.toString());
   back.delete('option');
   const res = useLoad(() => getRoute(option, params), [q.toString()]);
+  const walks = useLoad(getWalkRoutes, []);
   const { st, vn } = useRefs();
   const [app, setApp] = useState<'naver' | 'kakao'>('naver');
   const [walked, setWalked] = useState(false);
@@ -513,7 +515,12 @@ export function RouteScreen() {
   const toName = r.to_station_id ? st[r.to_station_id]?.name : params.toStationId ? st[params.toStationId]?.name : null;
   const hourLabel = `${Number(params.departAt.slice(11, 13))}시대 출발`;
   const max = Math.max(1, ...r.compare.items.map((i) => i.expected));
-  // TODO: 좌표가 정해지면 각 지도 앱의 길찾기 링크로 바꿔요. 지금은 역 이름 검색으로 열어요.
+  const walkRoute = params.fromType === 'venue' && walks.status === 'ok'
+    ? walks.value.data.routes.find((item) => item.venue_id === params.fromId && item.station_id === r.board_station_id)
+    : undefined;
+  const place = (id: string) => walks.status === 'ok' ? walks.value.data.places.find((item) => item.id === id) : undefined;
+  const originPlace = params.fromType === 'venue' ? place(params.fromId) : undefined;
+  const stationPlace = place(r.board_station_id);
   const mapUrl = (name: string) =>
     app === 'naver' ? `https://map.naver.com/p/search/${encodeURIComponent(name)}` : `https://map.kakao.com/link/search/${encodeURIComponent(name)}`;
   const appName = app === 'naver' ? '네이버지도' : '카카오맵';
@@ -522,22 +529,26 @@ export function RouteScreen() {
     { n: '2', title: `${boardName}에서 지하철 타기`, sub: `대중교통 길찾기, 출발은 ${boardName}`, active: walked, onClick: () => undefined },
   ];
 
+  const mapSteps = [
+    { n: '1', title: `${boardName}까지 걷기`, sub: walkRoute?.walk_min != null ? `미리 계산한 도보 약 ${walkRoute.walk_min}분` : '도보 경로 정보 없음', active: !walked, href: walkRoute?.landing_url ?? mapUrl(boardName), onClick: () => setWalked(true) },
+    { n: '2', title: `${boardName}에서 지하철 타기`, sub: `역 정보 확인 · ${board?.lines[0] ? `${board.lines[0]}호선` : '노선 정보 없음'}`, active: walked, href: mapUrl(boardName), onClick: () => undefined },
+  ];
+
   return (
     <main className="screen">
       <BackHeader href={`/compare/?${back.toString()}`} />
-      <div role="img" aria-label={`실제 지도가 아닌 대략적인 그림: ${originName}에서 ${boardName}까지`} style={{ margin: '0 16px', height: 220, borderRadius: 20, background: '#EEF0F3', position: 'relative', overflow: 'hidden' }}>
-        <svg aria-hidden="true" width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
-          <path d="M80 110 C 140 130, 200 150, 270 168" stroke="#4E3DBC" strokeWidth="4" strokeDasharray="2 8" strokeLinecap="round" fill="none" />
-        </svg>
-        <span style={{ position: 'absolute', left: 40, top: 86, fontSize: 13, fontWeight: 700, background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>{originName}</span>
-        <span style={{ position: 'absolute', left: 244, top: 158, fontSize: 13, fontWeight: 700, background: '#FFFFFF', padding: '3px 8px', borderRadius: 8 }}>{boardName}</span>
-        <span role="note" style={{ position: 'absolute', right: 10, top: 10, fontSize: 12, fontWeight: 700, color: '#8A5300', background: '#FFF2D1', padding: '3px 8px', borderRadius: 8 }}>실제 지도 아님 · 위치 정보 없음</span>
-      </div>
+      {walkRoute && walkRoute.path.length > 1 && originPlace && stationPlace ? (
+        <KakaoWalkMap path={walkRoute.path} origin={originPlace.name} destination={stationPlace.name} />
+      ) : walks.status === 'loading' && params.fromType === 'venue' ? (
+        <div role="status" className="card pad" style={{ margin: '0 16px' }}>도보 경로 데이터를 불러오는 중이에요.</div>
+      ) : (
+        <div role="status" className="card pad" style={{ margin: '0 16px' }}>이 출발지와 역 사이의 도보 경로 정보가 없습니다.</div>
+      )}
       <section style={{ padding: '20px 24px 8px', display: 'flex', flexDirection: 'column', gap: 10 }}>
         <h1 className="h1 big">
           {boardName}까지
           <br />
-          <Walk min={r.walk_min} />
+          <Walk min={walkRoute?.walk_min ?? (params.fromType === 'station' ? r.walk_min : null)} />
         </h1>
         <p className="lead">
           {boardName}에서 {board?.lines[0] ? `${board.lines[0]}호선을 타요` : '지하철을 타요(노선 정보 없음)'}
@@ -582,7 +593,7 @@ export function RouteScreen() {
                   {s.type === 'start' && hourLabel}
                   {s.type === 'walk' && (
                     <>
-                      <Walk min={r.walk_min} />, <span className="na">추천 출구·동선 정보 없음</span>
+                      <Walk min={walkRoute?.walk_min ?? (params.fromType === 'station' ? r.walk_min : null)} />, <span className="na">추천 출구·동선 정보 없음</span>
                     </>
                   )}
                   {s.type === 'board' && (
@@ -613,15 +624,15 @@ export function RouteScreen() {
       </section>
       <BottomBar column>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 44, padding: '0 4px' }}>
-          <span style={{ fontSize: 15, fontWeight: 700, color: '#4A4F5C' }}>지도 앱에서 순서대로 열어요</span>
+          <span style={{ fontSize: 15, fontWeight: 700, color: '#4A4F5C' }}>역까지 도보 후 지하철 이용</span>
           <button type="button" className="chip" style={{ fontSize: 14, padding: '0 12px' }} aria-label={`지도 앱 바꾸기, 지금은 ${appName}`} onClick={() => setApp(app === 'naver' ? 'kakao' : 'naver')}>
             {appName}
           </button>
         </div>
-        {steps.map((s) => (
+        {mapSteps.map((s) => (
           <a
             key={s.n}
-            href={mapUrl(board?.name ?? '')}
+            href={s.href}
             target="_blank"
             rel="noreferrer"
             onClick={s.onClick}

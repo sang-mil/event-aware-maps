@@ -42,6 +42,30 @@ export interface Venue {
   nearby_stations: { station_id: string; walk_min: number | null }[];
 }
 
+export interface WalkRoutePlace {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+}
+
+export interface WalkRoute {
+  venue_id: string;
+  station_id: string;
+  distance_m: number | null;
+  walk_min: number | null;
+  path: [number, number][];
+  landing_url: string | null;
+}
+
+export interface WalkRoutes {
+  schema_version: string;
+  updated_at: string;
+  attribution: string;
+  places: WalkRoutePlace[];
+  routes: WalkRoute[];
+}
+
 export interface Slot {
   hour: string;
   expected: number | null;
