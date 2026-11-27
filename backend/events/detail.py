@@ -13,30 +13,50 @@ from congestion.outputs import HOURS, slot_message
 from .detect import Event
 from .outputs import event_item
 
-NEARBY = ["olympic_park", "bangi"]  # 올림픽공원 공연장의 가까운 역 (backend/reference/venues.json)
+import reference
+
+NEARBY = {"olympic_park": ["olympic_park", "bangi"], "jamsil": ["sports_complex", "jamsil_saenae"]}  # venues.json 의 가까운 역
 
 
-def _block(day: dict, hour: int) -> dict:
+def _nearby(ev: Event) -> list[str]:
+    if ev.venue_id:
+        for v in reference.venues():
+            if v["id"] == ev.venue_id and v["nearby_stations"]:
+                return [n["station_id"] for n in v["nearby_stations"]]
+    return NEARBY.get(ev.area, [])
+
+
+def _block(day: dict, hour: int | None, stations_ids: list[str], unmodeled: bool = False,
+           walks: dict | None = None) -> dict:
+    """unmodeled: 이 지역 공연의 행사 효과를 학습하지 못해(잠실) 예상에 공연 영향이 빠져 있음 → uncertain."""
     stations = []
-    for sid in NEARBY:
+    for sid in stations_ids:
         s = day[sid].get(hour) if hour in HOURS else None
         stations.append({"station_id": sid, "level": s["level"] if s else "no_data",
-                         "message": slot_message(s) if s else None, "walk_min": None,
-                         "uncertain": bool(s and s["effect_unknown"])})
-    return {"hour_label": f"{hour}~{hour + 1}시 예상", "stations": stations}
+                         "message": slot_message(s) if s else None, "walk_min": (walks or {}).get(sid),
+                         "uncertain": bool(s and (s["effect_unknown"] or unmodeled))})
+    return {"hour_label": f"{hour}~{hour + 1}시 예상" if hour is not None else None, "stations": stations}
 
 
-def event_detail(ev: Event, same_day: list[Event], day: dict, nearest) -> dict:
+def event_detail(ev: Event, same_day: list[Event], day: dict, nearest, walk: dict | None = None) -> dict:
+    """walk: 카카오 도보 경로 표 {(공연장, 역): {...}}. 공연장을 아는 공연만 역까지 도보 시간을 채운다."""
     exit_h = ev.exit_hour
-    after_end: dict = {"end": _block(day, exit_h)}
-    if exit_h + 1 in HOURS:
-        after_end["later"] = _block(day, exit_h + 1)
-    if exit_h not in HOURS:
-        after_end["no_data_message"] = f"{exit_h}시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    near = _nearby(ev)
+    unmodeled = ev.area != "olympic_park"
+    walks = {sid: w["walk_min"] for (v, sid), w in (walk or {}).items() if ev.venue_id and v == ev.venue_id}
+    after_end: dict = {"end": _block(day, exit_h, near, unmodeled, walks)}
+    if exit_h is None:
+        after_end["no_data_message"] = "공연 시간 정보가 없어 끝나는 시각과 혼잡 예상을 알 수 없어요."
+    else:
+        if exit_h + 1 in HOURS:
+            after_end["later"] = _block(day, exit_h + 1, near, unmodeled, walks)
+        if exit_h not in HOURS:
+            after_end["no_data_message"] = f"{exit_h}시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
     return {
         **event_item(ev, nearest, linkable=True),
         "after_end": after_end,
-        "same_day": [{"id": o.id, "title": o.title, "venue_id": None, "start_at": None,
-                      "end_at": event_item(o)["end_at"], "end_at_source": "estimated", "type": "show"} for o in same_day if o.id != ev.id],
+        "same_day": [{"id": o.id, "title": o.title, "venue_id": o.venue_id, "start_at": o.start_at,
+                      "end_at": event_item(o)["end_at"], "end_at_source": "estimated" if event_item(o)["end_at"] else None,
+                      "type": "show"} for o in same_day if o.id != ev.id],
         "crossing_note": None,
     }
