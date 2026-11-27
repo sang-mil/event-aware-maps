@@ -21,7 +21,8 @@ def _block(day: dict, hour: int) -> dict:
     for sid in NEARBY:
         s = day[sid].get(hour) if hour in HOURS else None
         stations.append({"station_id": sid, "level": s["level"] if s else "no_data",
-                         "message": slot_message(s) if s else None, "walk_min": None})
+                         "message": slot_message(s) if s else None, "walk_min": None,
+                         "uncertain": bool(s and s["effect_unknown"])})
     return {"hour_label": f"{hour}~{hour + 1}시 예상", "stations": stations}
 
 

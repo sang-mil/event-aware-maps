@@ -49,7 +49,8 @@ def compare(day: dict, hour: int) -> dict | None:
         "last_train": None,
         "options": [{"id": o["id"], "kind": o["kind"], "recommended": i == 0, "title": o["title"], "subtitle": o["subtitle"],
                      "station_id": o["station_id"], "board_hour": f"{o['hour']:02d}", "walk_min": None,
-                     "expected": round(o["s"]["expected"]), "level": o["s"]["level"], "compare_message": slot_message(o["s"])}
+                     "expected": round(o["s"]["expected"]), "level": o["s"]["level"], "compare_message": slot_message(o["s"]),
+                     "uncertain": o["s"]["effect_unknown"]}
                     for i, o in enumerate(opts)],
     }
 

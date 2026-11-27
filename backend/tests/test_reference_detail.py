@@ -55,7 +55,8 @@ def test_event_detail_after_end_and_same_day():
     assert d["linkable"] is True and d["nearest_station"] == {"station_id": "olympic_park", "level": "crowded"}
     assert d["after_end"]["end"]["hour_label"] == "20~21시 예상"
     assert [(x["station_id"], x["level"], x["message"]) for x in d["after_end"]["end"]["stations"]] == [
-        ("olympic_park", "crowded", "400명, 평소의 4.0배"), ("bangi", "normal", "100명, 평소와 비슷")]
+        ("olympic_park", "crowded", "400명, 평소의 4.0배예요"), ("bangi", "normal", "100명, 평소와 비슷해요")]
+    assert [x["uncertain"] for x in d["after_end"]["end"]["stations"]] == [False, False]
     assert d["after_end"]["later"]["stations"][0]["level"] == "normal"
     assert "no_data_message" not in d["after_end"]
     assert [x["id"] for x in d["same_day"]] == [b.id]

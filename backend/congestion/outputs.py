@@ -37,10 +37,38 @@ def station_hour(d: str, sid: str, hour: int, lines: list, exits: dict, base: Ba
 
 
 def slot_message(s: dict) -> str:
-    ref, with_ = ("행사 없는 평일", "행사 없는 평일과") if s["weekday_fallback"] else ("평소", "평소와")
+    """해요체 한 문장 (#38). 기준선이 월~목으로 대신됐는지는 문장 대신 baseline_basis 필드로 알린다.
+    관객 수를 모르는 공연이 있다는 안내도 문장에서 빼고 uncertain 필드로 준다."""
     r = s["ratio"]
-    text = f"{round(s['expected']):,}명, " + (f"{with_} 비슷" if 0.85 <= r < 1.15 else f"{ref}의 {r:.1f}배")
-    return text + (" (관객 수를 모르는 공연이 있어 더 붐빌 수 있음)" if s["effect_unknown"] else "")
+    return f"{round(s['expected']):,}명, " + ("평소와 비슷해요" if 0.85 <= r < 1.15 else f"평소의 {r:.1f}배예요")
+
+
+def _basis(s: dict) -> str:
+    return "weekday_fallback" if s["weekday_fallback"] else "same_weekday"
+
+
+def _how(s: dict) -> str:
+    r = s["ratio"]
+    if r >= 1.15:
+        return f"평소의 {r:.1f}배가 탈 거예요"
+    return "평소와 비슷하게 탈 거예요" if r >= 0.85 else "평소보다 적게 탈 거예요"
+
+
+def description(fh: int, per_hour: dict, has_event: bool) -> str | None:
+    """두 문장을 줄바꿈(\\n)으로 (#38-2.5). 예: '공연이 끝나는 20시대엔 평소의 2.6배가 탈 거예요.' + 줄바꿈 + '21시대엔 643명으로 줄어요.'"""
+    focus = per_hour.get(fh)
+    if not focus:
+        return None
+    first = f"{'공연이 끝나는 ' if has_event else ''}{fh}시대엔 {_how(focus)}."
+    nxt = per_hour.get(fh + 1)
+    if not nxt:
+        return first
+    n1, n2 = round(focus["expected"]), round(nxt["expected"])
+    if n1 > 0 and 0.45 <= n2 / n1 <= 0.55:
+        change = "그 절반 정도로 줄어요"
+    else:
+        change = f"{n2:,}명으로 " + ("줄어요" if n2 < n1 * 0.95 else "늘어요" if n2 > n1 * 1.05 else "비슷해요")
+    return f"{first}\n{fh + 1}시대엔 {change}."
 
 
 def day_label(d: str) -> str:
@@ -68,7 +96,8 @@ def _slots(per_hour: dict) -> list[dict]:
         return []
     best = min(have, key=lambda h: (have[h]["ratio"], h))
     return [{"hour": f"{h:02d}", "expected": round(s["expected"]), "baseline": round(s["baseline"]),
-             "ratio": round(s["ratio"], 1), "level": s["level"], "message": slot_message(s), "recommended": h == best}
+             "ratio": round(s["ratio"], 1), "level": s["level"], "message": slot_message(s), "recommended": h == best,
+             "uncertain": s["effect_unknown"], "baseline_basis": _basis(s)}
             for h, s in sorted(have.items())]
 
 
@@ -85,9 +114,12 @@ def forecast(d: str, day: dict, exits: dict) -> dict:
         ranks[f"{h:02d}"] = order
         best = order[0] if order else None
         if not has_event:
-            summaries[f"{h:02d}"] = {"highlight": None, "text": "큰 공연이 없어 주변 역이 평소와 비슷할 거예요", "best_station_id": best}
+            summaries[f"{h:02d}"] = {"highlight": None, "text": "오늘은 큰 공연이 없어\n주변 역이 평소와 비슷할 거예요",
+                                     "best_station_id": best}
         elif best:
-            summaries[f"{h:02d}"] = {"highlight": NAMES[best], "text": "에서 타면 가장 덜 붐빌 거예요", "best_station_id": best}
+            # 역 이름은 모두 '역'(받침 있음)으로 끝나 조사는 '이'
+            summaries[f"{h:02d}"] = {"highlight": f"{h}시", "text": f"엔 {NAMES[best]}이\n가장 덜 붐빌 거예요",
+                                     "best_station_id": best}
         else:
             summaries[f"{h:02d}"] = {"highlight": None, "text": "이 시간대는 예상 정보가 없어요", "best_station_id": None}
     return {"date": d, "day_label": day_label(d), "has_event": has_event, "focus_hour": f"{focus_hour(d, exits):02d}",
@@ -108,16 +140,23 @@ def station_forecast(d: str, sid: str, day: dict, exits: dict) -> dict:
     focus = day[sid][fh]
     best = next(s for s in slots if s["recommended"])
     best_h = int(best["hour"])
-    headline = ({"highlight": f"{best_h}시대", "text": "에 타면 가장 덜 붐빌 거예요"} if focus and focus["level"] == "crowded" and best_h != fh
-                else {"highlight": f"{fh}시대", "text": f" 예상: {LEVEL_KO[focus['level']] if focus else '정보 없음'}"})
+    if not focus:
+        headline = {"highlight": f"{fh}시대", "text": " 예상 정보가 없어요"}
+    elif focus["level"] != "crowded":
+        headline = {"highlight": f"{fh}시대", "text": "에 타기 좋아요"}
+    elif best_h != fh:
+        headline = {"highlight": f"{best_h}시대", "text": "에 타면 덜 붐벼요"}
+    else:
+        headline = {"highlight": f"{fh}시대", "text": "엔 붐빌 거예요"}
     out = {**base, "focus_level": focus["level"] if focus else "no_data", "headline": headline,
-           "description": f"{fh}시대 {slot_message(focus)}." if focus else None, "slots": slots}
+           "description": description(fh, day[sid], bool(exits.get(d))), "slots": slots}
     if focus and focus["level"] == "crowded" and sid in OLYMPIC_AREA:
         better = [o for o in ranking(day, fh) if o != sid and _ORDER[day[o][fh]["level"]] < _ORDER["crowded"]]
         if better:
             out["alternatives_title"] = f"{fh}시대에 타야 한다면"
             out["alternatives"] = [{"station_id": o, "level": day[o][fh]["level"], "walk_min": None,
-                                    "message": f"{NAMES[o]} {slot_message(day[o][fh])}"} for o in better]
+                                    "message": slot_message(day[o][fh]), "uncertain": day[o][fh]["effect_unknown"]}
+                                   for o in better]
         out["notify_hour"] = f"{best_h:02d}" if best_h != fh else None
     return out
 
