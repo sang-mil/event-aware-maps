@@ -26,26 +26,14 @@ import {
 } from '@/components/ui';
 import { DEFAULT_ORIGIN_STATION, demoState, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track, viewTime } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
-import { KakaoWalkMap } from '@/components/KakaoWalkMap';
-
-/** 지도 위 배치 (지도 API를 정하기 전 개략도, 390px 화면 기준 좌표) */
-const MAP_STATIONS: { id: string; x: number; y: number }[] = [
-  { id: 'olympic_park', x: 214, y: 410 },
-  { id: 'bangi', x: 196, y: 452 },
-  { id: 'mongchontoseong', x: 150, y: 206 },
-  { id: 'sports_complex', x: 16, y: 390 },
-  { id: 'hanseong_baekje', x: 36, y: 474 },
-];
-const MAP_VENUES: { id: string; x: number; y: number }[] = [
-  { id: 'kspo_dome', x: 220, y: 236 },
-  { id: 'olympic_hall', x: 250, y: 284 },
-  { id: 'jamsil_baseball', x: 24, y: 280 },
-];
+import { KakaoOverviewMap, KakaoWalkMap } from '@/components/KakaoWalkMap';
 
 /** 04 길찾기 탭 · 지도 */
 export function MapScreen() {
+  const router = useRouter();
   const fc = useLoad(() => getForecast(today()), []);
   const ev = useLoad(() => getEvents(today()), []);
+  const walks = useLoad(getWalkRoutes, []);
   const { st, vn } = useRefs();
   const [sel, setSel] = useState<string | null>(null);
   if (fc.status === 'loading' || ev.status === 'loading') return <Loading />;
@@ -65,11 +53,20 @@ export function MapScreen() {
     <main className="screen" style={{ background: '#EEF0F3', minHeight: '100dvh', overflow: 'hidden', paddingBottom: 0 }}>
       <h1 className="sr">길찾기</h1>
       <div style={{ position: 'relative', height: 'calc(100dvh - 76px)', minHeight: 600 }}>
-        <svg aria-hidden="true" width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
-          <path d="M-20 430 C 120 410, 200 400, 420 470" stroke="#C9B6D6" strokeWidth="6" fill="none" />
-          <path d="M-20 520 C 100 470, 200 430, 420 380" stroke="#E2D7B4" strokeWidth="6" fill="none" />
-          <ellipse cx="260" cy="240" rx="120" ry="80" fill="#DCEBDD" />
-        </svg>
+        {walks.status === 'ok' ? (
+          <KakaoOverviewMap
+            places={walks.value.data.places}
+            routes={walks.value.data.routes}
+            selectedVenueId={sel}
+            stationMarkers={Object.fromEntries(Object.entries(st).map(([id, station]) => [id, { line: station.lines[0] ?? null, level: LEVEL[levelOf(id)].label }]))}
+            onSelectVenue={setSel}
+            onSelectStation={(id) => router.push(`/station/?id=${id}`)}
+          />
+        ) : (
+          <div role="status" className="card pad" style={{ position: 'absolute', inset: '16px 16px auto', zIndex: 1 }}>
+            {walks.status === 'loading' ? '지도 위치 정보를 불러오는 중이에요.' : '지도 위치 정보가 아직 발행되지 않았어요.'}
+          </div>
+        )}
         <div style={{ position: 'absolute', top: 16, left: 16, right: 16, display: 'flex', flexDirection: 'column', gap: 10, zIndex: 2 }}>
           <Link href="/search/" style={{ height: 52, borderRadius: 16, background: '#FFFFFF', display: 'flex', alignItems: 'center', gap: 10, padding: '0 16px', boxShadow: '0 2px 10px rgba(23,23,28,0.12)' }}>
             <Icon.search />
@@ -85,46 +82,6 @@ export function MapScreen() {
             ))}
           </div>
         </div>
-        <span style={{ position: 'absolute', left: 226, top: 182, fontSize: 13, fontWeight: 700, color: '#2E6B3D' }}>올림픽공원</span>
-        <span style={{ position: 'absolute', left: 28, top: 252, fontSize: 13, fontWeight: 700, color: '#4A4F5C' }}>잠실종합운동장</span>
-        <span role="note" style={{ position: 'absolute', right: 16, top: 130, fontSize: 12, fontWeight: 700, color: '#8A5300', background: '#FFF2D1', padding: '3px 8px', borderRadius: 8 }}>실제 지도 아님 · 위치 정보 없음 · 대략적인 배치 그림</span>
-        {MAP_VENUES.filter((v) => vn[v.id]).map((v) => {
-          const e = ev.value.data.events.find((x) => x.venue_id === v.id);
-          const game = e?.type === 'game';
-          return (
-            <button
-              key={v.id}
-              type="button"
-              aria-pressed={sel === v.id}
-              onClick={() => setSel(v.id)}
-              style={{ position: 'absolute', left: v.x, top: v.y, height: 44, padding: '0 12px 0 6px', borderRadius: 14, border: 0, background: '#FFFFFF', fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', boxShadow: `0 1px 3px rgba(23,23,28,0.16), inset 0 0 0 ${sel === v.id ? 2 : 0}px #17171C` }}
-            >
-              <span style={{ width: 32, height: 32, borderRadius: 9, background: game ? '#FFF0E6' : '#E8F0FB', color: game ? '#B54708' : '#1F5FAF', fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {game ? '경' : '공'}
-              </span>
-              {venueName(vn, v.id)}
-            </button>
-          );
-        })}
-        {MAP_STATIONS.map((p) => {
-          const s = st[p.id];
-          if (!s) return null;
-          const l = LEVEL[levelOf(p.id)];
-          return (
-            <Link
-              key={p.id}
-              href={`/station/?id=${p.id}`}
-              aria-label={`${s.name}, ${s.lines[0]}호선, ${l.label}`}
-              style={{ position: 'absolute', left: p.x, top: p.y, height: 32, padding: '0 4px', borderRadius: 16, background: '#FFFFFF', boxShadow: '0 1px 3px rgba(23,23,28,0.16)', display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}
-            >
-              <span aria-hidden="true" style={{ display: 'flex' }}>
-                <LineBadge line={s.lines[0]} size={24} />
-              </span>
-              <span style={{ fontSize: 13, fontWeight: 700 }}>{s.name}</span>
-              <span style={{ height: 24, padding: '0 8px', borderRadius: 12, fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', background: l.bg, color: l.fg }}>{l.label}</span>
-            </Link>
-          );
-        })}
         <section aria-live="polite" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: '#FFFFFF', borderRadius: '24px 24px 0 0', padding: '10px 20px 16px', display: 'flex', flexDirection: 'column', gap: 10, boxShadow: '0 -4px 16px rgba(23,23,28,0.08)', zIndex: 3 }}>
           <span className="grabber" aria-hidden="true" />
           {!sel ? (
