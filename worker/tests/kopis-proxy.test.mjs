@@ -26,7 +26,7 @@ test("KOPIS proxy validates the fixed endpoint and never returns the service key
   globalThis.fetch = async (input) => {
     calls += 1;
     const upstream = new URL(input);
-    assert.equal(upstream.origin, "http://www.kopis.or.kr");
+    assert.equal(upstream.origin, "https://kopis.or.kr");
     assert.equal(upstream.pathname, "/openApi/restful/pblprfr");
     assert.equal(upstream.searchParams.get("service"), env.KOPIS_API_KEY);
     assert.equal(upstream.searchParams.get("stdate"), "20261201");
