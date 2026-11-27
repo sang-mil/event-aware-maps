@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import { ReplayBanner } from '@/components/DataNote';
 import { ServiceWorker } from '@/components/ServiceWorker';
 // 글꼴: Pretendard (SIL OFL 1.1). 패키지에 든 글꼴 파일을 사이트와 함께 배포해요(외부 서버에 접속하지 않아요).
 // 한글을 글자 묶음별로 나눈 파일이라, 화면에 쓰인 글자 묶음만 그때그때 받아요.
@@ -32,7 +31,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body>
-        <ReplayBanner />
         {children}
         <ServiceWorker />
       </body>

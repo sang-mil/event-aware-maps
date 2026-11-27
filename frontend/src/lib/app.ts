@@ -17,7 +17,7 @@ function kstDate(): string {
   return `${part('year')}-${part('month')}-${part('day')}`;
 }
 
-/** 실제 데이터에서는 한국 날짜를 기본으로 쓰고, 사용자가 과거 재생을 고른 경우만 그 날짜를 사용해요. */
+/** 실제 데이터에서는 한국 날짜를 기본으로 쓰고, 주소에 지정된 과거 날짜만 사용해요. */
 export function today(): string {
   if (typeof window === 'undefined') return DEMO_TODAY;
   if (usingStaticData) return replayDate() ?? kstDate();
@@ -29,17 +29,12 @@ export function today(): string {
 export function replayDate(): string | null {
   if (!usingStaticData || typeof window === 'undefined') return null;
   const fromUrl = new URLSearchParams(window.location.search).get('replay');
-  if (fromUrl && isReplayDate(fromUrl)) {
-    setReplayDate(fromUrl);
-    return fromUrl;
-  }
-  const saved = store<string>('replayDate');
-  return saved && isReplayDate(saved) ? saved : null;
+  return fromUrl && isReplayDate(fromUrl) ? fromUrl : null;
 }
 
 /**
  * 2025 리플레이: 발행된 실제 데이터는 2025년 것뿐이라, 그 해의 하루를 '오늘'로 골라 다시 봐요.
- * 주소에 `?replay=2025-08-16` 을 붙이거나 화면 위 안내 띠에서 고르면 기기에만 저장돼요(서버로 보내지 않아요).
+ * 주소에 `?replay=2025-08-16` 을 붙이면 과거 자료를 다시 볼 수 있어요.
  */
 /**
  * 시안 미리보기 상태(?state=...)를 읽어요. 실제 데이터 모드에서는 시안용 예시가 보이지 않게 항상 null 이에요.
@@ -49,31 +44,6 @@ export const demoState = (q: { get(k: string): string | null }) => (usingStaticD
 export const REPLAY_MIN = '2025-01-01';
 export const REPLAY_MAX = '2025-12-31';
 const isReplayDate = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= REPLAY_MIN && d <= REPLAY_MAX;
-export function setReplayDate(date: string) {
-  if (isReplayDate(date)) store('replayDate', date);
-}
-export function clearReplayDate() {
-  try {
-    window.localStorage.removeItem('tumgil:replayDate');
-    const url = new URL(window.location.href);
-    url.searchParams.delete('replay');
-    window.history.replaceState({}, '', url);
-  } catch {
-    /* 저장소를 쓸 수 없어도 오늘 날짜로 계속 볼 수 있어요 */
-  }
-}
-/** 예전 버전이 저장한 2025년 날짜를 한 번 지워 새 기본값인 오늘 날짜로 전환해요. */
-export function resetLegacyReplayForLiveDefault(): boolean {
-  try {
-    const marker = 'tumgil:liveDateDefault';
-    if (window.localStorage.getItem(marker) === '1') return false;
-    window.localStorage.removeItem('tumgil:replayDate');
-    window.localStorage.setItem(marker, '1');
-    return true;
-  } catch {
-    return false;
-  }
-}
 /** 위치를 쓸 수 없을 때(E1)의 기준. "올림픽공원 기준으로 보여드려요" */
 export const DEFAULT_ORIGIN_STATION = 'olympic_park';
 /** 한국 시각 기준 지금(분). 시간 선택이 10분 단위라 10분 단위로 내려요. */
