@@ -265,7 +265,7 @@ export function Calendar() {
           <span style={{ fontSize: 17, fontWeight: 700 }}>
             {venue === 'all' ? '이날은 등록된 공연과 경기가 없어요' : `이날 ${venueName(vn, venue)}에는 일정이 없어요`}
           </span>
-          <span style={{ fontSize: 14, color: '#5F6573' }}>역 혼잡도 평소와 비슷할 거예요</span>
+          <span style={{ fontSize: 15, color: '#5F6573' }}>역 혼잡도 평소와 비슷할 거예요</span>
         </section>
       )}
       {!usingStaticData && <p className="note">지금은 2025년 8월 9일 일정만 들어 있어요.</p>}
@@ -465,7 +465,7 @@ export function EventScreen() {
           </span>
           <span style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
             <strong style={{ fontSize: 17 }}>{going ? '공연 끝나기 30분 전에 알려드릴게요' : '이 공연 보러 가세요?'}</strong>
-            <span style={{ fontSize: 14, lineHeight: 1.45, color: '#5F6573' }}>
+            <span style={{ fontSize: 15, lineHeight: 1.45, color: '#5F6573' }}>
               {going ? '그때 어느 역이 덜 붐비는지 함께 보내드려요. 다시 누르면 취소돼요' : '끝나기 30분 전, 덜 붐비는 역을 알림으로 받아요'}
             </span>
           </span>
@@ -479,7 +479,7 @@ export function EventScreen() {
             </span>
             <span style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
               <strong style={{ fontSize: 17 }}>{denied ? '알림이 꺼져 있어요' : '이 공연 보러 가세요?'}</strong>
-              <span style={{ fontSize: 14, lineHeight: 1.45, color: '#5F6573' }}>
+              <span style={{ fontSize: 15, lineHeight: 1.45, color: '#5F6573' }}>
                 {denied
                   ? '브라우저 설정에서 알림을 켜거나, 캘린더에 넣어 두면 끝나기 30분 전에 알려드려요'
                   : notReady
@@ -506,7 +506,7 @@ export function EventScreen() {
 
       <div className="section-title" style={{ paddingRight: 24 }}>
         <h2>공연이 끝나면 주변 역은</h2>
-        <span className="t" style={{ fontSize: 14, color: '#5F6573' }}>
+        <span className="t" style={{ fontSize: 15, color: '#5F6573' }}>
           {block.hour_label}
         </span>
       </div>
@@ -538,7 +538,7 @@ export function EventScreen() {
             <LevelBadge level={s.level} />
           </Link>
         ))}
-        {e.after_end.no_data_message && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 14, color: '#5F6573' }}>{e.after_end.no_data_message}</p>}
+        {e.after_end.no_data_message && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 15, color: '#5F6573' }}>{e.after_end.no_data_message}</p>}
       </section>
 
       <SectionTitle>같은 날 송파 일정</SectionTitle>
@@ -687,7 +687,7 @@ export function GameScreen() {
             <LevelBadge level={s.level} />
           </Link>
         ))}
-        {e.after_end.no_data_message && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 14, color: '#5F6573' }}>{e.after_end.no_data_message}</p>}
+        {e.after_end.no_data_message && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 15, color: '#5F6573' }}>{e.after_end.no_data_message}</p>}
       </section>
       {e.crossing_note && (
         <Link href={`/station/?id=${e.crossing_note.station_id}`} className="card row" style={{ marginTop: 12, width: 'auto' }}>

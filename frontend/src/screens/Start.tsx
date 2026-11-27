@@ -71,7 +71,7 @@ export function Onboarding() {
             </span>
             <span style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <strong style={{ fontSize: 16 }}>{s.title}</strong>
-              <span style={{ fontSize: 14, lineHeight: 1.5, color: '#5F6573' }}>{s.sub}</span>
+              <span style={{ fontSize: 15, lineHeight: 1.5, color: '#5F6573' }}>{s.sub}</span>
             </span>
           </li>
         ))}
@@ -157,14 +157,14 @@ export function Install({ from, event }: { from: string | null; event: string | 
             </span>
             <span style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <strong style={{ fontSize: 17 }}>{t}</strong>
-              <span style={{ fontSize: 14, lineHeight: 1.5, color: '#5F6573' }}>{s}</span>
+              <span style={{ fontSize: 15, lineHeight: 1.5, color: '#5F6573' }}>{s}</span>
             </span>
           </li>
         ))}
       </ol>
       <section className="card pad" style={{ marginTop: 12, gap: 4 }}>
         <strong style={{ fontSize: 17 }}>안드로이드와 PC는 바로 돼요</strong>
-        <span style={{ fontSize: 14, lineHeight: 1.5, color: '#5F6573' }}>브라우저에서 알림 허용만 누르면 받을 수 있어요</span>
+        <span style={{ fontSize: 15, lineHeight: 1.5, color: '#5F6573' }}>브라우저에서 알림 허용만 누르면 받을 수 있어요</span>
       </section>
       <p className="note">iOS 16.4 이상에서 지원돼요. 추가하기 어렵다면 공연 상세의 ‘캘린더에 추가하기’를 써 주세요.</p>
     </main>

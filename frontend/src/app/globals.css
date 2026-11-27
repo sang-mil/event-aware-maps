@@ -45,7 +45,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 .h1 { margin: 0; font-size: 24px; line-height: 1.4; font-weight: 700; }
 .h1.big { font-size: 30px; line-height: 1.35; }
 .lead { margin: 0; font-size: 16px; line-height: 1.6; color: var(--ink-2); }
-.note { margin: 0; padding: 14px 24px; font-size: 13px; line-height: 1.55; color: var(--ink-3); }
+.note { margin: 0; padding: 14px 24px; font-size: 14px; line-height: 1.55; color: var(--ink-3); }
 .section-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 28px 12px 10px 24px; min-height: 44px; }
 .section-title h2 { margin: 0; font-size: 17px; font-weight: 700; }
 .section-title a, .section-title .side { min-height: 44px; padding: 0 12px; display: flex; align-items: center; font-size: 14px; color: var(--ink-3); }
@@ -56,8 +56,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 .row { display: flex; align-items: center; gap: 14px; min-height: 68px; padding: 8px 20px; color: var(--ink); width: 100%; border: 0; background: transparent; text-align: left; font: inherit; }
 .row .main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .row .title { font-size: 17px; font-weight: 700; }
-.row .sub { font-size: 14px; line-height: 1.45; color: var(--ink-3); }
-.row .best { color: var(--accent); font-weight: 700; }
+.row .sub { font-size: 15px; line-height: 1.45; color: var(--ink-3); }
+.row .best { color: var(--accent); font-weight: 700; white-space: nowrap; }
 .line { flex: none; border-radius: 50%; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
 .badge { flex: none; white-space: nowrap; height: 28px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; }
 .kind { flex: none; border-radius: 12px; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
@@ -137,7 +137,9 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 @keyframes rise { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
 
 /* 2025 리플레이 안내 띠 · 데이터 출처 */
-.replay-banner { max-width: var(--max); margin: 0 auto; padding: 6px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; color: #4A4F5C; background: #EEF0F3; }
+.replay-banner { max-width: var(--max); margin: 0 auto; padding: 6px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 14px; color: #4A4F5C; background: #EEF0F3; }
 .replay-banner input { font: inherit; font-size: 13px; border: 1px solid #D5D8DE; border-radius: 8px; padding: 2px 6px; background: #FFFFFF; color: inherit; }
-.source-note { font-size: 12px; }
+.source-note { font-size: 13px; }
 .na { color: var(--ink-3); font-weight: 400; }
+
+/* 작은 회색 글씨는 15px 이상으로 둬요. 윈도우에서 13~14px 한글이 거칠게 보여서 키웠어요. */

@@ -327,7 +327,7 @@ export function TimeSheet(props: {
     <Sheet open={props.open} onClose={props.onClose} title={props.title}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{props.title}</h2>
-        <span style={{ fontSize: 14, color: '#5F6573' }}>{props.sub}</span>
+        <span style={{ fontSize: 15, color: '#5F6573' }}>{props.sub}</span>
       </div>
       <div role="group" aria-label={props.title} className="time-picker">
         <div className="col">
@@ -359,7 +359,7 @@ export function TimeSheet(props: {
           </button>
         ))}
       </div>
-      <span style={{ fontSize: 14, lineHeight: 1.5, color: '#5F6573' }}>{props.hint(hh)}</span>
+      <span style={{ fontSize: 15, lineHeight: 1.5, color: '#5F6573' }}>{props.hint(hh)}</span>
       <button type="button" className="btn primary" onClick={() => props.onConfirm(draft)}>
         {props.confirmLabel(draft, draft === props.now)}
       </button>

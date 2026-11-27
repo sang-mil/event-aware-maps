@@ -86,7 +86,7 @@ function Doc({ title, intro, children }: { title: string; intro: string; childre
         <p className="lead" style={{ fontSize: 15 }}>
           {intro}
         </p>
-        <span style={{ fontSize: 14, color: '#5F6573' }}>
+        <span style={{ fontSize: 15, color: '#5F6573' }}>
           시행일 <Ph />
         </span>
       </section>

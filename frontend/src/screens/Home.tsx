@@ -103,7 +103,7 @@ export function Home() {
       {noLoc && (
         <div role="status" style={{ margin: '4px 16px 0', background: '#FFFFFF', borderRadius: 16, padding: '10px 8px 10px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
           <Icon.pin />
-          <span style={{ flex: 1, fontSize: 14, lineHeight: 1.45, color: '#4A4F5C' }}>
+          <span style={{ flex: 1, fontSize: 15, lineHeight: 1.45, color: '#4A4F5C' }}>
             위치 권한이 꺼져 있어 <strong style={{ color: '#17171C' }}>올림픽공원 기준</strong>으로 보여드려요
           </span>
           <button type="button" className="chip" style={{ fontSize: 14, padding: '0 12px' }} onClick={async () => setLocOn(await requestLocation())}>
@@ -123,7 +123,7 @@ export function Home() {
           <Icon.down />
         </button>
         {fallbackNote && (
-          <span role="status" style={{ fontSize: 14, lineHeight: 1.5, color: '#5F6573', marginTop: -6 }}>
+          <span role="status" style={{ fontSize: 15, lineHeight: 1.5, color: '#5F6573', marginTop: -6 }}>
             {fallbackNote}
           </span>
         )}
@@ -254,7 +254,7 @@ function FeedbackSheet({ fb, onClose }: { fb: PendingFeedback; onClose: () => vo
         <>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{fb.station_name}, 실제로 어땠나요?</h2>
-            <span style={{ fontSize: 14, lineHeight: 1.5, color: '#5F6573' }}>
+            <span style={{ fontSize: 15, lineHeight: 1.5, color: '#5F6573' }}>
               {fb.event_title ? `어제 ${fb.event_title}이 끝나고 ` : ''}
               {fb.station_name}에서 타셨어요. 알려 주시면 다음 예상이 더 정확해져요
             </span>

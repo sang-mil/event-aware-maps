@@ -130,7 +130,7 @@ export function MapScreen() {
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{best && st[best] ? `${st[best].name}이 가장 덜 붐빌 거예요` : '주변 역 예상이에요'}</h2>
-                <span style={{ fontSize: 14, color: '#5F6573' }}>
+                <span style={{ fontSize: 15, color: '#5F6573' }}>
                   {view.fallback ? `지금은 예상이 없는 시간이라, 행사가 끝나는 ${Number(hour)}시대 예상이에요` : `${Number(hour)}시대에 출발할 때의 예상이에요`}
                 </span>
               </div>
@@ -167,7 +167,7 @@ export function MapScreen() {
                     </span>
                   )}
                   <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{selEvent?.title ?? venueName(vn, sel)}</h2>
-                  <span style={{ fontSize: 14, color: '#5F6573' }}>
+                  <span style={{ fontSize: 15, color: '#5F6573' }}>
                     {venueName(vn, sel)}, 가까운 역 {st[selVenue?.nearby_stations[0]?.station_id ?? '']?.name ?? '정보 없음'}
                   </span>
                 </div>
@@ -261,13 +261,13 @@ export function Search() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ height: 52, borderRadius: 14, background: '#F4F5F7', display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px' }}>
-              <label htmlFor="from" style={{ flex: 'none', width: 30, fontSize: 14, fontWeight: 700, color: '#5F6573' }}>
+              <label htmlFor="from" style={{ flex: 'none', width: 30, fontSize: 15, fontWeight: 700, color: '#5F6573' }}>
                 출발
               </label>
               <input id="from" type="text" value={fromLabel} readOnly style={{ flex: 1, minWidth: 0, border: 0, outline: 'none', fontSize: 16, fontWeight: 700, background: 'transparent' }} />
             </div>
             <div style={{ height: 52, borderRadius: 14, background: '#F4F5F7', display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px' }}>
-              <label htmlFor="to" style={{ flex: 'none', width: 30, fontSize: 14, fontWeight: 700, color: '#5F6573' }}>
+              <label htmlFor="to" style={{ flex: 'none', width: 30, fontSize: 15, fontWeight: 700, color: '#5F6573' }}>
                 도착
               </label>
               <input id="to" type="text" value={to} onChange={(e) => setTo(e.target.value)} placeholder="역이나 장소 검색" style={{ flex: 1, minWidth: 0, border: 0, outline: 'none', fontSize: 16, fontWeight: 500, background: 'transparent' }} />
@@ -295,7 +295,7 @@ export function Search() {
           <button type="button" onClick={() => setSheet(true)} aria-haspopup="dialog" aria-label={`출발 시간 바꾸기, 지금은 ${when === now ? '지금 출발' : `${fmtMin(when)} 출발`}`} className="chip">
             {when === now ? '지금 출발' : `${fmtMin(when)} 출발`}
           </button>
-          <span style={{ fontSize: 14, color: '#5F6573' }}>누르면 출발 시간을 바꿀 수 있어요</span>
+          <span style={{ fontSize: 15, color: '#5F6573' }}>누르면 출발 시간을 바꿀 수 있어요</span>
         </div>
       </form>
 
@@ -328,7 +328,7 @@ export function Search() {
           ))}
           {!SEARCH_VENUES.some((id) => vn[id]) && <span className="na">공연장 정보 없음</span>}
         </div>
-        <span style={{ fontSize: 14, color: '#5F6573' }}>아직 공연장 안이라면 출발지를 공연장으로 바꿔 보세요</span>
+        <span style={{ fontSize: 15, color: '#5F6573' }}>아직 공연장 안이라면 출발지를 공연장으로 바꿔 보세요</span>
       </section>
       <BottomBar>
         <button type="button" className="btn primary" onClick={() => go(matches[0]?.id ?? to)}>
@@ -436,19 +436,19 @@ export function Compare() {
             <span style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
               <span style={{ fontSize: 14, fontWeight: 700, color: '#4E3DBC' }}>추천</span>
               <span style={{ fontSize: 21, fontWeight: 700 }}>{rec.title}</span>
-              <span style={{ fontSize: 14, color: '#5F6573' }}>
+              <span style={{ fontSize: 15, color: '#5F6573' }}>
                 {rec.subtitle}, <Walk min={rec.walk_min} />
               </span>
             </span>
             <LevelBadge level={rec.level} />
           </span>
           <span style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 14, color: '#5F6573' }}>{rec.compare_message}</span>
+            <span style={{ fontSize: 15, color: '#5F6573' }}>{rec.compare_message}</span>
             <span className="t" style={{ fontSize: 24, fontWeight: 800 }}>
               {rec.expected != null ? (
                 <>
                   {fmtNum(rec.expected)}
-                  <span style={{ fontSize: 14, fontWeight: 500, color: '#5F6573' }}>명 예상</span>
+                  <span style={{ fontSize: 15, fontWeight: 500, color: '#5F6573' }}>명 예상</span>
                 </>
               ) : (
                 <span className="na" style={{ fontSize: 14 }}>
@@ -537,7 +537,7 @@ export function RouteScreen() {
         </p>
         <span style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
           <LevelBadge level={r.level} />
-          <span style={{ fontSize: 14, color: '#5F6573' }}>{r.message}</span>
+          <span style={{ fontSize: 15, color: '#5F6573' }}>{r.message}</span>
         </span>
       </section>
       <section className="card" style={{ marginTop: 12, display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
@@ -570,7 +570,7 @@ export function RouteScreen() {
               </div>
               <div style={{ paddingBottom: last ? 0 : 18, display: 'flex', flexDirection: 'column', gap: 3 }}>
                 <span style={{ fontSize: 17, fontWeight: 700 }}>{s.type === 'start' ? `${originName}에서 출발` : s.title}</span>
-                <span style={{ fontSize: 14, lineHeight: 1.5, color: '#5F6573' }}>
+                <span style={{ fontSize: 15, lineHeight: 1.5, color: '#5F6573' }}>
                   {s.type === 'start' && hourLabel}
                   {s.type === 'walk' && (
                     <>
@@ -601,11 +601,11 @@ export function RouteScreen() {
             </span>
           </div>
         ))}
-        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: '#5F6573' }}>{r.compare.note}</p>
+        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: '#5F6573' }}>{r.compare.note}</p>
       </section>
       <BottomBar column>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 44, padding: '0 4px' }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color: '#4A4F5C' }}>지도 앱에서 순서대로 열어요</span>
+          <span style={{ fontSize: 15, fontWeight: 700, color: '#4A4F5C' }}>지도 앱에서 순서대로 열어요</span>
           <button type="button" className="chip" style={{ fontSize: 14, padding: '0 12px' }} aria-label={`지도 앱 바꾸기, 지금은 ${appName}`} onClick={() => setApp(app === 'naver' ? 'kakao' : 'naver')}>
             {appName}
           </button>

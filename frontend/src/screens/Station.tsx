@@ -135,7 +135,7 @@ export function Station() {
                 <span className="bar" aria-hidden="true">
                   <span style={{ width: `${Math.round(((s.expected ?? 0) / max) * 100)}%`, background: LEVEL[s.level].fg }} />
                 </span>
-                <span style={{ fontSize: 14, color: '#5F6573' }}>
+                <span style={{ fontSize: 15, color: '#5F6573' }}>
                   {s.message} <span className="sr">{LEVEL[s.level].label}</span>
                   {s.recommended && <b style={{ marginLeft: 6, color: '#4E3DBC' }}>추천</b>}
                 </span>

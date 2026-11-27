@@ -216,7 +216,7 @@ export function Notifications() {
                 <span className="t">{when}</span>
               </span>
               <strong style={{ fontSize: 15 }}>{title}</strong>
-              <span style={{ fontSize: 14, lineHeight: 1.45, color: '#4A4F5C' }}>{body}</span>
+              <span style={{ fontSize: 15, lineHeight: 1.45, color: '#4A4F5C' }}>{body}</span>
             </span>
           </Link>
           <span style={{ padding: '0 14px 6px', fontSize: 12, lineHeight: 1.5, color: '#C9CCD6' }}>{who}</span>
