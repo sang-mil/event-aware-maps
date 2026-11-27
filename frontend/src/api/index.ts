@@ -27,6 +27,7 @@ export const getStations = () => getJson<Station[]>('/stations', { mock: 'statio
 export const getVenues = () => getJson<Venue[]>('/venues', { mock: 'venues.json' });
 
 const isNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+const isCoordinate = (v: unknown): v is [number, number] => Array.isArray(v) && isNum(v[0]) && isNum(v[1]);
 
 /**
  * walk-routes.json 형식 확인. 최상위 places·routes 가 배열이 아니면 null(읽지 못함)을 돌려줘요.
@@ -38,9 +39,11 @@ export function readWalkRoutes(raw: unknown): WalkRoutes | null {
   const places = d.places.filter((p) => p && typeof p.id === 'string' && isNum(p.x) && isNum(p.y));
   const routes = d.routes
     .filter((r) => r && typeof r.venue_id === 'string' && typeof r.station_id === 'string' && Array.isArray(r.path))
-    .map((r) => ({ ...r, path: r.path.filter((pt) => Array.isArray(pt) && isNum(pt[0]) && isNum(pt[1])) }));
+    .map((r) => ({ ...r, path: r.path.filter(isCoordinate) }));
   const stationRoutes = Array.isArray(d.station_routes)
-    ? d.station_routes.filter((r) => r && typeof r.from_station_id === 'string' && typeof r.to_station_id === 'string')
+    ? d.station_routes
+        .filter((r) => r && typeof r.from_station_id === 'string' && typeof r.to_station_id === 'string')
+        .map((r) => ({ ...r, path: Array.isArray(r.path) ? r.path.filter(isCoordinate) : undefined }))
     : [];
   return { ...(d as WalkRoutes), places, routes, station_routes: stationRoutes };
 }

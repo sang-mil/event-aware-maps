@@ -26,8 +26,8 @@ import {
   UncertainMark,
   Walk,
 } from '@/components/ui';
-import { DEMO_QUIET_DAY, dateLabel, demoState, LEVEL, nowMin, today, viewTime, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
-import { useLoad, useRefs, type LoadState } from '@/lib/useLoad';
+import { DEFAULT_ORIGIN_STATION, DEMO_QUIET_DAY, dateLabel, demoState, LEVEL, nowMin, today, viewTime, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
+import { useLoad, useRefs, useStationWalkMin, type LoadState } from '@/lib/useLoad';
 
 export interface PendingFeedback {
   station_id: string;
@@ -50,6 +50,7 @@ export function Home() {
   const olympicCrowd = useLoad(() => getRealtimeCrowd('olympic-park'), []);
   const jamsilCrowd = useLoad(() => getRealtimeCrowd('jamsil'), []);
   const { st, vn } = useRefs();
+  const stationWalkMin = useStationWalkMin();
   const locGranted = useLocationGranted();
   const [locOn, setLocOn] = useState(false);
   const noLoc = demo === 'noLocation' || (locGranted === false && !locOn && demo !== 'feedback');
@@ -131,7 +132,7 @@ export function Home() {
           </span>
         )}
         {!f.has_event ? (
-          <Headline highlight={null} text={summary?.text ?? '오늘은 큰 행사가 없어 주변 역이 평소와 비슷할 거예요'} />
+          <Headline highlight={null} text={summary?.text ?? '이 시간대 혼잡 예상 정보가 없어요'} />
         ) : summary && supported ? (
           <Headline highlight={summary.highlight} text={summary.text} />
         ) : (
@@ -150,7 +151,7 @@ export function Home() {
             <span className="main">
               <span className="title">{stationName(st, s.id)}</span>
               <span className="sub">
-                <Walk min={null} />, {s.best && <b className="best">가장 덜 붐빔</b>}
+                <Walk min={stationWalkMin(DEFAULT_ORIGIN_STATION, s.id)} />, {s.best && <b className="best">가장 덜 붐빔</b>}
                 {!s.best && s.note}
                 <UncertainMark show={s.uncertain} />
               </span>
