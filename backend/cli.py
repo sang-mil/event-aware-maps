@@ -7,6 +7,7 @@
     python backend/cli.py export-seed                      # DB → 승하차 요약 backend/data/seed/ridership_daily.csv.gz
     python backend/cli.py build --out 폴더 [--as-of 시각]   # 행사 반영·혼잡 계산 → stations·venues·calendar·events·event·forecast·station·compare·route JSON 검증 후 발행
     python backend/cli.py backtest                         # 공연 날마다 그날을 빼고 예측해 실제와 비교 (혼잡 단계 적중률)
+    python backend/cli.py recommend-backtest               # 추천 1순위와 실제 승차 결과 비교
     python backend/cli.py publish --src 폴더 --out 폴더      # src 의 JSON을 검증해 out 에 발행
 
 collect 는 인증키를 환경변수에서 읽고(backend/.env 파일이 있으면 그것도 읽음, 형식은 backend/env.example), 결과를 backend/data/raw/ 에 저장한다(이 폴더는 git에 올라가지 않음).
@@ -28,7 +29,8 @@ sys.path.insert(0, str(BACKEND))
 from collectors import CollectError, kspo, seoul_subway  # noqa: E402
 from normalize import db as normalize_db, seed as normalize_seed  # noqa: E402
 from congestion import anomalies as cg_anomalies, backtest as cg_backtest, load as cg_load, model as cg_model, outputs as cg_outputs  # noqa: E402
-from recommend import compare as rc_compare  # noqa: E402
+from recommend import backtest as rc_backtest, compare as rc_compare  # noqa: E402
+from maps import walk_routes  # noqa: E402
 import reference  # noqa: E402
 from events import detail as ev_detail, detect as ev_detect, load as ev_load, outputs as ev_outputs  # noqa: E402
 from publish import PublishError, publish, wrap  # noqa: E402
@@ -185,9 +187,26 @@ def cmd_backtest(db_path: Path) -> int:
     print(f"'혼잡' 예측이 맞은 비율 {pct(r['crowded_precision'])}, 실제 혼잡을 미리 잡은 비율 {pct(r['crowded_recall'])}")
     for sid, (acc, naive, n) in r["by_station"].items():
         print(f"  {sid}: {pct(acc)} (기준선만 {pct(naive)}, {n}건)")
+    for group, label in (("overlap", "공연 겹침"), ("single", "단독 공연")):
+        stats = r["by_overlap"][group]
+        print(f"{label}: {stats['days']}일, {stats['cases']}건, 적중 {pct(stats['accuracy'])}, 혼잡 재현 {pct(stats['crowded_recall'])}, 인원 오차 중앙값 {stats['median_abs_error']:.0f}명")
     print(f"예상 인원 오차 중앙값 {r['median_abs_error']:.0f}명")
     print("실제→예측: " + ", ".join(f"{LEVEL_KO[a]}→{LEVEL_KO[p]} {n}" for (a, p), n in sorted(r["confusion"].items())))
     print(f"참고: leave-one-out 적중률 {pct(loo['accuracy'])} (각 날짜를 제외한 과거·미래 자료를 함께 학습하므로 운영 신뢰도 지표로 쓰지 않음)")
+    return 0
+
+
+def cmd_recommend_backtest(db_path: Path) -> int:
+    if not db_path.is_file():
+        print(f"DB가 없습니다. 먼저 build-db 를 실행하세요: {db_path}")
+        return 1
+    result = rc_backtest.run(*cg_load.load_inputs(db_path))
+    if not result["cases"]:
+        print("추천 후보와 실제 승차를 비교할 수 있는 사례가 없습니다.")
+        return 1
+    print(f"추천 시간순 검증: {result['cases']}건")
+    print(f"추천 1순위가 실제로 가장 덜 붐빈 선택지와 일치: {result['accuracy']:.0%} ({result['correct']}/{result['cases']})")
+    print("예측된 1순위 선택지: " + ", ".join(f"{key} {count}건" for key, count in sorted(result["recommended_options"].items())))
     return 0
 
 
@@ -248,6 +267,8 @@ def main(argv: list[str] | None = None) -> int:
     bd.add_argument("--as-of", type=datetime.fromisoformat, default=None, help="기준 시각 (예: 2025-08-09T18:00:00+09:00)")
     bt = sub.add_parser("backtest", help="혼잡 단계 적중률 검증")
     bt.add_argument("--db", type=Path, default=DB_PATH)
+    rb = sub.add_parser("recommend-backtest", help="추천 1순위를 실제 승차로 검증")
+    rb.add_argument("--db", type=Path, default=DB_PATH)
     an = sub.add_parser("anomalies", help="공연 기록 없는 혼잡 후보 찾기")
     an.add_argument("--db", type=Path, default=DB_PATH)
     an.add_argument("--min-ratio", type=float, default=1.5, help="평소 기준선 대비 후보 비율 (기본 1.5)")
@@ -255,12 +276,16 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("publish", help="검증 후 발행")
     p.add_argument("--src", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
+    wr = sub.add_parser("precompute-walk-routes", help="카카오 지도에서 공연장·역 도보 경로를 계산")
+    wr.add_argument("--out", type=Path, default=Path("site_data/walk-routes.json"))
     args = parser.parse_args(argv)
 
     if args.command == "collect":
         return cmd_collect(args.source, args.month, args.raw_dir, args.page_size)
     if args.command == "backtest":
         return cmd_backtest(args.db)
+    if args.command == "recommend-backtest":
+        return cmd_recommend_backtest(args.db)
     if args.command == "anomalies":
         return cmd_anomalies(args.db, args.min_ratio, args.as_of)
     if args.command == "build":
@@ -275,6 +300,14 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_export_seed(args.db, args.out)
     if args.command == "publish":
         return cmd_publish(args.src, args.out)
+    if args.command == "precompute-walk-routes":
+        try:
+            count = walk_routes.write(os.environ.get("KAKAO_REST_API_KEY", ""), args.out)
+        except walk_routes.KakaoMapError as e:
+            print(e)
+            return 1
+        print(f"공연장·역 조합 {count}개의 도보 경로 데이터를 만들었습니다: {args.out}")
+        return 0
     print(f"'{args.command}' 는 아직 만들지 않았습니다 (2단계 다음 작업).")
     return 2
 

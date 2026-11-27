@@ -11,6 +11,7 @@ import type {
   Station,
   StationForecast,
   Venue,
+  WalkRoutes,
 } from './types';
 
 export * from './types';
@@ -24,6 +25,13 @@ export type { ApiErrorCode, Loaded } from './client';
 // 정적 파일 모드에서는 목업을 절대 대신 쓰지 않아요. 파일이 없으면 화면이 '정보 없음'으로 보여줘요.
 export const getStations = () => getJson<Station[]>('/stations', { mock: 'stations.json' });
 export const getVenues = () => getJson<Venue[]>('/venues', { mock: 'venues.json' });
+
+/** 사전 발행한 공연장→역 도보 경로. 파일이 없으면 없는 데이터로 처리합니다. */
+export const getWalkRoutes = () => getJson<WalkRoutes>('/walk-routes', {
+  mock: 'walk-routes.json',
+  data: 'walk-routes.json',
+  forceStatic: true,
+});
 
 /** GET /events?date= */
 export const getEvents = (date: string) =>

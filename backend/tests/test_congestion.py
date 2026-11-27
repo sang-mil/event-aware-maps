@@ -115,6 +115,14 @@ def test_backtest_as_of_never_uses_records_after_the_prediction_date():
     assert before["last_scored_day"] == after["last_scored_day"]
     assert before["accuracy"] == after["accuracy"]
     assert before["median_abs_error"] == after["median_abs_error"]
+    assert before["by_overlap"]["overlap"]["cases"] == 0
+    assert before["by_overlap"]["single"]["cases"] == before["cases"]
+
+
+def test_overlapping_exit_groups_match_the_model_exclusion_window():
+    assert backtest.has_overlapping_exits([(20, 1000), (23, 500)])
+    assert not backtest.has_overlapping_exits([(20, 1000), (24, 500)])
+    assert backtest.has_overlapping_exits([(20, 1000), (20, None)])
 
 
 def test_non_event_anomalies_find_spikes_without_calling_them_events():

@@ -85,6 +85,8 @@ export interface JsonFiles<T> {
   empty?: () => T;
   /** 정적 파일에서 파일이 없을 때(404) '찾을 수 없음' 대신 '지원하지 않는 조건'으로 보여줄지 */
   missingIsUnsupported?: boolean;
+  /** This published artifact is served from DATA_BASE even when an API server is configured. */
+  forceStatic?: boolean;
 }
 
 /**
@@ -93,10 +95,12 @@ export interface JsonFiles<T> {
  */
 export async function getJson<T>(apiPath: string, files: JsonFiles<T>): Promise<Loaded<T>> {
   const dataFile = files.data === undefined ? files.mock : files.data;
-  if (usingStaticData && dataFile === null) throw new ApiError('unsupported', null);
-  const fromData = usingStaticData;
-  const url = usingApi ? `${API_BASE}${apiPath}` : fromData ? `${DATA_BASE}/${dataFile}` : `${BASE}/mock/${files.mock}`;
-  const key = usingApi ? apiPath : fromData ? `data:${dataFile}` : files.mock;
+  const fromData = usingStaticData || !!files.forceStatic;
+  if (files.forceStatic && !DATA_BASE) throw new ApiError('not_found', null);
+  if (fromData && dataFile === null) throw new ApiError('unsupported', null);
+  const useApi = usingApi && !files.forceStatic;
+  const url = useApi ? `${API_BASE}${apiPath}` : fromData ? `${DATA_BASE}/${dataFile}` : `${BASE}/mock/${files.mock}`;
+  const key = useApi ? apiPath : fromData ? `data:${dataFile}` : files.mock;
   let res: Response;
   try {
     res = await fetch(url, { cache: 'no-store' });
@@ -104,7 +108,7 @@ export async function getJson<T>(apiPath: string, files: JsonFiles<T>): Promise<
     return fromCacheOrThrow<T>(key);
   }
   if (res.status === 404) {
-    if (!usingApi && files.empty) return { data: files.empty(), updatedAt: new Date().toISOString(), fromCache: false };
+    if (!useApi && files.empty) return { data: files.empty(), updatedAt: new Date().toISOString(), fromCache: false };
     if (fromData && files.missingIsUnsupported) throw new ApiError('unsupported', null);
     throw new ApiError('not_found', null);
   }
