@@ -51,6 +51,8 @@ export function MapScreen() {
   const selVenue = sel ? vn[sel] : undefined;
   // 형식이 예상과 다르면 null → 화면 전체를 죽이지 않고 '지도 위치 정보를 읽지 못했어요'
   const walkData = walks.status === 'ok' ? readWalkRoutes(walks.value.data) : null;
+  const stationWalkMin = (stationId: string) =>
+    walkData?.station_routes?.find((r) => r.from_station_id === DEFAULT_ORIGIN_STATION && r.to_station_id === stationId)?.walk_min ?? null;
 
   return (
     <main className="screen" style={{ background: '#EEF0F3', minHeight: '100dvh', overflow: 'hidden', paddingBottom: 0 }}>
@@ -116,7 +118,7 @@ export function MapScreen() {
                         {stationName(st, id)}
                       </span>
                       <span className="sub">
-                        <Walk min={null} />
+                        <Walk min={stationWalkMin(id)} />
                         {id === best && (
                           <>
                             , <b className="best">가장 덜 붐빔</b>
