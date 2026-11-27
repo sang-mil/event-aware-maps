@@ -14,7 +14,9 @@ const plex = IBM_Plex_Sans_KR({
   preload: false,
   display: 'swap',
   variable: '--font-plex',
-  fallback: ['system-ui', '-apple-system', 'sans-serif'],
+  // 글꼴을 받기 전이나 못 받았을 때 쓸 한글 글꼴. 윈도우의 system-ui(Segoe UI)에는 한글이 없어서
+  // 맑은 고딕을 먼저 지정해 글자마다 다른 글꼴이 섞여 보이지 않게 해요.
+  fallback: ['Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', 'Noto Sans KR', 'system-ui', 'sans-serif'],
 });
 
 export const metadata: Metadata = {

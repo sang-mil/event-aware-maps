@@ -25,7 +25,7 @@ import {
   TimeSheet,
   Walk,
 } from '@/components/ui';
-import { DEMO_QUIET_DAY, dateLabel, demoState, LEVEL, nowMin, today, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
+import { DEMO_QUIET_DAY, dateLabel, demoState, LEVEL, nowMin, today, viewTime, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 export interface PendingFeedback {
@@ -52,7 +52,7 @@ export function Home() {
   const noLoc = demo === 'noLocation' || (locGranted === false && !locOn && demo !== 'feedback');
 
   const now = nowMin();
-  const [at, setAt] = useState(now);
+  const [picked, setPicked] = useState<number | null>(null); // 사용자가 시간 시트에서 고른 시각
   const [sheet, setSheet] = useState(demo === 'time');
   const [fb, setFb] = useState<PendingFeedback | null>(null);
   useEffect(() => {
@@ -70,6 +70,9 @@ export function Home() {
   if (events.status === 'error') return <LoadError code={events.code} lastUpdatedAt={events.lastUpdatedAt} onRetry={events.retry} />;
 
   const f = forecast.value.data;
+  const view = viewTime(now, f);
+  const at = picked ?? view.min;
+  const showingFallback = picked === null && view.fallback;
   const hour = String(Math.floor(at / 60)).padStart(2, '0');
   const supported = f.supported_hours.includes(hour);
   const summary = f.summaries[hour];
@@ -86,6 +89,7 @@ export function Home() {
   const ev = events.value.data;
   const hourNum = Number(hour);
   const timeLabel = at === now ? `지금 ${fmtMin(at)}` : `오늘 ${fmtMin(at)}`;
+  const fallbackNote = showingFallback ? `지금(${fmtMin(now)})은 예상이 없는 시간이라, 행사가 끝나는 ${hourNum}시대를 보여드려요` : null;
 
   return (
     <main className="screen with-tabs">
@@ -118,6 +122,11 @@ export function Home() {
           <span className="t">{timeLabel}</span> 예상
           <Icon.down />
         </button>
+        {fallbackNote && (
+          <span role="status" style={{ fontSize: 14, lineHeight: 1.5, color: '#5F6573', marginTop: -6 }}>
+            {fallbackNote}
+          </span>
+        )}
         {!f.has_event ? (
           <Headline highlight={null} text={summary?.text ?? '오늘은 큰 행사가 없어 주변 역이 평소와 비슷할 거예요'} />
         ) : summary && supported ? (
@@ -210,7 +219,7 @@ export function Home() {
         hint={(h) => (f.supported_hours.includes(String(h).padStart(2, '0')) ? `${h}시대 혼잡 예상을 보여드려요` : `${h}시대 혼잡 정보는 아직 준비 중이에요`)}
         confirmLabel={(v, isNow) => (isNow ? '지금 기준으로 보기' : `${fmtMin(v)} 기준으로 보기`)}
         onConfirm={(v) => {
-          setAt(v);
+          setPicked(v);
           setSheet(false);
           track('time_set', { screen: 'home', time: fmtMin(v) });
         }}

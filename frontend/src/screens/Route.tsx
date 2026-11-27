@@ -24,7 +24,7 @@ import {
   stationName,
   venueName,
 } from '@/components/ui';
-import { DEFAULT_ORIGIN_STATION, demoState, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track } from '@/lib/app';
+import { DEFAULT_ORIGIN_STATION, demoState, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track, viewTime } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
 /** 지도 위 배치 (지도 API를 정하기 전 개략도, 390px 화면 기준 좌표) */
@@ -51,8 +51,9 @@ export function MapScreen() {
   if (fc.status === 'error') return <LoadError code={fc.code} lastUpdatedAt={fc.lastUpdatedAt} onRetry={fc.retry} />;
   if (ev.status === 'error') return <LoadError code={ev.code} lastUpdatedAt={ev.lastUpdatedAt} onRetry={ev.retry} />;
 
-  const hour = hourKey(nowMin()); // 지금 출발할 때의 예상
   const f = fc.value.data;
+  const view = viewTime(nowMin(), f); // 지금 출발할 때의 예상, 없으면 그날 행사가 끝나는 시간대
+  const hour = hourKey(view.min);
   const levelOf = (id: string) => f.stations.find((s) => s.station_id === id)?.slots.find((s) => s.hour === hour)?.level ?? 'no_data';
   const best = f.summaries[hour]?.best_station_id;
   const top = (f.ranking[hour] ?? []).filter((id) => levelOf(id) !== 'no_data').slice(0, 2);
@@ -129,7 +130,9 @@ export function MapScreen() {
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <h2 style={{ margin: 0, fontSize: 21, fontWeight: 700 }}>{best && st[best] ? `${st[best].name}이 가장 덜 붐빌 거예요` : '주변 역 예상이에요'}</h2>
-                <span style={{ fontSize: 14, color: '#5F6573' }}>{Number(hour)}시대에 출발할 때의 예상이에요</span>
+                <span style={{ fontSize: 14, color: '#5F6573' }}>
+                  {view.fallback ? `지금은 예상이 없는 시간이라, 행사가 끝나는 ${Number(hour)}시대 예상이에요` : `${Number(hour)}시대에 출발할 때의 예상이에요`}
+                </span>
               </div>
               <div>
                 {top.map((id) => (
@@ -204,10 +207,15 @@ export function Search() {
   const [to, setTo] = useState('');
   const now = nowMin();
   const [when, setWhen] = useState(now);
+  const [touched, setTouched] = useState(false);
   const [sheet, setSheet] = useState(demoState(q) === 'time');
   const [recents, setRecents] = useState<string[]>([]);
   const fc = useLoad(() => getForecast(today()), []);
   const supported = fc.status === 'ok' ? fc.value.data.supported_hours : [];
+  // 지금 시각의 예상이 없으면 출발 시간을 그날 행사가 끝나는 시간대로 맞춰 둬요(사용자가 바꾸기 전까지)
+  useEffect(() => {
+    if (fc.status === 'ok' && !touched) setWhen(viewTime(now, fc.value.data).min);
+  }, [fc.status]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => setRecents(sessionList('recent')), []);
   useEffect(() => setFrom(venueParam), [venueParam]);
   // 역 상세에서 [길찾기]로 오면 그 역을 도착지로 채워요
@@ -334,12 +342,13 @@ export function Search() {
         sub="시와 분을 직접 맞춰요"
         value={when}
         now={now}
-        min={now}
+        min={Math.min(now, when, 24 * 60 - 10)}
         max={24 * 60 - 10}
         hint={(h) => (supported.includes(hourKey(h * 60)) ? `${h}시대 혼잡 예상으로 비교해요` : `${h}시대 혼잡 정보는 아직 준비 중이에요`)}
         confirmLabel={(v, isNow) => (isNow ? '지금 출발로 정하기' : `${fmtMin(v)} 출발로 정하기`)}
         onConfirm={(v) => {
           setWhen(v);
+          setTouched(true);
           setSheet(false);
           track('time_set', { screen: 'search', time: fmtMin(v) });
         }}

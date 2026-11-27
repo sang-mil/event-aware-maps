@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { subscribePush, usingStaticData, type Level } from '@/api';
+import { subscribePush, usingMock, usingStaticData, type Level } from '@/api';
 
 /**
  * 시안은 2025년 8월 9일(토) 20:00 을 "지금"으로 그렸어요.
@@ -44,7 +44,29 @@ export function setReplayDate(date: string) {
 }
 /** 위치를 쓸 수 없을 때(E1)의 기준. "올림픽공원 기준으로 보여드려요" */
 export const DEFAULT_ORIGIN_STATION = 'olympic_park';
-export const nowMin = () => DEMO_NOW_MIN;
+/** 한국 시각 기준 지금(분). 시간 선택이 10분 단위라 10분 단위로 내려요. */
+function kstNowMin(): number {
+  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
+  const h = Number(parts.find((p) => p.type === 'hour')?.value ?? 0);
+  const m = Number(parts.find((p) => p.type === 'minute')?.value ?? 0);
+  return h * 60 + Math.floor(m / 10) * 10;
+}
+
+/**
+ * 지금 시각(분). 실제 데이터(발행 파일·API)를 쓸 때는 실제 한국 시각,
+ * 목업(디자인 시안 미리보기)일 때만 시안의 20:00 이에요.
+ */
+export const nowMin = () => (usingStaticData || !usingMock ? kstNowMin() : DEMO_NOW_MIN);
+
+/**
+ * 화면에 보여줄 시각. 지금 시각의 예상이 있으면 지금, 없으면(예: 낮 2시) 그날 행사가 끝나는 시간대(focus_hour)를 보여줘요.
+ * fallback 이 true 면 화면에 "지금은 예상이 없어 OO시대를 보여드려요"라고 알려요.
+ */
+export function viewTime(now: number, f: { supported_hours: string[]; focus_hour: string }): { min: number; fallback: boolean } {
+  if (f.supported_hours.includes(hourKey(now))) return { min: now, fallback: false };
+  const focus = f.supported_hours.includes(f.focus_hour) ? f.focus_hour : f.supported_hours[0];
+  return focus ? { min: Number(focus) * 60, fallback: true } : { min: now, fallback: false };
+}
 export const hourKey = (min: number) => pad(Math.floor(min / 60) % 24);
 /** 날짜 + 분 → 오프셋이 붙은 ISO 시각 (API 명세서 2.1) */
 export const isoAt = (date: string, min: number) => `${date}T${pad(Math.floor(min / 60) % 24)}:${pad(min % 60)}:00+09:00`;
