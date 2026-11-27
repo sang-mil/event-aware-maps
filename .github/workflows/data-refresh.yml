@@ -30,13 +30,19 @@ jobs:
       - name: 의존성 설치
         run: pip install -r backend/requirements.txt
 
-      - name: KSPO 수집 (5초에 1번 제한이라 몇 분 걸림)
+      - name: KSPO 연계 자료 수집 (실패 시 기존 공개 데이터 유지)
+        id: kspo_linked
+        continue-on-error: true
         env:
           KSPO_LINKED_KEY: ${{ secrets.KSPO_LINKED_KEY }}
+        run: python backend/cli.py collect kspo_linked
+
+      - name: KSPO 공연정보 수집
+        id: kspo_perf
+        continue-on-error: true
+        env:
           KSPO_PERF_KEY: ${{ secrets.KSPO_PERF_KEY }}
-        run: |
-          python backend/cli.py collect kspo_linked
-          python backend/cli.py collect kspo_perf
+        run: python backend/cli.py collect kspo_perf
 
       - name: KOPIS 앞으로 30일 공연 수집 (실패하면 2025 다시 보기만 발행)
         env:
@@ -49,9 +55,11 @@ jobs:
           fi
 
       - name: DB 만들기 (승하차는 요약 파일)
+        if: steps.kspo_linked.outcome == 'success' && steps.kspo_perf.outcome == 'success'
         run: python backend/cli.py build-db
 
       - name: 발행된 도보 경로 받기 (없으면 도보 시간은 '정보 없음')
+        if: steps.kspo_linked.outcome == 'success' && steps.kspo_perf.outcome == 'success'
         run: |
           if git fetch --depth=1 origin gh-pages 2>/dev/null && git show origin/gh-pages:data/walk-routes.json > backend/data/raw/walk-routes.json 2>/dev/null; then
             echo "walk-routes.json 받음"
@@ -61,11 +69,13 @@ jobs:
           fi
 
       - name: 계산하고 검증해서 만들기
+        if: steps.kspo_linked.outcome == 'success' && steps.kspo_perf.outcome == 'success'
         run: |
           AS_OF="$(TZ=Asia/Seoul date +%Y-%m-%dT%H:%M:%S)+09:00"
           python backend/cli.py build --out site_data --as-of "$AS_OF"
 
       - name: gh-pages 준비
+        if: steps.kspo_linked.outcome == 'success' && steps.kspo_perf.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -79,6 +89,7 @@ jobs:
           fi
 
       - name: 내용이 바뀌었는지 확인 (updated_at 제외)
+        if: steps.kspo_linked.outcome == 'success' && steps.kspo_perf.outcome == 'success'
         id: diff
         run: |
           python - <<'PY'
@@ -100,7 +111,7 @@ jobs:
           PY
 
       - name: gh-pages data/ 에 발행
-        if: steps.diff.outputs.changed == 'true'
+        if: steps.kspo_linked.outcome == 'success' && steps.kspo_perf.outcome == 'success' && steps.diff.outputs.changed == 'true'
         run: |
           # walk-routes.json 은 walk-routes-refresh 가 따로 발행하므로 지우지 않고 남긴다
           mkdir -p pages/data
@@ -111,3 +122,19 @@ jobs:
           git add -A data .nojekyll
           git commit -q -m "data: 데이터 갱신 $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M')"
           git push origin gh-pages
+
+      - name: 필수 KSPO 자료 실패 안내
+        if: always() && (steps.kspo_linked.outcome == 'failure' || steps.kspo_perf.outcome == 'failure')
+        run: |
+          {
+            echo "## 이번 데이터 갱신은 보류됐어요"
+            echo "KSPO 필수 자료를 모두 받지 못해 계산·검증·발행을 건너뛰었습니다."
+            echo "불완전한 자료로 새 결과를 만들지 않았고, 공개 중인 이전 데이터는 그대로 유지됩니다."
+            if [[ "${{ steps.kspo_linked.outcome }}" == "failure" ]]; then
+              echo "- KSPO 연계 자료 수집에 실패했습니다."
+            fi
+            if [[ "${{ steps.kspo_perf.outcome }}" == "failure" ]]; then
+              echo "- KSPO 공연정보 수집에 실패했습니다."
+            fi
+            echo "다음 예약 실행에서 다시 시도합니다."
+          } >> "$GITHUB_STEP_SUMMARY"
