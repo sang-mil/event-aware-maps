@@ -113,6 +113,29 @@ def test_http_429_message_has_no_key(monkeypatch):
     assert SECRET not in str(e.value)
 
 
+def test_http_connection_error_reports_safe_reason_without_key_or_url(monkeypatch):
+    import socket
+    import urllib.error
+    import urllib.request
+
+    from collectors import http
+
+    def raise_dns_error(req, timeout):
+        raise urllib.error.URLError(socket.gaierror(-3, f"failed for {SECRET}"))
+
+    monkeypatch.setattr(urllib.request, "urlopen", raise_dns_error)
+    url = kspo.page_url("linked", SECRET, 1)
+    with pytest.raises(CollectError) as e:
+        http.get_text(url, "kopis_list")
+    message = str(e.value)
+    assert "URLError" in message
+    assert "gaierror" in message
+    assert "오류 번호: -3" in message
+    assert SECRET not in message
+    assert url not in message
+    assert "failed for" not in message
+
+
 def test_kspo_waits_between_pages_and_retries_429():
     from collectors.http import RateLimited
 

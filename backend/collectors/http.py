@@ -28,6 +28,16 @@ def _limit_detail(e: urllib.error.HTTPError) -> str:
     return ("\n  " + "\n  ".join(parts)) if parts else ""
 
 
+def _connection_detail(e: Exception) -> str:
+    """네트워크 원인을 분류하되, 주소·키·예외 문구는 출력하지 않는다."""
+    reason = e.reason if isinstance(e, urllib.error.URLError) else e
+    detail = f"원인 종류: {type(reason).__name__}"
+    error_number = getattr(reason, "errno", None)
+    if isinstance(error_number, int):
+        detail += f", 오류 번호: {error_number}"
+    return detail
+
+
 def get_text(url: str, source: str) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": "tumgil-collector"})
     try:
@@ -38,4 +48,4 @@ def get_text(url: str, source: str) -> str:
             raise RateLimited(f"{source}: HTTP 429 (요청이 너무 많음)" + _limit_detail(e)) from None
         raise CollectError(f"{source}: HTTP {e.code}") from None
     except (urllib.error.URLError, TimeoutError, OSError) as e:
-        raise CollectError(f"{source}: 연결 실패 ({type(e).__name__})") from None
+        raise CollectError(f"{source}: 연결 실패 ({type(e).__name__}; {_connection_detail(e)})") from None
