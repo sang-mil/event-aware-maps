@@ -26,6 +26,8 @@ type Props = {
   destination: string;
 };
 
+const OVERLAY_NOTE = { position: 'absolute', top: 140, left: 16, right: 16, zIndex: 1 } as const;
+
 /** Map display only: route coordinates and walking time come from the published precomputation. */
 export function KakaoWalkMap({ path, origin, destination }: Props) {
   const container = useRef<HTMLDivElement>(null);
@@ -170,7 +172,8 @@ export function KakaoOverviewMap({
     return () => { cancelled = true; };
   }, [key, places, routes, selectedVenueId, stationMarkers, onSelectVenue, onSelectStation]);
 
-  if (state === 'missing-data') return <div role="status" className="card pad" style={{ margin: 16 }}>지도 위치 데이터가 아직 발행되지 않았어요.</div>;
-  if (state === 'missing-key') return <div role="status" className="card pad" style={{ margin: 16 }}>카카오 지도 키가 연결되지 않았어요.</div>;
-  return <div ref={container} role="application" aria-label="공연장과 지하철역 지도" style={{ position: 'absolute', inset: 0, background: '#EEF0F3' }}>{state === 'failed' && <span role="status" className="card pad" style={{ display: 'inline-block', margin: 16 }}>지도를 불러오지 못했습니다.</span>}</div>;
+  // 안내 문구는 지도 위 검색창·범례(위쪽 약 130px) 아래에 놓아야 가려지지 않아요
+  if (state === 'missing-data') return <div role="status" className="card pad" style={OVERLAY_NOTE}>지도 위치 데이터가 아직 발행되지 않았어요.</div>;
+  if (state === 'missing-key') return <div role="status" className="card pad" style={OVERLAY_NOTE}>카카오 지도 키가 연결되지 않았어요.</div>;
+  return <div ref={container} role="application" aria-label="공연장과 지하철역 지도" style={{ position: 'absolute', inset: 0, background: '#EEF0F3' }}>{state === 'failed' && <span role="status" className="card pad" style={OVERLAY_NOTE}>지도를 불러오지 못했습니다.</span>}</div>;
 }
