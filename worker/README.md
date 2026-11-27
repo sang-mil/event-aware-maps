@@ -29,6 +29,10 @@
 - `/api/kopis/pblprfr` (인증된 GitHub Actions 수집기 전용)
 - `/api/kopis/pblprfr/{공연ID}` (인증된 GitHub Actions 수집기 전용)
 - `/api/kopis/prfplc/{시설ID}` (인증된 GitHub Actions 수집기 전용)
+- `/api/push/subscriptions` (푸시 구독 등록)
+- `/api/push/subscriptions/{device_id}/preferences` (알림 설정 저장)
+- `/api/alerts` (알림 예약)
+- `/api/push/status` (푸시 서버 설정 확인)
 
 서울 API는 장소명 하나씩 조회하며, 현재 Worker는 이 두 장소만 요청할 수 있게 제한합니다. 장소명이 공식 장소 목록과 다르면 `AREAS`의 값을 공식 목록에 맞춰 바꿔야 합니다.
 
@@ -67,3 +71,32 @@ Worker는 API 키가 없는 목록·상세 요청만 받고, 정해진 KOPIS 공
 KOPIS 공식 API도 HTTP 주소를 사용하므로 Worker에서 KOPIS로 가는 요청은 암호화되지 않습니다. Worker Secret은 브라우저와 저장소에서 키를 감추지만, KOPIS 서버로 가는 구간의 암호화를 제공하지 않습니다. Worker 배치 위치는 KOPIS 서버에 가까운 곳을 지정했지만 실제 연결 성공 여부는 배포 후 Actions 실행으로 확인해야 합니다.
 
 응답을 화면에 표시할 때 출처를 `서울특별시 공공데이터`로 표시해야 합니다.
+
+## 웹 푸시 알림 활성화
+
+Worker는 공연 종료 30분 전·역별 출발 알림 예약을 D1에 저장하고, 매분 Cron Trigger로 발송합니다. 한국 시각 오전 9~10시에는 10분 간격으로 공개 행사 JSON을 읽어 전날 알림을 발송·재시도합니다. KBO 경기 종료 시각이 없으면 경기 알림은 예약되지 않습니다. 한 번 실행할 때 최대 5건을 보내 무료 Worker의 처리 한도를 고려합니다.
+
+푸시를 켜기 전에 아래 Cloudflare 설정이 필요합니다.
+
+1. `worker` 폴더에서 `npx wrangler d1 create tumgil-push`를 실행해 D1 데이터베이스를 만듭니다.
+2. 응답으로 받은 ID를 아래처럼 `worker/wrangler.toml`에 넣습니다. `<D1 database ID>`는 실제 ID로 바꾸고, 이 설정 파일을 저장소에 커밋합니다.
+
+   ```toml
+   [[d1_databases]]
+   binding = "PUSH_DB"
+   database_name = "tumgil-push"
+   database_id = "<D1 database ID>"
+   migrations_dir = "migrations"
+   ```
+
+3. `worker` 폴더에서 `npx wrangler d1 migrations apply tumgil-push --remote`를 실행해 테이블을 만듭니다.
+4. `worker` 폴더에서 `node scripts/generate-vapid-keys.mjs`로 VAPID 키 쌍을 한 번 생성합니다. 공개 키는 Cloudflare Pages 환경변수 `NEXT_PUBLIC_VAPID_PUBLIC_KEY`와 Worker 일반 변수 `VAPID_PUBLIC_KEY`에 넣고, 개인 키는 Worker Secret `VAPID_PRIVATE_KEY`에 넣습니다. 개인 키를 코드, GitHub, 공개 문서, 채팅에 붙이지 않습니다.
+5. Cloudflare Pages에서 새 환경변수를 적용해 프런트를 다시 배포하고, Worker를 배포합니다. 푸시 서버 준비 여부는 `/api/push/status`가 `{"ready":true}`를 반환하는지 확인합니다.
+
+필요한 Worker Secrets:
+
+- `VAPID_PRIVATE_KEY`
+- `VAPID_PUBLIC_KEY` — Worker가 발송하고 설정 상태를 확인하는 공개 키.
+- (선택) `VAPID_SUBJECT` — 연락처 URL. 기본값은 서비스 URL입니다.
+
+Cloudflare Pages 환경변수 `NEXT_PUBLIC_PUSH_API_BASE`에 `https://event-aware-maps-live-api.sangmil6369.workers.dev/api`를 설정합니다. Worker, D1, 키 설정이 끝나기 전에는 이 값을 비워 둡니다. 그래야 준비 중에 화면의 알림 버튼이 활성화되지 않습니다.

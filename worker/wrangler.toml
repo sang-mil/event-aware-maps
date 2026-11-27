@@ -5,5 +5,8 @@ compatibility_flags = ["allow_custom_ports"]
 workers_dev = true
 previews = {}
 
+[triggers]
+crons = ["* * * * *", "5-55/10 * * * *"]
+
 [placement]
 hostname = "www.kopis.or.kr"

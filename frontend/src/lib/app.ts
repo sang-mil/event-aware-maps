@@ -224,8 +224,7 @@ export async function requestPush(): Promise<boolean> {
   if (pushSupport() === 'unsupported') return false;
   const r = await Notification.requestPermission();
   if (r !== 'granted') return false;
-  await subscribePush();
-  return true;
+  return subscribePush();
 }
 
 // ── 측정 이벤트 (PRD 10장) ─────────────────────────────────
