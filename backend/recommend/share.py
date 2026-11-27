@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from congestion.model import CROWDED
 
-MAX_WALK_MIN = 20        # 사용자 승인 대기 중인 기준. 바꾸려면 이 값만 고친다
+MAX_WALK_MIN = 20        # 사용자 확정(2026-11-27). 바꾸려면 이 값만 고친다
 SIMILAR_RATIO_GAP = 0.1
 
 
