@@ -26,7 +26,7 @@ import {
   UncertainMark,
   Walk,
 } from '@/components/ui';
-import { DEFAULT_ORIGIN_STATION, DEMO_QUIET_DAY, dateLabel, demoState, LEVEL, nowMin, today, viewTime, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
+import { hourRange, DEFAULT_ORIGIN_STATION, DEMO_QUIET_DAY, dateLabel, demoState, LEVEL, nowMin, today, viewTime, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
 import { useLoad, useRefs, useStationWalkMin, type LoadState } from '@/lib/useLoad';
 
 export interface PendingFeedback {
@@ -234,11 +234,11 @@ export function Home() {
         open={sheet}
         onClose={() => setSheet(false)}
         title="언제 기준으로 볼까요?"
-        sub="오늘 시와 분을 직접 맞춰요"
+        sub={`예상이 있는 ${hourRange(f.supported_hours).label} 사이에서 골라요`}
         value={at}
         now={now}
-        min={18 * 60}
-        max={24 * 60 - 10}
+        min={hourRange(f.supported_hours).min}
+        max={hourRange(f.supported_hours).max}
         hint={(h) => (f.supported_hours.includes(String(h).padStart(2, '0')) ? `${h}시대 혼잡 예상을 보여드려요` : `${h}시대 혼잡 정보는 아직 준비 중이에요`)}
         confirmLabel={(v, isNow) => (isNow ? '지금 기준으로 보기' : `${fmtMin(v)} 기준으로 보기`)}
         onConfirm={(v) => {

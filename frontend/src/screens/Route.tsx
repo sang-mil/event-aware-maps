@@ -25,7 +25,7 @@ import {
   venueName,
   UncertainMark,
 } from '@/components/ui';
-import { DEFAULT_ORIGIN_STATION, demoState, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track, viewTime } from '@/lib/app';
+import { hourRange, DEFAULT_ORIGIN_STATION, demoState, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track, viewTime } from '@/lib/app';
 import { useLoad, useRefs, useStationWalkMin, useWalkMin } from '@/lib/useLoad';
 import { KakaoOverviewMap, KakaoWalkMap } from '@/components/KakaoWalkMap';
 
@@ -272,6 +272,11 @@ export function Search() {
           </button>
           <span style={{ fontSize: 15, color: '#5F6573' }}>누르면 출발 시간을 바꿀 수 있어요</span>
         </div>
+        <p role="note" style={{ margin: 0, paddingTop: 4, fontSize: 14, lineHeight: 1.5, color: '#5F6573' }}>
+          도착지별 경로는 준비 중이에요.
+          <br />
+          지금은 출발지 주변 역끼리 비교해 드려요.
+        </p>
       </form>
 
       <div className="section-title" style={{ justifyContent: 'flex-start' }}>
@@ -314,11 +319,11 @@ export function Search() {
         open={sheet}
         onClose={() => setSheet(false)}
         title="언제 출발할까요?"
-        sub="시와 분을 직접 맞춰요"
+        sub={`예상이 있는 ${hourRange(supported).label} 사이에서 골라요`}
         value={when}
         now={now}
-        min={Math.min(now, when, 24 * 60 - 10)}
-        max={24 * 60 - 10}
+        min={hourRange(supported).min}
+        max={hourRange(supported).max}
         hint={(h) => (supported.includes(hourKey(h * 60)) ? `${h}시대 혼잡 예상으로 비교해요` : `${h}시대 혼잡 정보는 아직 준비 중이에요`)}
         confirmLabel={(v, isNow) => (isNow ? '지금 출발로 정하기' : `${fmtMin(v)} 출발로 정하기`)}
         onConfirm={(v) => {
@@ -397,6 +402,7 @@ export function Compare() {
           {[originKnown ? `${originKnown}에서${toName ? ` ${toName}까지` : ''}` : `출발 공연장 정보 없음${toName ? `, ${toName}까지` : ''}`, c.condition_label.hour_label].join(', ')}
         </span>
         <Headline highlight={c.headline.highlight} text={c.headline.text} />
+        <span style={{ fontSize: 14, color: '#5F6573' }}>도착지와 관계없이 출발지 주변 역끼리 비교했어요</span>
       </section>
       {c.last_train?.imminent && (
         <div role="alert" className="alert red" style={{ margin: '0 16px 12px' }}>

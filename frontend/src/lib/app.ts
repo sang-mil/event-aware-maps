@@ -70,6 +70,14 @@ export function viewTime(now: number, f: { supported_hours: string[]; focus_hour
   return focus ? { min: Number(focus) * 60, fallback: true } : { min: now, fallback: false };
 }
 export const hourKey = (min: number) => pad(Math.floor(min / 60) % 24);
+
+/** 예상이 있는 시간대로 시간 선택 범위를 정해요(예: 19:00~23:50). 데이터가 없으면 19~23시. */
+export function hourRange(hours: string[] | undefined): { min: number; max: number; label: string } {
+  const hs = (hours ?? []).map(Number).filter((h) => Number.isFinite(h)).sort((a, b) => a - b);
+  const lo = hs.length ? hs[0] : 19;
+  const hi = hs.length ? hs[hs.length - 1] : 23;
+  return { min: lo * 60, max: hi * 60 + 50, label: `${lo}시~${hi}시` };
+}
 /** 날짜 + 분 → 오프셋이 붙은 ISO 시각 (API 명세서 2.1) */
 export const isoAt = (date: string, min: number) => `${date}T${pad(Math.floor(min / 60) % 24)}:${pad(min % 60)}:00+09:00`;
 

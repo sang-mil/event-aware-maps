@@ -583,7 +583,7 @@ export function EventScreen() {
         {e.after_end.no_data_message && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 15, color: '#5F6573' }}>{e.after_end.no_data_message}</p>}
       </section>
 
-      <SectionTitle>같은 날 송파 일정</SectionTitle>
+      <SectionTitle>같은 날 다른 일정</SectionTitle>
       <ul className="card" style={{ listStyle: 'none' }}>
         {e.same_day.length === 0 && (
           <li className="row" style={{ minHeight: 56 }}>
