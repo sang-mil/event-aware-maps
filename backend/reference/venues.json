@@ -79,6 +79,9 @@
     "nearby_station_ids": [
       "sports_complex",
       "jamsil_saenae"
+    ],
+    "search_aliases": [
+      "잠실종합운동장 실내체육관"
     ]
   },
   {
@@ -100,6 +103,9 @@
     "nearby_station_ids": [
       "sports_complex",
       "jamsil_saenae"
+    ],
+    "search_aliases": [
+      "잠실종합운동장 올림픽주경기장"
     ]
   },
   {
