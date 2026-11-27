@@ -1,5 +1,3 @@
-PRAGMA foreign_keys = ON;
-
 CREATE TABLE IF NOT EXISTS push_subscriptions (
   device_id TEXT PRIMARY KEY,
   endpoint TEXT NOT NULL UNIQUE,

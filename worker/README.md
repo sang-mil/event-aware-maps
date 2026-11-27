@@ -79,13 +79,13 @@ Worker는 공연 종료 30분 전·역별 출발 알림 예약을 D1에 저장�
 푸시를 켜기 전에 아래 Cloudflare 설정이 필요합니다.
 
 1. `worker` 폴더에서 `npx wrangler d1 create tumgil-push`를 실행해 D1 데이터베이스를 만듭니다.
-2. 응답으로 받은 ID를 아래처럼 `worker/wrangler.toml`에 넣습니다. `<D1 database ID>`는 실제 ID로 바꾸고, 이 설정 파일을 저장소에 커밋합니다.
+2. 응답으로 받은 ID를 아래처럼 `worker/wrangler.toml`에 넣습니다. 현재 생성된 데이터베이스 ID가 이미 설정되어 있습니다.
 
    ```toml
    [[d1_databases]]
    binding = "PUSH_DB"
    database_name = "tumgil-push"
-   database_id = "<D1 database ID>"
+   database_id = "73d1401a-a9ab-4f71-89af-c44a053dde33"
    migrations_dir = "migrations"
    ```
 

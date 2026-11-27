@@ -5,6 +5,12 @@ compatibility_flags = ["allow_custom_ports"]
 workers_dev = true
 previews = {}
 
+[[d1_databases]]
+binding = "PUSH_DB"
+database_name = "tumgil-push"
+database_id = "73d1401a-a9ab-4f71-89af-c44a053dde33"
+migrations_dir = "migrations"
+
 [triggers]
 crons = ["* * * * *", "5-55/10 * * * *"]
 
