@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { alertKey, getCalendar, getEvent, getEvents, getForecast, hasAlert, pushReady, setAlert, type EventDetail, type EventItem, usingStaticData } from '@/api';
+import { alertKey, getCalendar, getEvent, getEvents, getForecast, hasAlert, pushReady, setAlert, type EventDetail, type EventItem, usingMock, usingStaticData } from '@/api';
 import { SourceNote } from '@/components/DataNote';
 import {
   BackHeader,
@@ -28,7 +28,7 @@ import {
   venueName,
   UncertainMark,
 } from '@/components/ui';
-import { REPLAY_MAX, REPLAY_MIN, dateLabel, demoState, isIphone, pushSupport, requestPush, today, track, type PushSupport } from '@/lib/app';
+import { REPLAY_MIN, dateLabel, demoState, isIphone, pushSupport, requestPush, replayDate, today, track, type PushSupport } from '@/lib/app';
 import { useLoad, useRefs, useWalkMin } from '@/lib/useLoad';
 
 const AREAS = [
@@ -41,19 +41,32 @@ function eventHref(e: { id: string; type: 'show' | 'game' }, from: string) {
   return e.type === 'game' ? `/game/?id=${e.id}` : `/event/?id=${e.id}&from=${from}`;
 }
 
+function latestSelectableMonth() {
+  const [year, month] = today().split('-').map(Number);
+  const next = new Date(Date.UTC(year, month, 1));
+  return `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+
 /** 03 캘린더 탭 */
 export function Calendar() {
   const [area, setArea] = useState<string>('all');
   const [venue, setVenue] = useState<string>('all');
   const [picked, setPicked] = useState(today());
   const [month, setMonth] = useState(today().slice(0, 7));
+  useEffect(() => {
+    if (replayDate()) return;
+    const liveDate = today();
+    setPicked(liveDate);
+    setMonth(liveDate.slice(0, 7));
+  }, []);
   const cal = useLoad(() => getCalendar(month), [month]);
-  // 데이터가 있는 달(2025-01 ~ 2025-12) 안에서만 넘겨요
+  const latestMonth = latestSelectableMonth();
+  // 2025 관측 범위와 현재부터 한 달 뒤까지 이동할 수 있어요. 자료가 없으면 화면에 없다고 표시해요.
   const shiftMonth = (delta: number) => {
     const [yy, mm] = month.split('-').map(Number);
     const d = new Date(Date.UTC(yy, mm - 1 + delta, 1));
     const next = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
-    if (next < REPLAY_MIN.slice(0, 7) || next > REPLAY_MAX.slice(0, 7)) return;
+    if (next < REPLAY_MIN.slice(0, 7) || next > latestMonth) return;
     setMonth(next);
     setPicked(`${next}-01`);
   };
@@ -140,7 +153,7 @@ export function Calendar() {
           <span className="t" style={{ fontSize: 17, fontWeight: 700 }}>
             {y}년 {m}월
           </span>
-          <button type="button" aria-label="다음 달" className="icon-btn" style={{ color: '#4A4F5C', transform: 'scaleX(-1)' }} disabled={month >= REPLAY_MAX.slice(0, 7)} onClick={() => shiftMonth(1)}>
+          <button type="button" aria-label="다음 달" className="icon-btn" style={{ color: '#4A4F5C', transform: 'scaleX(-1)' }} disabled={month >= latestMonth} onClick={() => shiftMonth(1)}>
             <Icon.back />
           </button>
         </div>
@@ -264,12 +277,18 @@ export function Calendar() {
       ) : (
         <section className="card pad" style={{ marginTop: 28, gap: 4, padding: '24px 20px' }}>
           <span style={{ fontSize: 17, fontWeight: 700 }}>
-            {venue === 'all' ? '이날은 등록된 공연과 경기가 없어요' : `이날 ${venueName(vn, venue)}에는 일정이 없어요`}
+            {events.status === 'loading'
+              ? '일정 자료를 불러오는 중이에요'
+              : events.status === 'error' && events.code === 'not_found'
+              ? '이 날짜 일정 자료가 아직 없어요'
+              : venue === 'all' ? '이날은 등록된 공연과 경기가 없어요' : `이날 ${venueName(vn, venue)}에는 일정이 없어요`}
           </span>
-          <span style={{ fontSize: 15, color: '#5F6573' }}>역 혼잡도 평소와 비슷할 거예요</span>
+          <span style={{ fontSize: 15, color: '#5F6573' }}>
+            {events.status === 'loading' ? '잠시만 기다려 주세요.' : events.status === 'error' && events.code === 'not_found' ? '일정 데이터가 발행되면 여기에 표시돼요.' : '역 혼잡도 자료가 없어요.'}
+          </span>
         </section>
       )}
-      {!usingStaticData && <p className="note">지금은 2025년 8월 9일 일정만 들어 있어요.</p>}
+      {!usingStaticData && usingMock && <p className="note">목업 미리보기입니다. 실제 날짜의 일정 자료는 표시하지 않아요.</p>}
       <SourceNote />
       <TabBar active="calendar" />
     </main>
