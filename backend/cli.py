@@ -157,13 +157,14 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime, walk_path: Path = WALK_
         return 1
     print(f"도보 경로 {len(walk)}개 조합 사용" if walk else "도보 경로 파일 없음: 도보 시간은 '정보 없음'으로 둡니다")
     data["venues.json"] = reference.venues(walk)
+    station_walk = walk_routes.load_station_lookup(walk_path)
     for ev in events:
         same = [o for o in events if o.date == ev.date]
         data[f"event-{ev.id}.json"] = ev_detail.event_detail(ev, same, day_of(ev.date), nearest)
     for d in sorted(name[len("events-"):-len(".json")] for name in list(data) if name.startswith("events-")):
         data[f"forecast-{d}.json"] = cg_outputs.forecast(d, day_of(d), exits)
         for sid in cg_outputs.STATIONS:
-            data[f"station-{sid}-{d}.json"] = cg_outputs.station_forecast(d, sid, day_of(d), exits)
+            data[f"station-{sid}-{d}.json"] = cg_outputs.station_forecast(d, sid, day_of(d), exits, station_walk)
         if exits.get(d):  # 귀가 방법 비교는 공연 날만
             data.update(rc_compare.build_files(d, day_of(d), walk))
     files = {name: wrap(body, as_of) for name, body in data.items()}

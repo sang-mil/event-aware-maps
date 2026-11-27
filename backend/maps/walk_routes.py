@@ -143,6 +143,10 @@ def walking_route(start: dict, end: dict, key: str, opener=urlopen) -> dict | No
     }
 
 
+OLYMPIC_AREA_STATIONS = ["olympic_park", "bangi", "mongchontoseong", "hanseong_baekje"]
+STATION_PAIRS = [(a, b) for a in OLYMPIC_AREA_STATIONS for b in OLYMPIC_AREA_STATIONS if a != b]
+
+
 def build(key: str, pause_seconds: float = 0.25, opener=urlopen, report: list[str] | None = None) -> dict:
     """Return a complete dataset; unmatched/unsupported routes remain explicit nulls.
     report 를 주면 장소마다 '기준 이름 → 카카오가 돌려준 이름 | 주소 (검색어)'를 남긴다(키·헤더는 넣지 않음)."""
@@ -178,12 +182,21 @@ def build(key: str, pause_seconds: float = 0.25, opener=urlopen, report: list[st
             })
             time.sleep(pause_seconds)
 
+    # 역 상세의 '이 시간에 타야 한다면' 대안 역까지 도보 (올림픽공원 쪽 4개 역끼리, 방향마다 따로)
+    station_routes = []
+    for a, b in STATION_PAIRS:
+        route = walking_route(places[a], places[b], key, opener)
+        station_routes.append({"from_station_id": a, "to_station_id": b,
+                               **(route or {"distance_m": None, "walk_min": None, "path": [], "landing_url": None})})
+        time.sleep(pause_seconds)
+
     return {
         "schema_version": "1.0",
         "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "attribution": "도보 경로·장소 좌표: Kakao Map API",
         "places": [{"id": pid, "name": p["name"], "x": p["x"], "y": p["y"]} for pid, p in places.items()],
         "routes": routes,
+        "station_routes": station_routes,
     }
 
 
@@ -213,3 +226,14 @@ def load_lookup(path: Path) -> dict[tuple[str, str], dict]:
         raise KakaoMapError("walk-routes.json 형식이 올바르지 않습니다: " + "; ".join(errors[:3]))
     return {(r["venue_id"], r["station_id"]): {"walk_min": r["walk_min"], "distance_m": r["distance_m"]}
             for r in data["routes"] if r["walk_min"] is not None and r["distance_m"] is not None}
+
+
+def load_station_lookup(path: Path) -> dict[tuple[str, str], int]:
+    """walk-routes.json 의 station_routes → {(출발 역, 도착 역): 도보 분}. 없거나 경로를 못 구했으면 빠진다."""
+    if not path.is_file():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if errors_of("walk-routes.json", data):
+        raise KakaoMapError("walk-routes.json 형식이 올바르지 않습니다")
+    return {(r["from_station_id"], r["to_station_id"]): r["walk_min"]
+            for r in data.get("station_routes", []) if r["walk_min"] is not None}

@@ -36,6 +36,23 @@
         "required": ["venue_id", "station_id", "distance_m", "walk_min", "path", "landing_url"],
         "additionalProperties": false
       }
+    },
+    "station_routes": {
+      "type": "array",
+      "description": "(2026-11 추가, 선택) 역 ↔ 역 도보 경로 (역 상세 대안 역 도보 시간용)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from_station_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "to_station_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "distance_m": { "type": ["integer", "null"], "minimum": 0 },
+          "walk_min": { "type": ["integer", "null"], "minimum": 0 },
+          "path": { "type": "array", "items": { "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }], "minItems": 2, "maxItems": 2 } },
+          "landing_url": { "type": ["string", "null"], "format": "uri" }
+        },
+        "required": ["from_station_id", "to_station_id", "distance_m", "walk_min", "path", "landing_url"],
+        "additionalProperties": false
+      }
     }
   },
   "required": ["schema_version", "updated_at", "attribution", "places", "routes"],
