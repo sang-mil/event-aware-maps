@@ -1,0 +1,47 @@
+name: walk-routes-refresh
+
+on:
+  schedule:
+    - cron: "30 18 14 * *" # 매월 15일 03:30 KST
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: walk-routes-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 의존성 설치
+        run: pip install -r backend/requirements.txt
+      - name: 카카오 도보 경로 계산 및 스키마 검증
+        env:
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+        run: python backend/cli.py precompute-walk-routes --out site_data/walk-routes.json
+      - name: gh-pages 준비
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --depth=1 origin gh-pages
+          git worktree add -B gh-pages pages origin/gh-pages
+      - name: 경로 파일만 발행
+        run: |
+          mkdir -p pages/data
+          if cmp -s site_data/walk-routes.json pages/data/walk-routes.json; then
+            echo "도보 경로 변경 없음: 발행 생략"
+            exit 0
+          fi
+          cp site_data/walk-routes.json pages/data/walk-routes.json
+          cd pages
+          git add data/walk-routes.json
+          git commit -m "data: 공연장 도보 경로 갱신"
+          git push origin gh-pages

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tumgil.local/schema/walk-routes.schema.json",
+  "title": "공연장·역 사전 계산 도보 경로",
+  "type": "object",
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^1\\.[0-9]+$" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "attribution": { "const": "도보 경로·장소 좌표: Kakao Map API" },
+    "places": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "name": { "type": "string", "minLength": 1 },
+          "x": { "type": "number", "minimum": 124, "maximum": 132 },
+          "y": { "type": "number", "minimum": 33, "maximum": 39 }
+        },
+        "required": ["id", "name", "x", "y"],
+        "additionalProperties": false
+      }
+    },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "venue_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "station_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "distance_m": { "type": ["integer", "null"], "minimum": 0 },
+          "walk_min": { "type": ["integer", "null"], "minimum": 0 },
+          "path": { "type": "array", "items": { "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }], "minItems": 2, "maxItems": 2 } },
+          "landing_url": { "type": ["string", "null"], "format": "uri" }
+        },
+        "required": ["venue_id", "station_id", "distance_m", "walk_min", "path", "landing_url"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["schema_version", "updated_at", "attribution", "places", "routes"],
+  "additionalProperties": false
+}
