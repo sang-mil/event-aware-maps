@@ -26,7 +26,7 @@ from pathlib import Path
 BACKEND = Path(__file__).resolve().parent
 sys.path.insert(0, str(BACKEND))
 
-from collectors import CollectError, kspo, seoul_subway  # noqa: E402
+from collectors import CollectError, kspo, realtime_log, seoul_subway  # noqa: E402
 from normalize import db as normalize_db, seed as normalize_seed  # noqa: E402
 from congestion import anomalies as cg_anomalies, backtest as cg_backtest, load as cg_load, model as cg_model, outputs as cg_outputs  # noqa: E402
 from recommend import backtest as rc_backtest, compare as rc_compare  # noqa: E402
@@ -286,6 +286,9 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("publish", help="검증 후 발행")
     p.add_argument("--src", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
+    rl = sub.add_parser("log-realtime", help="실시간 지역 혼잡(live-api Worker)을 날짜별 기록에 덧붙이기")
+    rl.add_argument("--base-url", required=True, help="live-api Worker 주소")
+    rl.add_argument("--out-dir", type=Path, required=True)
     wr = sub.add_parser("precompute-walk-routes", help="카카오 지도에서 공연장·역 도보 경로를 계산")
     wr.add_argument("--out", type=Path, default=Path("site_data/walk-routes.json"))
     args = parser.parse_args(argv)
@@ -310,6 +313,12 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_export_seed(args.db, args.out)
     if args.command == "publish":
         return cmd_publish(args.src, args.out)
+    if args.command == "log-realtime":
+        written, errors = realtime_log.collect(args.base_url, args.out_dir)
+        for e in errors:
+            print(f"  실패 {e}")
+        print(f"실시간 기록 {written}줄 추가: {args.out_dir}")
+        return 1 if errors and not written else 0
     if args.command == "precompute-walk-routes":
         try:
             report: list[str] = []
