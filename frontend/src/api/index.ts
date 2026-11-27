@@ -39,7 +39,10 @@ export function readWalkRoutes(raw: unknown): WalkRoutes | null {
   const routes = d.routes
     .filter((r) => r && typeof r.venue_id === 'string' && typeof r.station_id === 'string' && Array.isArray(r.path))
     .map((r) => ({ ...r, path: r.path.filter((pt) => Array.isArray(pt) && isNum(pt[0]) && isNum(pt[1])) }));
-  return { ...(d as WalkRoutes), places, routes };
+  const stationRoutes = Array.isArray(d.station_routes)
+    ? d.station_routes.filter((r) => r && typeof r.from_station_id === 'string' && typeof r.to_station_id === 'string')
+    : [];
+  return { ...(d as WalkRoutes), places, routes, station_routes: stationRoutes };
 }
 
 /** 사전 발행한 공연장→역 도보 경로. 파일이 없으면 없는 데이터로 처리합니다. */

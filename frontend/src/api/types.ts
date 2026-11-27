@@ -58,12 +58,19 @@ export interface WalkRoute {
   landing_url: string | null;
 }
 
+export interface StationWalkRoute {
+  from_station_id: string;
+  to_station_id: string;
+  walk_min: number | null;
+}
+
 export interface WalkRoutes {
   schema_version: string;
   updated_at: string;
   attribution: string;
   places: WalkRoutePlace[];
   routes: WalkRoute[];
+  station_routes?: StationWalkRoute[];
 }
 
 export interface Slot {

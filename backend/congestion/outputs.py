@@ -143,7 +143,8 @@ def station_forecast(d: str, sid: str, day: dict, exits: dict, station_walk: dic
     base = {"station_id": sid, "date": d, "focus_hour": f"{fh:02d}", "alternatives_title": None,
             "alternatives": [], "notify_hour": None, "no_data": None}
     if not slots:
-        nearby = [{"station_id": o, "level": day[o][fh]["level"], "walk_min": None}
+        nearby = [{"station_id": o, "level": day[o][fh]["level"],
+                   "walk_min": (station_walk or {}).get((sid, o))}
                   for o in OLYMPIC_AREA if o != sid and day[o][fh]]
         return {**base, "focus_level": "no_data", "headline": None, "description": None, "slots": [],
                 "no_data": {"message": "이 역은 아직 시간대별 승하차 자료가 부족해 예상할 수 없어요.", "nearby": nearby}}
