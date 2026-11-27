@@ -128,7 +128,16 @@ def forecast(d: str, day: dict, exits: dict, has_event: bool | None = None) -> d
             "stations": [{"station_id": sid, "slots": _slots(day[sid])} for sid in STATIONS]}
 
 
-def station_forecast(d: str, sid: str, day: dict, exits: dict) -> dict:
+def transfer_note(a: str, b: str) -> str | None:
+    """두 역이 같은 노선을 지나면 '같은 5호선이라 갈아타지 않아요'. 아니면 None (환승 횟수는 자료가 없어 말하지 않음)."""
+    import reference
+    lines = {sid: ls for sid, _, ls in reference.STATIONS}
+    shared = [ln for ln in lines.get(a, []) if ln in lines.get(b, [])]
+    return f"같은 {shared[0]}호선이라 갈아타지 않아요" if shared else None
+
+
+def station_forecast(d: str, sid: str, day: dict, exits: dict, station_walk: dict | None = None) -> dict:
+    """station_walk: {(역, 역): 도보 분} (카카오 경로). 없으면 대안 역 도보 시간은 null."""
     fh = focus_hour(d, exits)
     slots = _slots(day[sid])
     base = {"station_id": sid, "date": d, "focus_hour": f"{fh:02d}", "alternatives_title": None,
@@ -155,7 +164,9 @@ def station_forecast(d: str, sid: str, day: dict, exits: dict) -> dict:
         better = [o for o in ranking(day, fh) if o != sid and _ORDER[day[o][fh]["level"]] < _ORDER["crowded"]]
         if better:
             out["alternatives_title"] = f"{fh}시대에 타야 한다면"
-            out["alternatives"] = [{"station_id": o, "level": day[o][fh]["level"], "walk_min": None,
+            out["alternatives"] = [{"station_id": o, "level": day[o][fh]["level"],
+                                    "walk_min": (station_walk or {}).get((sid, o)),
+                                    "transfer_note": transfer_note(sid, o),
                                     "message": slot_message(day[o][fh]), "uncertain": day[o][fh]["effect_unknown"]}
                                    for o in better]
         out["notify_hour"] = f"{best_h:02d}" if best_h != fh else None
