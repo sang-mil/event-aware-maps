@@ -20,6 +20,25 @@ SECRET = "TEST-KEY-123"
 NO_WAIT = lambda seconds: None  # noqa: E731  테스트에서는 실제로 기다리지 않음
 
 
+def test_cli_kopis_uses_worker_token_without_kopis_api_key(tmp_path, monkeypatch):
+    monkeypatch.delenv("KOPIS_API_KEY", raising=False)
+    monkeypatch.setenv("KOPIS_PROXY_URL", "https://example.workers.dev")
+    monkeypatch.setenv("KOPIS_PROXY_TOKEN", "TEST-PROXY-TOKEN")
+    seen = {}
+
+    def fake_fetch_range(key, start, days):
+        seen.update(key=key, start=start, days=days)
+        return {"window": {"start": "2026-12-01", "end": "2026-12-07"}, "performances": [],
+                "facilities": [], "skipped": [], "attribution": "출처"}
+
+    monkeypatch.setattr(cli.kopis_collector, "fetch_range", fake_fetch_range)
+    assert cli.cmd_collect("kopis", None, tmp_path, start="2026-12-01", days=7) == 0
+    assert seen["key"] == ""
+    assert seen["days"] == 7
+    saved = json.loads((tmp_path / "kopis_upcoming.json").read_text(encoding="utf-8"))
+    assert saved["performances"] == []
+
+
 def fixture(name: str) -> str:
     return (FIX / name).read_text(encoding="utf-8")
 

@@ -70,9 +70,16 @@ def cmd_collect(source: str, month: str | None, raw_dir: Path, page_size: int | 
                 start: str | None = None, days: int = 30, name: str | None = None) -> int:
     env = KEY_ENV[source]
     key = os.environ.get(env, "").strip()
+    proxy_mode = source == "kopis" and bool(os.environ.get("KOPIS_PROXY_URL", "").strip())
+    if proxy_mode:
+        if not os.environ.get("KOPIS_PROXY_TOKEN", "").strip():
+            print("환경변수 KOPIS_PROXY_TOKEN 에 Worker 접근 토큰이 없습니다.")
+            return 1
+        key = ""  # Worker Secret에 KOPIS 키를 두므로 수집기 주소에 키를 넣지 않습니다.
     if not key:
-        print(f"환경변수 {env} 에 인증키가 없습니다.")
-        return 1
+        if not proxy_mode:
+            print(f"환경변수 {env} 에 인증키가 없습니다.")
+            return 1
     try:
         if source == "kopis":
             begin = date.fromisoformat(start) if start else datetime.now(KST).date()

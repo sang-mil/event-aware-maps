@@ -1,7 +1,7 @@
 """KOPIS(공연예술통합전산망, 예술경영지원센터) 공연·공연시설 수집.
 
 출처 표시 의무: "출처: (재)예술경영지원센터 공연예술통합전산망(www.kopis.or.kr)" — 화면에 반드시 표시.
-인증키는 환경변수 KOPIS_API_KEY 에서만 읽고, 오류 메시지·파일에 남기지 않는다(주소에 키가 들어가므로 주소도 남기지 않음).
+KOPIS_API_KEY는 직접 수집할 때 환경변수에서만 읽는다. Worker 경유 시에는 인증키 대신 KOPIS_PROXY_TOKEN으로 Worker에 인증하며, 키는 Worker Secret에만 둔다.
 
 - 공연 목록(pblprfr): 기간(최대 31일)·지역으로 조회. 한 번에 최대 100건.
 - 공연 상세(pblprfr/{id}): 공연장(mt10id·mt13id·fcltynm), 공연 시간 글(dtguidance), 런타임, 상태.
@@ -11,6 +11,7 @@
 
 from __future__ import annotations
 
+import os
 import time
 import urllib.parse
 import xml.etree.ElementTree as ET
@@ -33,8 +34,33 @@ ROWS = 100
 PAUSE_SEC = 0.2
 
 
+def _proxy_base() -> str | None:
+    value = os.environ.get("KOPIS_PROXY_URL", "").strip()
+    if not value:
+        return None
+    parsed = urllib.parse.urlsplit(value)
+    if parsed.scheme != "https" or not parsed.netloc or parsed.path not in ("", "/") or parsed.query or parsed.fragment:
+        raise CollectError("KOPIS_PROXY_URL은 경로 없는 HTTPS Worker 주소여야 합니다")
+    return value.rstrip("/")
+
+
 def _url(path: str, key: str, **params) -> str:
+    proxy_base = _proxy_base()
+    if proxy_base:
+        url = f"{proxy_base}/api/kopis/{path}"
+        query = urllib.parse.urlencode(params)
+        return f"{url}?{query}" if query else url
     return f"{BASE}/{path}?{urllib.parse.urlencode({'service': key, **params})}"
+
+
+def _get_text(url: str, source: str) -> str:
+    proxy_base = _proxy_base()
+    if proxy_base and url.startswith(f"{proxy_base}/api/kopis/"):
+        token = os.environ.get("KOPIS_PROXY_TOKEN", "").strip()
+        if not token:
+            raise CollectError("KOPIS_PROXY_TOKEN 환경변수가 없습니다")
+        return get_text(url, source, headers={"Authorization": f"Bearer {token}"})
+    return get_text(url, source)
 
 
 def _parse(text: str, source: str) -> ET.Element:
@@ -52,7 +78,7 @@ def _fields(db: ET.Element) -> dict:
     return {c.tag: (c.text or "").strip() for c in db if len(c) == 0}
 
 
-def list_window(key: str, start: date, end: date, get: Callable = get_text, wait: Callable = time.sleep) -> list[dict]:
+def list_window(key: str, start: date, end: date, get: Callable = _get_text, wait: Callable = time.sleep) -> list[dict]:
     """start~end(최대 31일) 송파구 공연 목록. 대상 5곳 시설명으로 시작하는 것만."""
     if (end - start).days + 1 > MAX_DAYS:
         raise ValueError("KOPIS 목록은 한 번에 31일까지만 조회할 수 있습니다")
@@ -68,14 +94,14 @@ def list_window(key: str, start: date, end: date, get: Callable = get_text, wait
         wait(PAUSE_SEC)
 
 
-def detail(key: str, mt20id: str, get: Callable = get_text) -> dict:
+def detail(key: str, mt20id: str, get: Callable = _get_text) -> dict:
     db = _parse(get(_url(f"pblprfr/{urllib.parse.quote(mt20id)}", key), "kopis_detail"), "kopis_detail").find("db")
     if db is None:
         raise CollectError(f"kopis_detail: {mt20id} 상세 없음")
     return _fields(db)
 
 
-def facility(key: str, mt10id: str, get: Callable = get_text) -> dict:
+def facility(key: str, mt10id: str, get: Callable = _get_text) -> dict:
     db = _parse(get(_url(f"prfplc/{urllib.parse.quote(mt10id)}", key), "kopis_facility"), "kopis_facility").find("db")
     if db is None:
         raise CollectError(f"kopis_facility: {mt10id} 상세 없음")
@@ -87,7 +113,7 @@ def facility(key: str, mt10id: str, get: Callable = get_text) -> dict:
     return {"mt10id": mt10id, "name": (db.findtext("fcltynm") or "").strip(), "halls": halls}
 
 
-def fetch_range(key: str, start: date, days: int, get: Callable = get_text, wait: Callable = time.sleep) -> dict:
+def fetch_range(key: str, start: date, days: int, get: Callable = _get_text, wait: Callable = time.sleep) -> dict:
     """start 부터 days 일 동안의 대상 시설 공연(상세 포함)과 시설 객석 정보."""
     rows: dict[str, dict] = {}
     d = start

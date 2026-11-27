@@ -40,7 +40,8 @@ jobs:
 
       - name: KOPIS 앞으로 30일 공연 수집 (실패하면 2025 다시 보기만 발행)
         env:
-          KOPIS_API_KEY: ${{ secrets.KOPIS_API_KEY }}
+          KOPIS_PROXY_URL: https://event-aware-maps-live-api.sangmil6369.workers.dev
+          KOPIS_PROXY_TOKEN: ${{ secrets.KOPIS_PROXY_TOKEN }}
         run: |
           if ! python backend/cli.py collect kopis --days 30; then
             rm -f backend/data/raw/kopis_upcoming.json
