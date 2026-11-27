@@ -444,9 +444,9 @@ export function LoadError({
     <main className="screen">
       <BackHeader href={back} />
       <section className="intro">
-        <h1 className="h1 big">{unsupported ? '혼잡 정보는 아직 준비 중이에요' : '정보를 찾을 수 없어요'}</h1>
+        <h1 className="h1 big">{unsupported ? '이 조건의 혼잡 자료가 없어요' : '정보를 찾을 수 없어요'}</h1>
         <p className="lead">
-          {unsupported ? '다른 출발 시간이나 출발지를 골라 주세요.' : '주소가 바뀌었거나 아직 준비되지 않은 정보예요.'}
+          {unsupported ? '현재는 올림픽공원 주변 공연일의 19~23시대 비교 자료를 제공해요. 다른 시간이나 출발지를 선택하면 안내가 표시되지 않을 수 있어요.' : '주소가 바뀌었거나 아직 준비되지 않은 정보예요.'}
         </p>
       </section>
     </main>

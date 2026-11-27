@@ -2,32 +2,43 @@
 
 import { useEffect, useState } from 'react';
 import { usingStaticData } from '@/api';
-import { REPLAY_MAX, REPLAY_MIN, dateLabel, setReplayDate, today } from '@/lib/app';
+import { REPLAY_MAX, REPLAY_MIN, clearReplayDate, dateLabel, replayDate, resetLegacyReplayForLiveDefault, setReplayDate, today } from '@/lib/app';
 
 /**
- * 2025 리플레이 안내 띠.
- * 발행된 실제 데이터가 2025년 것뿐이라, 정적 데이터 모드에서는 2025년의 하루를 '오늘'로 다시 보여줘요.
- * 날짜를 바꾸면 기기에만 저장하고(서버로 보내지 않아요) 화면을 새로 불러요.
+ * 한국의 오늘 날짜를 기본으로 표시하고, 원하면 2025년 관측 자료를 다시 볼 수 있어요.
+ * 날짜 선택은 이 기기에만 저장하고 서버로 보내지 않아요.
  */
 export function ReplayBanner() {
-  const [date, setDate] = useState<string | null>(null);
-  useEffect(() => setDate(today()), []);
-  if (!usingStaticData || !date) return null;
+  const [dates, setDates] = useState<{ today: string; replay: string | null } | null>(null);
+  useEffect(() => {
+    if (!usingStaticData) return;
+    if (resetLegacyReplayForLiveDefault()) {
+      window.location.reload();
+      return;
+    }
+    setDates({ today: today(), replay: replayDate() });
+  }, []);
+  if (!usingStaticData || !dates) return null;
   return (
     <div className="replay-banner" role="note">
-      <span>2025년 실제 데이터 다시 보기 · {dateLabel(date)} 기준</span>
-      <input
-        type="date"
-        aria-label="다시 볼 날짜"
-        value={date}
-        min={REPLAY_MIN}
-        max={REPLAY_MAX}
-        onChange={(e) => {
-          if (!e.target.value) return;
-          setReplayDate(e.target.value);
-          window.location.reload();
-        }}
-      />
+      <span>{dates.replay ? `2025년 관측 자료 다시 보기 · ${dateLabel(dates.replay, true)} 기준` : `오늘 날짜 · ${dateLabel(dates.today, true)} 기준`}</span>
+      <label style={{ display: 'flex', alignItems: 'center', gap: 5, whiteSpace: 'nowrap' }}>
+        <span style={{ fontSize: 12 }}>2025 다시보기</span>
+        <input
+          type="date"
+          aria-label="다시 볼 2025년 날짜"
+          title="2025년 관측 자료 다시 보기"
+          value={dates.replay ?? ''}
+          min={REPLAY_MIN}
+          max={REPLAY_MAX}
+          onChange={(e) => {
+            if (!e.target.value) return;
+            setReplayDate(e.target.value);
+            window.location.reload();
+          }}
+        />
+      </label>
+      {dates.replay && <button type="button" onClick={() => { clearReplayDate(); window.location.reload(); }}>오늘 자료 보기</button>}
     </div>
   );
 }

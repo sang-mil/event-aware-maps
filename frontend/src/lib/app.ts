@@ -3,28 +3,38 @@
 import { useEffect, useState } from 'react';
 import { subscribePush, usingMock, usingStaticData, type Level } from '@/api';
 
-/**
- * 시안은 2025년 8월 9일(토) 20:00 을 "지금"으로 그렸어요.
- * 목업 데이터도 그날 것만 있어서, 실제 데이터가 연동되기 전까지는 이 값을 오늘로 써요.
- */
+/** 정적 목업·서버 렌더링에서 사용할 고정 날짜와 시각 */
 export const DEMO_TODAY = '2025-08-09';
 export const DEMO_QUIET_DAY = '2025-08-16';
 export const DEMO_NOW_MIN = 20 * 60;
 export const DEMO_MONTH = '2025-08';
 
-/**
- * 오늘 날짜와 지금 시각. 실제 데이터가 연동되면 이 두 함수만 실제 시계로 바꿔요.
- * 화면 곳곳에 날짜·시간을 직접 적지 말고 이 함수를 써요.
- */
+function kstDate(): string {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(new Date());
+  const part = (type: string) => parts.find((item) => item.type === type)?.value ?? '';
+  return `${part('year')}-${part('month')}-${part('day')}`;
+}
+
+/** 실제 데이터에서는 한국 날짜를 기본으로 쓰고, 사용자가 과거 재생을 고른 경우만 그 날짜를 사용해요. */
 export function today(): string {
-  if (!usingStaticData || typeof window === 'undefined') return DEMO_TODAY;
+  if (typeof window === 'undefined') return DEMO_TODAY;
+  if (usingStaticData) return replayDate() ?? kstDate();
+  if (usingMock) return DEMO_TODAY;
+  return kstDate();
+}
+
+/** 2025년 관측 자료 다시 보기 날짜. 선택값은 기기에만 저장돼요. */
+export function replayDate(): string | null {
+  if (!usingStaticData || typeof window === 'undefined') return null;
   const fromUrl = new URLSearchParams(window.location.search).get('replay');
   if (fromUrl && isReplayDate(fromUrl)) {
     setReplayDate(fromUrl);
     return fromUrl;
   }
   const saved = store<string>('replayDate');
-  return saved && isReplayDate(saved) ? saved : DEMO_TODAY;
+  return saved && isReplayDate(saved) ? saved : null;
 }
 
 /**
@@ -41,6 +51,28 @@ export const REPLAY_MAX = '2025-12-31';
 const isReplayDate = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= REPLAY_MIN && d <= REPLAY_MAX;
 export function setReplayDate(date: string) {
   if (isReplayDate(date)) store('replayDate', date);
+}
+export function clearReplayDate() {
+  try {
+    window.localStorage.removeItem('tumgil:replayDate');
+    const url = new URL(window.location.href);
+    url.searchParams.delete('replay');
+    window.history.replaceState({}, '', url);
+  } catch {
+    /* 저장소를 쓸 수 없어도 오늘 날짜로 계속 볼 수 있어요 */
+  }
+}
+/** 예전 버전이 저장한 2025년 날짜를 한 번 지워 새 기본값인 오늘 날짜로 전환해요. */
+export function resetLegacyReplayForLiveDefault(): boolean {
+  try {
+    const marker = 'tumgil:liveDateDefault';
+    if (window.localStorage.getItem(marker) === '1') return false;
+    window.localStorage.removeItem('tumgil:replayDate');
+    window.localStorage.setItem(marker, '1');
+    return true;
+  } catch {
+    return false;
+  }
 }
 /** 위치를 쓸 수 없을 때(E1)의 기준. "올림픽공원 기준으로 보여드려요" */
 export const DEFAULT_ORIGIN_STATION = 'olympic_park';
