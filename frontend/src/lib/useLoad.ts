@@ -55,3 +55,11 @@ export function useWalkMin() {
   return (venueId: string | null | undefined, stationId: string): number | null =>
     venueId ? data?.routes.find((r) => r.venue_id === venueId && r.station_id === stationId)?.walk_min ?? null : null;
 }
+
+/** 역 상세의 혼잡 대안 역 사이 도보 시간(분). 역 순서를 지켜 공개된 사전 계산 경로를 찾아요. */
+export function useStationWalkMin() {
+  const walks = useLoad(getWalkRoutes, []);
+  const data = walks.status === 'ok' ? readWalkRoutes(walks.value.data) : null;
+  return (fromStationId: string, toStationId: string): number | null =>
+    data?.station_routes?.find((r) => r.from_station_id === fromStationId && r.to_station_id === toStationId)?.walk_min ?? null;
+}

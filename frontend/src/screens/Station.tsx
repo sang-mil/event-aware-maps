@@ -7,7 +7,7 @@ import { alertKey, getStationForecast, hasAlert, pushReady, setAlert } from '@/a
 import { SourceNote } from '@/components/DataNote';
 import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, UncertainMark, Walk, stationName } from '@/components/ui';
 import { LEVEL, today, dateLabel, isoAt, requestPush, pushSupport, track } from '@/lib/app';
-import { useLoad, useRefs } from '@/lib/useLoad';
+import { useLoad, useRefs, useStationWalkMin } from '@/lib/useLoad';
 
 /** 02 · 02-1 역 상세, 02-2 · 02-3 고른 날짜, E3 혼잡 정보가 없는 역 */
 export function Station() {
@@ -18,6 +18,7 @@ export function Station() {
   const back = pickedDate ? '/calendar/' : '/home/';
   const res = useLoad(() => getStationForecast(id, date), [id, date]);
   const { st } = useRefs();
+  const stationWalkMin = useStationWalkMin();
   const [on, setOn] = useState(false);
   const key = alertKey('departure', `${id}:${date}`);
   useEffect(() => {
@@ -63,7 +64,7 @@ export function Station() {
               <span className="main">
                 <span className="title">{stationName(st, n.station_id)}</span>
                 <span className="sub">
-                  <Walk min={n.walk_min} />
+                  <Walk min={n.walk_min ?? stationWalkMin(id, n.station_id)} />
                 </span>
               </span>
               <LevelBadge level={n.level} />
@@ -113,7 +114,7 @@ export function Station() {
                 <span className="main">
                   <span className="title">{stationName(st, a.station_id)}</span>
                   <span className="sub">
-                    <Walk min={a.walk_min} />, {a.message}
+                    <Walk min={a.walk_min ?? stationWalkMin(id, a.station_id)} />, {a.message}
                     <UncertainMark show={a.uncertain} />
                   </span>
                 </span>
