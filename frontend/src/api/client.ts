@@ -87,6 +87,12 @@ export interface JsonFiles<T> {
   missingIsUnsupported?: boolean;
   /** This published artifact is served from DATA_BASE even when an API server is configured. */
   forceStatic?: boolean;
+  /**
+   * 파일 자체가 데이터인 형식(envelope 없음)인지. 예: walk-routes.json 은 최상위에
+   * schema_version·updated_at·places·routes 가 바로 있어요(data-contract walk-routes.schema.json).
+   * 이때는 `body.data` 가 아니라 body 전체를 돌려주고, 캐시에는 envelope 로 감싸서 저장해요.
+   */
+  unwrapped?: boolean;
 }
 
 /**
@@ -114,6 +120,12 @@ export async function getJson<T>(apiPath: string, files: JsonFiles<T>): Promise<
   }
   if (res.status === 422) throw new ApiError('unsupported', null);
   if (!res.ok) return fromCacheOrThrow<T>(key);
+  if (files.unwrapped) {
+    const raw = (await res.json()) as T & { schema_version?: string; updated_at?: string };
+    const updatedAt = raw?.updated_at || new Date().toISOString();
+    writeCache(key, { schema_version: raw?.schema_version ?? '', updated_at: updatedAt, data: raw });
+    return { data: raw, updatedAt, fromCache: false };
+  }
   const body = (await res.json()) as Envelope<T>;
   writeCache(key, body);
   return { data: body.data, updatedAt: body.updated_at, fromCache: false };

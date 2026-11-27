@@ -26,11 +26,28 @@ export type { ApiErrorCode, Loaded } from './client';
 export const getStations = () => getJson<Station[]>('/stations', { mock: 'stations.json' });
 export const getVenues = () => getJson<Venue[]>('/venues', { mock: 'venues.json' });
 
+const isNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+
+/**
+ * walk-routes.json 형식 확인. 최상위 places·routes 가 배열이 아니면 null(읽지 못함)을 돌려줘요.
+ * 좌표가 숫자가 아닌 장소·경로 점은 지도를 깨뜨리지 않게 빼고 보여줘요(값을 고치거나 지어내지 않아요).
+ */
+export function readWalkRoutes(raw: unknown): WalkRoutes | null {
+  const d = raw as Partial<WalkRoutes> | null | undefined;
+  if (!d || !Array.isArray(d.places) || !Array.isArray(d.routes)) return null;
+  const places = d.places.filter((p) => p && typeof p.id === 'string' && isNum(p.x) && isNum(p.y));
+  const routes = d.routes
+    .filter((r) => r && typeof r.venue_id === 'string' && typeof r.station_id === 'string' && Array.isArray(r.path))
+    .map((r) => ({ ...r, path: r.path.filter((pt) => Array.isArray(pt) && isNum(pt[0]) && isNum(pt[1])) }));
+  return { ...(d as WalkRoutes), places, routes };
+}
+
 /** 사전 발행한 공연장→역 도보 경로. 파일이 없으면 없는 데이터로 처리합니다. */
 export const getWalkRoutes = () => getJson<WalkRoutes>('/walk-routes', {
   mock: 'walk-routes.json',
   data: 'walk-routes.json',
   forceStatic: true,
+  unwrapped: true, // envelope 없이 최상위에 places·routes 가 있는 파일이에요
 });
 
 /** GET /events?date= */

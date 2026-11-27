@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getCompare, getEvents, getForecast, getRoute, getWalkRoutes, type CompareOption, type CompareParams } from '@/api';
+import { getCompare, getEvents, getForecast, getRoute, getWalkRoutes, readWalkRoutes, type CompareOption, type CompareParams } from '@/api';
 import {
   BackHeader,
   BottomBar,
@@ -48,23 +48,29 @@ export function MapScreen() {
   const top = (f.ranking[hour] ?? []).filter((id) => levelOf(id) !== 'no_data').slice(0, 2);
   const selEvent = sel ? ev.value.data.events.find((e) => e.venue_id === sel) : undefined;
   const selVenue = sel ? vn[sel] : undefined;
+  // 형식이 예상과 다르면 null → 화면 전체를 죽이지 않고 '지도 위치 정보를 읽지 못했어요'
+  const walkData = walks.status === 'ok' ? readWalkRoutes(walks.value.data) : null;
 
   return (
     <main className="screen" style={{ background: '#EEF0F3', minHeight: '100dvh', overflow: 'hidden', paddingBottom: 0 }}>
       <h1 className="sr">길찾기</h1>
       <div style={{ position: 'relative', height: 'calc(100dvh - 76px)', minHeight: 600 }}>
-        {walks.status === 'ok' ? (
+        {walkData ? (
           <KakaoOverviewMap
-            places={walks.value.data.places}
-            routes={walks.value.data.routes}
+            places={walkData.places}
+            routes={walkData.routes}
             selectedVenueId={sel}
             stationMarkers={Object.fromEntries(Object.entries(st).map(([id, station]) => [id, { line: station.lines[0] ?? null, level: LEVEL[levelOf(id)].label }]))}
             onSelectVenue={setSel}
             onSelectStation={(id) => router.push(`/station/?id=${id}`)}
           />
         ) : (
-          <div role="status" className="card pad" style={{ position: 'absolute', inset: '16px 16px auto', zIndex: 1 }}>
-            {walks.status === 'loading' ? '지도 위치 정보를 불러오는 중이에요.' : '지도 위치 정보가 아직 발행되지 않았어요.'}
+          <div role="status" className="card pad" style={{ position: 'absolute', inset: '140px 16px auto', zIndex: 1 }}>
+            {walks.status === 'loading'
+              ? '지도 위치 정보를 불러오는 중이에요.'
+              : walks.status === 'ok'
+                ? '지도 위치 정보를 읽지 못했어요.'
+                : '지도 위치 정보가 아직 발행되지 않았어요.'}
           </div>
         )}
         <div style={{ position: 'absolute', top: 16, left: 16, right: 16, display: 'flex', flexDirection: 'column', gap: 10, zIndex: 2 }}>
@@ -472,10 +478,11 @@ export function RouteScreen() {
   const toName = r.to_station_id ? st[r.to_station_id]?.name : params.toStationId ? st[params.toStationId]?.name : null;
   const hourLabel = `${Number(params.departAt.slice(11, 13))}시대 출발`;
   const max = Math.max(1, ...r.compare.items.map((i) => i.expected));
-  const walkRoute = params.fromType === 'venue' && walks.status === 'ok'
-    ? walks.value.data.routes.find((item) => item.venue_id === params.fromId && item.station_id === r.board_station_id)
+  const walkData = walks.status === 'ok' ? readWalkRoutes(walks.value.data) : null;
+  const walkRoute = params.fromType === 'venue' && walkData
+    ? walkData.routes.find((item) => item.venue_id === params.fromId && item.station_id === r.board_station_id)
     : undefined;
-  const place = (id: string) => walks.status === 'ok' ? walks.value.data.places.find((item) => item.id === id) : undefined;
+  const place = (id: string) => walkData?.places.find((item) => item.id === id);
   const originPlace = params.fromType === 'venue' ? place(params.fromId) : undefined;
   const stationPlace = place(r.board_station_id);
   const mapUrl = (name: string) =>
