@@ -28,7 +28,7 @@ import {
   venueName,
   UncertainMark,
 } from '@/components/ui';
-import { REPLAY_MIN, dateLabel, demoState, isIphone, pushSupport, requestPush, replayDate, today, track, type PushSupport } from '@/lib/app';
+import { DEMO_MONTH, DEMO_TODAY, REPLAY_MIN, dateLabel, demoState, isIphone, pushSupport, requestPush, replayDate, today, track, type PushSupport } from '@/lib/app';
 import { useLoad, useRefs, useWalkMin } from '@/lib/useLoad';
 
 const AREAS = [
@@ -41,8 +41,8 @@ function eventHref(e: { id: string; type: 'show' | 'game' }, from: string) {
   return e.type === 'game' ? `/game/?id=${e.id}` : `/event/?id=${e.id}&from=${from}`;
 }
 
-function latestSelectableMonth() {
-  const [year, month] = today().split('-').map(Number);
+function latestSelectableMonth(date: string) {
+  const [year, month] = date.split('-').map(Number);
   const next = new Date(Date.UTC(year, month, 1));
   return `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, '0')}`;
 }
@@ -51,16 +51,16 @@ function latestSelectableMonth() {
 export function Calendar() {
   const [area, setArea] = useState<string>('all');
   const [venue, setVenue] = useState<string>('all');
-  const [picked, setPicked] = useState(today());
-  const [month, setMonth] = useState(today().slice(0, 7));
+  const [picked, setPicked] = useState(DEMO_TODAY);
+  const [month, setMonth] = useState(DEMO_MONTH);
+  const [latestMonth, setLatestMonth] = useState(() => latestSelectableMonth(DEMO_TODAY));
   useEffect(() => {
-    if (replayDate()) return;
-    const liveDate = today();
-    setPicked(liveDate);
-    setMonth(liveDate.slice(0, 7));
+    const activeDate = replayDate() ?? today();
+    setPicked(activeDate);
+    setMonth(activeDate.slice(0, 7));
+    setLatestMonth(latestSelectableMonth(today()));
   }, []);
   const cal = useLoad(() => getCalendar(month), [month]);
-  const latestMonth = latestSelectableMonth();
   // 2025 관측 범위와 현재부터 한 달 뒤까지 이동할 수 있어요. 자료가 없으면 화면에 없다고 표시해요.
   const shiftMonth = (delta: number) => {
     const [yy, mm] = month.split('-').map(Number);
