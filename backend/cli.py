@@ -124,7 +124,10 @@ def cmd_export_seed(db_path: Path, out: Path) -> int:
     return 0
 
 
-def cmd_build(db_path: Path, out: Path, as_of: datetime) -> int:
+WALK_ROUTES_PATH = BACKEND / "data" / "raw" / "walk-routes.json"  # data-refresh 가 gh-pages 에서 받아 둠 (git 제외)
+
+
+def cmd_build(db_path: Path, out: Path, as_of: datetime, walk_path: Path = WALK_ROUTES_PATH) -> int:
     if not db_path.is_file():
         print(f"DB가 없습니다. 먼저 build-db 를 실행하세요: {db_path}")
         return 1
@@ -147,7 +150,13 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime) -> int:
     nearest = lambda ev: cg_outputs.nearest_level(day_of(ev.date), ev.exit_hour)  # noqa: E731
     data = ev_outputs.build_files(events, *span, nearest=nearest, linkable=True)
     data["stations.json"] = reference.stations(set(obs))
-    data["venues.json"] = reference.venues()
+    try:
+        walk = walk_routes.load_lookup(walk_path)
+    except walk_routes.KakaoMapError as e:
+        print(e)
+        return 1
+    print(f"도보 경로 {len(walk)}개 조합 사용" if walk else "도보 경로 파일 없음: 도보 시간은 '정보 없음'으로 둡니다")
+    data["venues.json"] = reference.venues(walk)
     for ev in events:
         same = [o for o in events if o.date == ev.date]
         data[f"event-{ev.id}.json"] = ev_detail.event_detail(ev, same, day_of(ev.date), nearest)
@@ -156,7 +165,7 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime) -> int:
         for sid in cg_outputs.STATIONS:
             data[f"station-{sid}-{d}.json"] = cg_outputs.station_forecast(d, sid, day_of(d), exits)
         if exits.get(d):  # 귀가 방법 비교는 공연 날만
-            data.update(rc_compare.build_files(d, day_of(d)))
+            data.update(rc_compare.build_files(d, day_of(d), walk))
     files = {name: wrap(body, as_of) for name, body in data.items()}
     try:
         written = publish(files, out)
@@ -265,6 +274,7 @@ def main(argv: list[str] | None = None) -> int:
     bd.add_argument("--db", type=Path, default=DB_PATH)
     bd.add_argument("--out", type=Path, required=True)
     bd.add_argument("--as-of", type=datetime.fromisoformat, default=None, help="기준 시각 (예: 2025-08-09T18:00:00+09:00)")
+    bd.add_argument("--walk-routes", type=Path, default=WALK_ROUTES_PATH, help="발행된 walk-routes.json (없으면 도보 시간 null)")
     bt = sub.add_parser("backtest", help="혼잡 단계 적중률 검증")
     bt.add_argument("--db", type=Path, default=DB_PATH)
     rb = sub.add_parser("recommend-backtest", help="추천 1순위를 실제 승차로 검증")
@@ -293,7 +303,7 @@ def main(argv: list[str] | None = None) -> int:
         if as_of.tzinfo is None:
             print("--as-of 에는 시간대(+09:00)가 있어야 합니다.")
             return 1
-        return cmd_build(args.db, args.out, as_of)
+        return cmd_build(args.db, args.out, as_of, args.walk_routes)
     if args.command == "build-db":
         return cmd_build_db(args.raw_dir, args.db, args.seed)
     if args.command == "export-seed":

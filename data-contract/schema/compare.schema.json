@@ -49,6 +49,20 @@
               "expected": { "$ref": "common.schema.json#/$defs/count_or_null" },
               "level": { "$ref": "common.schema.json#/$defs/level" },
               "compare_message": { "type": "string" },
+              "walk_by_venue": {
+                "type": "object",
+                "description": "(2026-11 추가, 선택) 출발 공연장 id → 이 역까지 카카오 도보 경로. 경로가 없는 공연장은 빠짐",
+                "propertyNames": { "$ref": "common.schema.json#/$defs/id" },
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "walk_min": { "type": "integer", "minimum": 0 },
+                    "distance_m": { "type": "integer", "minimum": 0 }
+                  },
+                  "required": ["walk_min", "distance_m"],
+                  "additionalProperties": false
+                }
+              },
               "uncertain": { "type": "boolean", "description": "(2026-11 추가, 선택) 관객 수를 모르는 공연이 있어 실제로는 더 붐빌 수 있음" }
             },
             "required": ["id", "kind", "recommended", "title", "subtitle", "station_id", "board_hour", "walk_min", "expected", "level", "compare_message"],
