@@ -82,9 +82,12 @@ jobs:
         run: |
           python - <<'PY'
           import json, os, pathlib
+          KEEP = {"walk-routes.json"}  # 다른 워크플로(walk-routes-refresh)가 발행하는 파일은 비교·삭제에서 뺀다
           def load(d):
               out = {}
               for p in pathlib.Path(d).glob("*.json"):
+                  if p.name in KEEP:
+                      continue
                   body = json.loads(p.read_text(encoding="utf-8"))
                   body.pop("updated_at", None)
                   out[p.name] = body
@@ -98,8 +101,9 @@ jobs:
       - name: gh-pages data/ 에 발행
         if: steps.diff.outputs.changed == 'true'
         run: |
-          rm -rf pages/data
+          # walk-routes.json 은 walk-routes-refresh 가 따로 발행하므로 지우지 않고 남긴다
           mkdir -p pages/data
+          find pages/data -mindepth 1 -maxdepth 1 ! -name walk-routes.json -exec rm -rf {} +
           cp -r site_data/. pages/data/
           touch pages/.nojekyll
           cd pages
