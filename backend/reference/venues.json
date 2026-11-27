@@ -8,6 +8,7 @@
       "bangi"
     ],
     "search_aliases": [
+      "KSPO돔",
       "올림픽체조경기장",
       "체조경기장"
     ]
@@ -87,6 +88,9 @@
     "nearby_station_ids": [
       "sports_complex",
       "jamsil_saenae"
+    ],
+    "search_aliases": [
+      "서울특별시교육청 학생체육관"
     ]
   },
   {

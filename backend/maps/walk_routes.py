@@ -37,6 +37,7 @@ def _norm(text: str) -> str:
     return re.sub(r"[\s()·_-]+", "", text).lower()
 
 
+# 검색 별칭(venues.json search_aliases)의 근거: KSPO 공연정보 API 장소 표기, 카카오 장소 검색이 실제로 돌려준 이름.
 VENUE_REGION = "서울 송파구"  # 기준 공연장 12곳은 모두 서울 송파구에 있다. 다른 지역의 같은 이름 장소를 막는다.
 CANDIDATES_IN_ERROR = 5
 

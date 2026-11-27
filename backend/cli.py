@@ -305,6 +305,8 @@ def main(argv: list[str] | None = None) -> int:
             report: list[str] = []
             count = walk_routes.write(os.environ.get("KAKAO_REST_API_KEY", ""), args.out, report)
         except walk_routes.KakaoMapError as e:
+            for line in report:  # 실패해도 찾은 장소는 보여 준다
+                print(f"  {line}")
             print(e)
             return 1
         for line in report:
