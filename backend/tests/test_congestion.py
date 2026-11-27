@@ -92,6 +92,31 @@ def test_backtest_leave_one_out_on_fake_world():
     assert r["naive_accuracy"] == pytest.approx(3 / 4)     # 기준선만 쓰면 퇴장 시각을 놓침
 
 
+def test_backtest_as_of_never_uses_records_after_the_prediction_date():
+    obs, covered, exits = make_world(12)
+    cutoff = "2099-03-20"
+    before = backtest.run_as_of(obs, covered, exits, ["olympic_park"], through=cutoff)
+
+    changed_obs = {key: dict(series) for key, series in obs.items()}
+    for key, series in changed_obs.items():
+        for point in list(series):
+            d, hour = point
+            if d > cutoff:
+                series[point] += 100_000
+    changed_exits = {
+        d: [(hour, None if audience is None else audience * 100) for hour, audience in events]
+        for d, events in exits.items()
+    }
+    after = backtest.run_as_of(changed_obs, covered, changed_exits, ["olympic_park"], through=cutoff)
+
+    assert before["validation"] == "as_of"
+    assert before["cases"] > 0
+    assert before["first_scored_day"] == after["first_scored_day"]
+    assert before["last_scored_day"] == after["last_scored_day"]
+    assert before["accuracy"] == after["accuracy"]
+    assert before["median_abs_error"] == after["median_abs_error"]
+
+
 def test_non_event_anomalies_find_spikes_without_calling_them_events():
     obs, covered, exits = make_world()
     second = ("bangi", "5")
