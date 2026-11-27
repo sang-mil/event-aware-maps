@@ -6,6 +6,37 @@ const AREAS = Object.freeze({
 const CACHE_SECONDS = 300;
 const SOURCE = "서울특별시 공공데이터 · 서울시 실시간 도시데이터";
 
+function normalizeCityData(payload) {
+  const city = payload?.CITYDATA;
+  const population = city?.LIVE_PPLTN_STTS;
+  if (!city || typeof city !== "object") return null;
+
+  const crowd = Array.isArray(population)
+    ? population[0]
+    : population && typeof population === "object"
+      ? population
+      : city;
+  const pick = (key) => {
+    const value = crowd?.[key];
+    return typeof value === "string" || typeof value === "number" ? value : null;
+  };
+
+  return {
+    area: {
+      name: typeof city.AREA_NM === "string" ? city.AREA_NM : null,
+      code: typeof city.AREA_CD === "string" ? city.AREA_CD : null,
+    },
+    crowd: {
+      level: pick("AREA_CONGEST_LVL"),
+      message: pick("AREA_CONGEST_MSG"),
+      population_min: pick("AREA_PPLTN_MIN"),
+      population_max: pick("AREA_PPLTN_MAX"),
+      observed_at: pick("PPLTN_TIME"),
+    },
+    source: SOURCE,
+  };
+}
+
 function jsonResponse(body, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(body), {
     status,
@@ -82,13 +113,23 @@ export default {
       return jsonResponse({ error: "invalid_upstream_response" }, 502);
     }
 
-    const headers = new Headers(upstream.headers);
-    headers.set("Access-Control-Allow-Origin", "*");
-    headers.set("Access-Control-Expose-Headers", "X-Data-Source, X-Data-Retrieved-At");
-    headers.set("Cache-Control", `public, max-age=${CACHE_SECONDS}`);
-    headers.set("X-Data-Source", SOURCE);
-    headers.set("X-Data-Retrieved-At", new Date().toISOString());
-    const response = new Response(upstream.body, { status: 200, headers });
+    let payload;
+    try {
+      payload = await upstream.json();
+    } catch {
+      return jsonResponse({ error: "invalid_upstream_response" }, 502);
+    }
+
+    const data = normalizeCityData(payload);
+    if (!data) {
+      return jsonResponse({ error: "invalid_upstream_response" }, 502);
+    }
+
+    const response = jsonResponse(data, 200, {
+      "Access-Control-Expose-Headers": "X-Data-Source, X-Data-Retrieved-At",
+      "X-Data-Source": SOURCE,
+      "X-Data-Retrieved-At": new Date().toISOString(),
+    });
     await cache.put(cacheKey, response.clone());
     return response;
   },
