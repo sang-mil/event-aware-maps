@@ -6,6 +6,11 @@
     "nearby_station_ids": [
       "olympic_park",
       "bangi"
+    ],
+    "search_aliases": [
+      "KSPO돔",
+      "올림픽체조경기장",
+      "체조경기장"
     ]
   },
   {
@@ -24,6 +29,11 @@
     "nearby_station_ids": [
       "olympic_park",
       "bangi"
+    ],
+    "search_aliases": [
+      "SK핸드볼경기장",
+      "올림픽핸드볼경기장",
+      "핸드볼경기장"
     ]
   },
   {
@@ -69,6 +79,9 @@
     "nearby_station_ids": [
       "sports_complex",
       "jamsil_saenae"
+    ],
+    "search_aliases": [
+      "잠실종합운동장 실내체육관"
     ]
   },
   {
@@ -78,6 +91,9 @@
     "nearby_station_ids": [
       "sports_complex",
       "jamsil_saenae"
+    ],
+    "search_aliases": [
+      "서울특별시교육청 학생체육관"
     ]
   },
   {
@@ -87,6 +103,9 @@
     "nearby_station_ids": [
       "sports_complex",
       "jamsil_saenae"
+    ],
+    "search_aliases": [
+      "잠실종합운동장 올림픽주경기장"
     ]
   },
   {
