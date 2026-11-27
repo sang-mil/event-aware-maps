@@ -132,12 +132,13 @@ def cmd_build(db_path: Path, out: Path, as_of: datetime) -> int:
         return 1
     events = ev_detect.detect_events(ev_load.load_rows(db_path))
     obs, covered, exits = cg_load.load_inputs(db_path)
-    base = cg_model.Baselines(obs, covered, exits)
-    res = cg_model.residuals(obs, exits, base)
     days: dict[str, dict] = {}
 
     def day_of(d: str) -> dict:
         if d not in days:
+            # Historical replay for d may use only data available before d.
+            base = cg_model.Baselines(obs, covered, exits, as_of=d)
+            res = cg_model.residuals(obs, exits, base, as_of=d)
             days[d] = cg_outputs.compute_day(d, obs, exits, base, res)
         return days[d]
 
@@ -172,18 +173,21 @@ def cmd_backtest(db_path: Path) -> int:
     if not db_path.is_file():
         print(f"DB가 없습니다. 먼저 build-db 를 실행하세요: {db_path}")
         return 1
-    r = cg_backtest.run(*cg_load.load_inputs(db_path), BACKTEST_STATIONS)
+    inputs = cg_load.load_inputs(db_path)
+    r = cg_backtest.run_as_of(*inputs, BACKTEST_STATIONS)
+    loo = cg_backtest.run(*inputs, BACKTEST_STATIONS)
     if not r["cases"]:
-        print("비교할 공연 날이 없습니다.")
+        print("이전 자료만으로 기준선을 만들 수 있는 비교 사례가 없습니다.")
         return 1
     pct = lambda x: "-" if x is None else f"{x:.0%}"  # noqa: E731
-    print(f"공연 날 {r['days']}일 × 역 {len(BACKTEST_STATIONS)}곳 × 19~23시 = {r['cases']}건 (각 날은 그날을 빼고 예측)")
-    print(f"단계 적중률 {pct(r['accuracy'])} (행사 효과 없이 기준선만 쓰면 {pct(r['naive_accuracy'])})")
+    print(f"시간순 검증 {r['days']}일 ({r['first_scored_day']} ~ {r['last_scored_day']}), {r['cases']}건")
+    print(f"단계 적중률 {pct(r['accuracy'])} (기준선만 {pct(r['naive_accuracy'])})")
     print(f"'혼잡' 예측이 맞은 비율 {pct(r['crowded_precision'])}, 실제 혼잡을 미리 잡은 비율 {pct(r['crowded_recall'])}")
     for sid, (acc, naive, n) in r["by_station"].items():
         print(f"  {sid}: {pct(acc)} (기준선만 {pct(naive)}, {n}건)")
     print(f"예상 인원 오차 중앙값 {r['median_abs_error']:.0f}명")
     print("실제→예측: " + ", ".join(f"{LEVEL_KO[a]}→{LEVEL_KO[p]} {n}" for (a, p), n in sorted(r["confusion"].items())))
+    print(f"참고: leave-one-out 적중률 {pct(loo['accuracy'])} (각 날짜를 제외한 과거·미래 자료를 함께 학습하므로 운영 신뢰도 지표로 쓰지 않음)")
     return 0
 
 

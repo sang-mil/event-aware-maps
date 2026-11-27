@@ -42,6 +42,67 @@ def run(obs: dict, covered: set[str], exits: dict, stations: list[str]) -> dict:
                 naive_hits[sid] += al == "normal"
                 confusion[(al, pl)] += 1
                 abs_err.append(abs(sum(p["expected"] for p in parts) - sum(p["actual"] for p in parts)))
+    return _result(hits, naive_hits, total, confusion, abs_err, exits, covered, stations)
+
+
+def run_as_of(
+    obs: dict,
+    covered: set[str],
+    exits: dict,
+    stations: list[str],
+    through: str | None = None,
+) -> dict:
+    """날짜순 검증: 각 예측일에는 그 날짜보다 앞선 기록만 학습에 쓴다.
+
+    `through`는 검증할 마지막 날짜(포함)이며, 테스트·부분 재현에 쓸 수 있다.
+    해당 날짜의 공연 종료·관객 기록은 예측 입력으로 사용하고, 그날의 승차 실측은 정답으로만 쓴다.
+    """
+    hits = Counter()
+    naive_hits = Counter()
+    total = Counter()
+    confusion = Counter()
+    abs_err: list[float] = []
+    scored_days: set[str] = set()
+    lines = {sid: [k for k in obs if k[0] == sid] for sid in stations}
+
+    for d in sorted(exits):
+        if d not in covered or (through is not None and d > through):
+            continue
+        base = Baselines(obs, covered, exits, as_of=d)
+        res = residuals(obs, exits, base, as_of=d)
+        coefs = coefficients(res)
+        target_exits = {d: exits[d]}
+        day_scored = False
+        for sid in stations:
+            for hour in HOURS:
+                parts = []
+                for key in lines[sid]:
+                    p = predict(d, key, hour, target_exits, base, coefs)
+                    p["actual"] = obs[key].get((d, hour))
+                    parts.append(p)
+                pred, actual = station_ratio(parts), station_ratio(parts, "actual")
+                if pred is None or actual is None:
+                    continue
+                pl, al = level(pred), level(actual)
+                total[sid] += 1
+                hits[sid] += pl == al
+                naive_hits[sid] += al == "normal"
+                confusion[(al, pl)] += 1
+                abs_err.append(abs(sum(p["expected"] for p in parts) - sum(p["actual"] for p in parts)))
+                day_scored = True
+        if day_scored:
+            scored_days.add(d)
+
+    result = _result(hits, naive_hits, total, confusion, abs_err, exits, covered, stations)
+    result["validation"] = "as_of"
+    result["days"] = len(scored_days)
+    result["first_scored_day"] = min(scored_days) if scored_days else None
+    result["last_scored_day"] = max(scored_days) if scored_days else None
+    return result
+
+
+def _result(hits: Counter, naive_hits: Counter, total: Counter, confusion: Counter,
+            abs_err: list[float], exits: dict, covered: set[str], stations: list[str]) -> dict:
     n = sum(total.values())
     said_crowded = sum(v for (a, p), v in confusion.items() if p == "crowded")
     was_crowded = sum(v for (a, p), v in confusion.items() if a == "crowded")
