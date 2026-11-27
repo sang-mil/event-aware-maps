@@ -1,0 +1,57 @@
+# 실시간 지역 혼잡 기록 쌓기: 30분마다 live-api Worker(서울시 실시간 도시데이터)를 불러
+# realtime-log 브랜치의 realtime/YYYY-MM-DD.jsonl 에 덧붙인다.
+# - 서울 인증키는 Worker 비밀값에만 있다. 이 작업은 공개 Worker 주소만 부르므로 키가 필요 없다.
+# - main 기록을 늘리지 않도록 별도 브랜치(realtime-log)에만 커밋한다. force push 하지 않는다.
+# - 지금은 화면 예측(2025 다시 보기)을 보정하지 않는다. 나중에 '오늘 예측'의 보정 규칙을 검증할 원자료다.
+name: realtime-log
+
+on:
+  schedule:
+    - cron: "*/30 * * * *" # 30분마다 (GitHub 사정으로 몇 분 늦을 수 있음)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: realtime-log
+  cancel-in-progress: false
+
+env:
+  LIVE_API_BASE: https://event-aware-maps-live-api.sangmil6369.workers.dev
+
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: realtime-log 브랜치 준비
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin realtime-log > /dev/null; then
+            git fetch --depth=1 origin realtime-log
+            git worktree add -B realtime-log log origin/realtime-log
+          else
+            git worktree add --detach log
+            git -C log checkout --orphan realtime-log
+            git -C log rm -rf --quiet .
+            printf '%s\n' "# 실시간 지역 혼잡 기록" "" "출처: 서울특별시 공공데이터 · 서울시 실시간 도시데이터 (live-api Worker 경유)" \
+              "한 줄에 한 기록(JSON Lines). 지역·혼잡 단계·추정 인구 범위·관측 시각만 담고 개인 정보는 없음." > log/README.md
+          fi
+      - name: 기록 덧붙이기
+        run: python backend/cli.py log-realtime --base-url "$LIVE_API_BASE" --out-dir log/realtime
+      - name: 커밋
+        run: |
+          cd log
+          git add -A
+          if git diff --cached --quiet; then
+            echo "새 관측 없음: 커밋 생략"
+            exit 0
+          fi
+          git commit -q -m "data: 실시간 지역 혼잡 기록 $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M')"
+          git push origin realtime-log
