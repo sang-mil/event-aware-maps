@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "id": "evt_20250101_d1c8e5",
     "type": "show",
@@ -16,7 +16,7 @@
     "game_state": null,
     "nearest_station": {
       "station_id": "olympic_park",
-      "level": "crowded"
+      "level": "no_data"
     },
     "linkable": true,
     "after_end": {
@@ -25,15 +25,17 @@
         "stations": [
           {
             "station_id": "olympic_park",
-            "level": "crowded",
-            "message": "1,122명, 평소의 3.0배",
-            "walk_min": null
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
           },
           {
             "station_id": "bangi",
-            "level": "normal",
-            "message": "326명, 평소와 비슷",
-            "walk_min": null
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
           }
         ]
       },
@@ -42,15 +44,17 @@
         "stations": [
           {
             "station_id": "olympic_park",
-            "level": "normal",
-            "message": "460명, 평소의 1.3배",
-            "walk_min": null
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
           },
           {
             "station_id": "bangi",
-            "level": "normal",
-            "message": "404명, 평소와 비슷",
-            "walk_min": null
+            "level": "no_data",
+            "message": null,
+            "walk_min": null,
+            "uncertain": false
           }
         ]
       }

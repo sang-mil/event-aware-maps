@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "station_id": "mongchontoseong",
     "date": "2025-02-05",
@@ -9,57 +9,23 @@
     "alternatives": [],
     "notify_hour": null,
     "no_data": null,
-    "focus_level": "normal",
+    "focus_level": "no_data",
     "headline": {
       "highlight": "20시대",
-      "text": " 예상: 보통"
+      "text": " 예상 정보가 없어요"
     },
-    "description": "20시대 341명, 평소와 비슷.",
+    "description": null,
     "slots": [
       {
-        "hour": "19",
-        "expected": 431,
-        "baseline": 431,
-        "ratio": 1.0,
-        "level": "normal",
-        "message": "431명, 평소와 비슷",
-        "recommended": true
-      },
-      {
-        "hour": "20",
-        "expected": 341,
-        "baseline": 341,
-        "ratio": 1.0,
-        "level": "normal",
-        "message": "341명, 평소와 비슷",
-        "recommended": false
-      },
-      {
-        "hour": "21",
-        "expected": 346,
-        "baseline": 346,
-        "ratio": 1.0,
-        "level": "normal",
-        "message": "346명, 평소와 비슷",
-        "recommended": false
-      },
-      {
-        "hour": "22",
-        "expected": 272,
-        "baseline": 272,
-        "ratio": 1.0,
-        "level": "normal",
-        "message": "272명, 평소와 비슷",
-        "recommended": false
-      },
-      {
         "hour": "23",
-        "expected": 119,
-        "baseline": 119,
+        "expected": 102,
+        "baseline": 102,
         "ratio": 1.0,
         "level": "normal",
-        "message": "119명, 평소와 비슷",
-        "recommended": false
+        "message": "102명, 평소와 비슷해요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       }
     ]
   }

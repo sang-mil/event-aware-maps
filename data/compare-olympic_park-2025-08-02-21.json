@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "condition_label": {
       "to_name": null,
@@ -11,6 +11,7 @@
       "text": "에서 타면 가장 덜 붐빌 거예요"
     },
     "last_train": null,
+    "similar": false,
     "options": [
       {
         "id": "walk_bangi",
@@ -21,9 +22,45 @@
         "station_id": "bangi",
         "board_hour": "21",
         "walk_min": null,
-        "expected": 323,
+        "expected": 308,
         "level": "relaxed",
-        "compare_message": "323명, 행사 없는 평일의 0.8배"
+        "compare_message": "308명, 평소의 0.7배예요",
+        "walk_by_venue": {
+          "kspo_dome": {
+            "walk_min": 27,
+            "distance_m": 1639
+          },
+          "olympic_hall": {
+            "walk_min": 15,
+            "distance_m": 881
+          },
+          "ticketlink_live_arena": {
+            "walk_min": 19,
+            "distance_m": 1149
+          },
+          "woori_art_hall": {
+            "walk_min": 23,
+            "distance_m": 1363
+          },
+          "muse_live": {
+            "walk_min": 14,
+            "distance_m": 813
+          },
+          "grass_88": {
+            "walk_min": 26,
+            "distance_m": 1602
+          }
+        },
+        "share": 1.0,
+        "share_by_venue": {
+          "grass_88": 0.0,
+          "kspo_dome": 0.0,
+          "muse_live": 1.0,
+          "olympic_hall": 1.0,
+          "ticketlink_live_arena": 1.0,
+          "woori_art_hall": 0.0
+        },
+        "uncertain": false
       },
       {
         "id": "later_olympic",
@@ -34,9 +71,45 @@
         "station_id": "olympic_park",
         "board_hour": "22",
         "walk_min": null,
-        "expected": 736,
+        "expected": 765,
         "level": "crowded",
-        "compare_message": "736명, 행사 없는 평일의 3.1배"
+        "compare_message": "765명, 평소의 3.2배예요",
+        "walk_by_venue": {
+          "kspo_dome": {
+            "walk_min": 12,
+            "distance_m": 783
+          },
+          "olympic_hall": {
+            "walk_min": 9,
+            "distance_m": 571
+          },
+          "ticketlink_live_arena": {
+            "walk_min": 10,
+            "distance_m": 607
+          },
+          "woori_art_hall": {
+            "walk_min": 13,
+            "distance_m": 824
+          },
+          "muse_live": {
+            "walk_min": 14,
+            "distance_m": 874
+          },
+          "grass_88": {
+            "walk_min": 16,
+            "distance_m": 1062
+          }
+        },
+        "share": 0.0,
+        "share_by_venue": {
+          "grass_88": 0.8,
+          "kspo_dome": 0.8,
+          "muse_live": 0.0,
+          "olympic_hall": 0.0,
+          "ticketlink_live_arena": 0.0,
+          "woori_art_hall": 0.8
+        },
+        "uncertain": false
       },
       {
         "id": "now_olympic",
@@ -47,9 +120,45 @@
         "station_id": "olympic_park",
         "board_hour": "21",
         "walk_min": null,
-        "expected": 4534,
+        "expected": 4308,
         "level": "crowded",
-        "compare_message": "4,534명, 행사 없는 평일의 13.7배"
+        "compare_message": "4,308명, 평소의 13.1배예요",
+        "walk_by_venue": {
+          "kspo_dome": {
+            "walk_min": 12,
+            "distance_m": 783
+          },
+          "olympic_hall": {
+            "walk_min": 9,
+            "distance_m": 571
+          },
+          "ticketlink_live_arena": {
+            "walk_min": 10,
+            "distance_m": 607
+          },
+          "woori_art_hall": {
+            "walk_min": 13,
+            "distance_m": 824
+          },
+          "muse_live": {
+            "walk_min": 14,
+            "distance_m": 874
+          },
+          "grass_88": {
+            "walk_min": 16,
+            "distance_m": 1062
+          }
+        },
+        "share": 0.0,
+        "share_by_venue": {
+          "grass_88": 0.2,
+          "kspo_dome": 0.2,
+          "muse_live": 0.0,
+          "olympic_hall": 0.0,
+          "ticketlink_live_arena": 0.0,
+          "woori_art_hall": 0.2
+        },
+        "uncertain": false
       }
     ]
   }

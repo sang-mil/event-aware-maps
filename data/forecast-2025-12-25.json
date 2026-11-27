@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "date": "2025-12-25",
     "day_label": "12월 25일 (목)",
@@ -16,27 +16,27 @@
     "summaries": {
       "19": {
         "highlight": null,
-        "text": "큰 공연이 없어 주변 역이 평소와 비슷할 거예요",
+        "text": "오늘은 큰 공연이 없어\n주변 역이 평소와 비슷할 거예요",
         "best_station_id": "hanseong_baekje"
       },
       "20": {
         "highlight": null,
-        "text": "큰 공연이 없어 주변 역이 평소와 비슷할 거예요",
+        "text": "오늘은 큰 공연이 없어\n주변 역이 평소와 비슷할 거예요",
         "best_station_id": "hanseong_baekje"
       },
       "21": {
         "highlight": null,
-        "text": "큰 공연이 없어 주변 역이 평소와 비슷할 거예요",
+        "text": "오늘은 큰 공연이 없어\n주변 역이 평소와 비슷할 거예요",
         "best_station_id": "hanseong_baekje"
       },
       "22": {
         "highlight": null,
-        "text": "큰 공연이 없어 주변 역이 평소와 비슷할 거예요",
+        "text": "오늘은 큰 공연이 없어\n주변 역이 평소와 비슷할 거예요",
         "best_station_id": "hanseong_baekje"
       },
       "23": {
         "highlight": null,
-        "text": "큰 공연이 없어 주변 역이 평소와 비슷할 거예요",
+        "text": "오늘은 큰 공연이 없어\n주변 역이 평소와 비슷할 거예요",
         "best_station_id": "hanseong_baekje"
       }
     },
@@ -82,8 +82,10 @@
             "baseline": 486,
             "ratio": 1.0,
             "level": "normal",
-            "message": "486명, 평소와 비슷",
-            "recommended": true
+            "message": "486명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
@@ -91,8 +93,10 @@
             "baseline": 386,
             "ratio": 1.0,
             "level": "normal",
-            "message": "386명, 평소와 비슷",
-            "recommended": false
+            "message": "386명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "21",
@@ -100,8 +104,10 @@
             "baseline": 352,
             "ratio": 1.0,
             "level": "normal",
-            "message": "352명, 평소와 비슷",
-            "recommended": false
+            "message": "352명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "22",
@@ -109,8 +115,10 @@
             "baseline": 255,
             "ratio": 1.0,
             "level": "normal",
-            "message": "255명, 평소와 비슷",
-            "recommended": false
+            "message": "255명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "23",
@@ -118,8 +126,10 @@
             "baseline": 91,
             "ratio": 1.0,
             "level": "normal",
-            "message": "91명, 평소와 비슷",
-            "recommended": false
+            "message": "91명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           }
         ]
       },
@@ -132,8 +142,10 @@
             "baseline": 403,
             "ratio": 1.0,
             "level": "normal",
-            "message": "403명, 평소와 비슷",
-            "recommended": true
+            "message": "403명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
@@ -141,8 +153,10 @@
             "baseline": 348,
             "ratio": 1.0,
             "level": "normal",
-            "message": "348명, 평소와 비슷",
-            "recommended": false
+            "message": "348명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "21",
@@ -150,8 +164,10 @@
             "baseline": 454,
             "ratio": 1.0,
             "level": "normal",
-            "message": "454명, 평소와 비슷",
-            "recommended": false
+            "message": "454명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "22",
@@ -159,8 +175,10 @@
             "baseline": 473,
             "ratio": 1.0,
             "level": "normal",
-            "message": "473명, 평소와 비슷",
-            "recommended": false
+            "message": "473명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "23",
@@ -168,8 +186,10 @@
             "baseline": 93,
             "ratio": 1.0,
             "level": "normal",
-            "message": "93명, 평소와 비슷",
-            "recommended": false
+            "message": "93명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           }
         ]
       },
@@ -182,8 +202,10 @@
             "baseline": 438,
             "ratio": 1.0,
             "level": "normal",
-            "message": "438명, 평소와 비슷",
-            "recommended": true
+            "message": "438명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
@@ -191,8 +213,10 @@
             "baseline": 329,
             "ratio": 1.0,
             "level": "normal",
-            "message": "329명, 평소와 비슷",
-            "recommended": false
+            "message": "329명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "21",
@@ -200,8 +224,10 @@
             "baseline": 353,
             "ratio": 1.0,
             "level": "normal",
-            "message": "353명, 평소와 비슷",
-            "recommended": false
+            "message": "353명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "22",
@@ -209,8 +235,10 @@
             "baseline": 283,
             "ratio": 1.0,
             "level": "normal",
-            "message": "283명, 평소와 비슷",
-            "recommended": false
+            "message": "283명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "23",
@@ -218,8 +246,10 @@
             "baseline": 123,
             "ratio": 1.0,
             "level": "normal",
-            "message": "123명, 평소와 비슷",
-            "recommended": false
+            "message": "123명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           }
         ]
       },
@@ -232,8 +262,10 @@
             "baseline": 706,
             "ratio": 1.0,
             "level": "normal",
-            "message": "706명, 평소와 비슷",
-            "recommended": true
+            "message": "706명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
@@ -241,8 +273,10 @@
             "baseline": 762,
             "ratio": 1.0,
             "level": "normal",
-            "message": "762명, 평소와 비슷",
-            "recommended": false
+            "message": "762명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "21",
@@ -250,8 +284,10 @@
             "baseline": 2098,
             "ratio": 1.0,
             "level": "normal",
-            "message": "2,098명, 평소와 비슷",
-            "recommended": false
+            "message": "2,098명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "22",
@@ -259,8 +295,10 @@
             "baseline": 613,
             "ratio": 1.0,
             "level": "normal",
-            "message": "613명, 평소와 비슷",
-            "recommended": false
+            "message": "613명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "23",
@@ -268,8 +306,10 @@
             "baseline": 208,
             "ratio": 1.0,
             "level": "normal",
-            "message": "208명, 평소와 비슷",
-            "recommended": false
+            "message": "208명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           }
         ]
       },
@@ -282,8 +322,10 @@
             "baseline": 1189,
             "ratio": 1.0,
             "level": "normal",
-            "message": "1,189명, 평소와 비슷",
-            "recommended": true
+            "message": "1,189명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
@@ -291,8 +333,10 @@
             "baseline": 995,
             "ratio": 1.0,
             "level": "normal",
-            "message": "995명, 평소와 비슷",
-            "recommended": false
+            "message": "995명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "21",
@@ -300,8 +344,10 @@
             "baseline": 986,
             "ratio": 1.0,
             "level": "normal",
-            "message": "986명, 평소와 비슷",
-            "recommended": false
+            "message": "986명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "22",
@@ -309,8 +355,10 @@
             "baseline": 968,
             "ratio": 1.0,
             "level": "normal",
-            "message": "968명, 평소와 비슷",
-            "recommended": false
+            "message": "968명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "23",
@@ -318,8 +366,10 @@
             "baseline": 509,
             "ratio": 1.0,
             "level": "normal",
-            "message": "509명, 평소와 비슷",
-            "recommended": false
+            "message": "509명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           }
         ]
       },
@@ -332,8 +382,10 @@
             "baseline": 146,
             "ratio": 1.0,
             "level": "normal",
-            "message": "146명, 평소와 비슷",
-            "recommended": true
+            "message": "146명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
@@ -341,8 +393,10 @@
             "baseline": 107,
             "ratio": 1.0,
             "level": "normal",
-            "message": "107명, 평소와 비슷",
-            "recommended": false
+            "message": "107명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "21",
@@ -350,8 +404,10 @@
             "baseline": 105,
             "ratio": 1.0,
             "level": "normal",
-            "message": "105명, 평소와 비슷",
-            "recommended": false
+            "message": "105명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "22",
@@ -359,8 +415,10 @@
             "baseline": 77,
             "ratio": 1.0,
             "level": "normal",
-            "message": "77명, 평소와 비슷",
-            "recommended": false
+            "message": "77명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "23",
@@ -368,8 +426,10 @@
             "baseline": 27,
             "ratio": 1.0,
             "level": "normal",
-            "message": "27명, 평소와 비슷",
-            "recommended": false
+            "message": "27명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           }
         ]
       }

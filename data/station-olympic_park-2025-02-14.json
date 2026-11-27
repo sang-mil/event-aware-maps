@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "station_id": "olympic_park",
     "date": "2025-02-14",
@@ -10,75 +10,91 @@
       {
         "station_id": "bangi",
         "level": "relaxed",
-        "walk_min": null,
-        "message": "방이역 65명, 행사 없는 평일의 0.7배"
+        "walk_min": 18,
+        "transfer_note": "같은 5호선이라 갈아타지 않아요",
+        "message": "0명, 평소의 0.0배예요",
+        "uncertain": false
       },
       {
         "station_id": "mongchontoseong",
-        "level": "normal",
-        "walk_min": null,
-        "message": "몽촌토성역 118명, 행사 없는 평일과 비슷"
+        "level": "relaxed",
+        "walk_min": 34,
+        "transfer_note": null,
+        "message": "53명, 평소의 0.5배예요",
+        "uncertain": false
       },
       {
         "station_id": "hanseong_baekje",
-        "level": "normal",
-        "walk_min": null,
-        "message": "한성백제역 36명, 행사 없는 평일의 1.5배"
+        "level": "relaxed",
+        "walk_min": 30,
+        "transfer_note": "같은 9호선이라 갈아타지 않아요",
+        "message": "14명, 평소의 0.7배예요",
+        "uncertain": false
       }
     ],
-    "notify_hour": "20",
+    "notify_hour": "21",
     "no_data": null,
     "focus_level": "crowded",
     "headline": {
-      "highlight": "20시대",
-      "text": "에 타면 가장 덜 붐빌 거예요"
+      "highlight": "21시대",
+      "text": "에 타면 덜 붐벼요"
     },
-    "description": "23시대 2,267명, 행사 없는 평일의 29.4배.",
+    "description": "공연이 끝나는 23시대엔 평소의 53.1배가 탈 거예요.",
     "slots": [
       {
         "hour": "19",
-        "expected": 574,
-        "baseline": 574,
+        "expected": 414,
+        "baseline": 414,
         "ratio": 1.0,
         "level": "normal",
-        "message": "574명, 평소와 비슷",
-        "recommended": false
+        "message": "414명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "20",
-        "expected": 421,
-        "baseline": 438,
-        "ratio": 1.0,
-        "level": "normal",
-        "message": "421명, 평소와 비슷",
-        "recommended": true
+        "expected": 182,
+        "baseline": 283,
+        "ratio": 0.6,
+        "level": "relaxed",
+        "message": "182명, 평소의 0.6배예요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "21",
-        "expected": 446,
-        "baseline": 332,
-        "ratio": 1.3,
-        "level": "normal",
-        "message": "446명, 행사 없는 평일의 1.3배",
-        "recommended": false
+        "expected": 20,
+        "baseline": 239,
+        "ratio": 0.1,
+        "level": "relaxed",
+        "message": "20명, 평소의 0.1배예요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "22",
-        "expected": 1460,
-        "baseline": 241,
-        "ratio": 6.1,
+        "expected": 1213,
+        "baseline": 176,
+        "ratio": 6.9,
         "level": "crowded",
-        "message": "1,460명, 행사 없는 평일의 6.1배",
-        "recommended": false
+        "message": "1,213명, 평소의 6.9배예요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "23",
-        "expected": 2267,
-        "baseline": 77,
-        "ratio": 29.4,
+        "expected": 2735,
+        "baseline": 52,
+        "ratio": 53.1,
         "level": "crowded",
-        "message": "2,267명, 행사 없는 평일의 29.4배",
-        "recommended": false
+        "message": "2,735명, 평소의 53.1배예요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       }
     ]
   }

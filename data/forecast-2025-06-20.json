@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "date": "2025-06-20",
     "day_label": "6월 20일 (금)",
@@ -15,28 +15,28 @@
     ],
     "summaries": {
       "19": {
-        "highlight": "한성백제역",
-        "text": "에서 타면 가장 덜 붐빌 거예요",
+        "highlight": "19시",
+        "text": "엔 한성백제역이\n가장 덜 붐빌 거예요",
         "best_station_id": "hanseong_baekje"
       },
       "20": {
-        "highlight": "방이역",
-        "text": "에서 타면 가장 덜 붐빌 거예요",
-        "best_station_id": "bangi"
+        "highlight": "20시",
+        "text": "엔 몽촌토성역이\n가장 덜 붐빌 거예요",
+        "best_station_id": "mongchontoseong"
       },
       "21": {
-        "highlight": "방이역",
-        "text": "에서 타면 가장 덜 붐빌 거예요",
+        "highlight": "21시",
+        "text": "엔 방이역이\n가장 덜 붐빌 거예요",
         "best_station_id": "bangi"
       },
       "22": {
-        "highlight": "방이역",
-        "text": "에서 타면 가장 덜 붐빌 거예요",
-        "best_station_id": "bangi"
+        "highlight": "22시",
+        "text": "엔 몽촌토성역이\n가장 덜 붐빌 거예요",
+        "best_station_id": "mongchontoseong"
       },
       "23": {
-        "highlight": "방이역",
-        "text": "에서 타면 가장 덜 붐빌 거예요",
+        "highlight": "23시",
+        "text": "엔 방이역이\n가장 덜 붐빌 거예요",
         "best_station_id": "bangi"
       }
     },
@@ -48,10 +48,10 @@
         "olympic_park"
       ],
       "20": [
+        "mongchontoseong",
         "bangi",
         "hanseong_baekje",
-        "olympic_park",
-        "mongchontoseong"
+        "olympic_park"
       ],
       "21": [
         "bangi",
@@ -60,8 +60,8 @@
         "olympic_park"
       ],
       "22": [
-        "bangi",
         "mongchontoseong",
+        "bangi",
         "hanseong_baekje",
         "olympic_park"
       ],
@@ -78,48 +78,58 @@
         "slots": [
           {
             "hour": "19",
-            "expected": 571,
-            "baseline": 571,
+            "expected": 556,
+            "baseline": 556,
             "ratio": 1.0,
             "level": "normal",
-            "message": "571명, 평소와 비슷",
-            "recommended": false
+            "message": "556명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
-            "expected": 422,
-            "baseline": 438,
-            "ratio": 1.0,
+            "expected": 368,
+            "baseline": 388,
+            "ratio": 0.9,
             "level": "normal",
-            "message": "422명, 평소와 비슷",
-            "recommended": true
+            "message": "368명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "21",
-            "expected": 480,
+            "expected": 514,
             "baseline": 332,
-            "ratio": 1.4,
-            "level": "normal",
-            "message": "480명, 행사 없는 평일의 1.4배",
-            "recommended": false
+            "ratio": 1.5,
+            "level": "crowded",
+            "message": "514명, 평소의 1.5배예요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "22",
-            "expected": 1043,
-            "baseline": 241,
-            "ratio": 4.3,
+            "expected": 691,
+            "baseline": 248,
+            "ratio": 2.8,
             "level": "crowded",
-            "message": "1,043명, 행사 없는 평일의 4.3배",
-            "recommended": false
+            "message": "691명, 평소의 2.8배예요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "23",
-            "expected": 199,
-            "baseline": 77,
-            "ratio": 2.6,
+            "expected": 160,
+            "baseline": 74,
+            "ratio": 2.2,
             "level": "crowded",
-            "message": "199명, 행사 없는 평일의 2.6배",
-            "recommended": false
+            "message": "160명, 평소의 2.2배예요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           }
         ]
       },
@@ -128,48 +138,58 @@
         "slots": [
           {
             "hour": "19",
-            "expected": 404,
-            "baseline": 404,
+            "expected": 416,
+            "baseline": 416,
             "ratio": 1.0,
             "level": "normal",
-            "message": "404명, 평소와 비슷",
-            "recommended": false
+            "message": "416명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
-            "expected": 333,
-            "baseline": 350,
-            "ratio": 1.0,
+            "expected": 308,
+            "baseline": 338,
+            "ratio": 0.9,
             "level": "normal",
-            "message": "333명, 평소와 비슷",
-            "recommended": false
+            "message": "308명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "21",
-            "expected": 396,
-            "baseline": 413,
+            "expected": 397,
+            "baseline": 415,
             "ratio": 1.0,
             "level": "normal",
-            "message": "396명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "397명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "22",
-            "expected": 427,
-            "baseline": 431,
+            "expected": 432,
+            "baseline": 436,
             "ratio": 1.0,
             "level": "normal",
-            "message": "427명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "432명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "23",
-            "expected": 78,
-            "baseline": 87,
+            "expected": 77,
+            "baseline": 88,
             "ratio": 0.9,
             "level": "normal",
-            "message": "78명, 행사 없는 평일과 비슷",
-            "recommended": true
+            "message": "77명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           }
         ]
       },
@@ -178,48 +198,58 @@
         "slots": [
           {
             "hour": "19",
-            "expected": 424,
-            "baseline": 424,
+            "expected": 422,
+            "baseline": 422,
             "ratio": 1.0,
             "level": "normal",
-            "message": "424명, 평소와 비슷",
-            "recommended": false
+            "message": "422명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
-            "expected": 316,
-            "baseline": 328,
-            "ratio": 1.0,
+            "expected": 300,
+            "baseline": 330,
+            "ratio": 0.9,
             "level": "normal",
-            "message": "316명, 평소와 비슷",
-            "recommended": true
+            "message": "300명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "21",
             "expected": 323,
-            "baseline": 329,
+            "baseline": 332,
             "ratio": 1.0,
             "level": "normal",
-            "message": "323명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "323명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "22",
-            "expected": 266,
-            "baseline": 265,
+            "expected": 260,
+            "baseline": 264,
             "ratio": 1.0,
             "level": "normal",
-            "message": "266명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "260명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "23",
-            "expected": 115,
-            "baseline": 113,
-            "ratio": 1.0,
+            "expected": 108,
+            "baseline": 116,
+            "ratio": 0.9,
             "level": "normal",
-            "message": "115명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "108명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           }
         ]
       },
@@ -228,48 +258,58 @@
         "slots": [
           {
             "hour": "19",
-            "expected": 816,
-            "baseline": 816,
+            "expected": 808,
+            "baseline": 808,
             "ratio": 1.0,
             "level": "normal",
-            "message": "816명, 평소와 비슷",
-            "recommended": false
+            "message": "808명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
-            "expected": 671,
-            "baseline": 674,
-            "ratio": 1.0,
+            "expected": 516,
+            "baseline": 545,
+            "ratio": 0.9,
             "level": "normal",
-            "message": "671명, 평소와 비슷",
-            "recommended": true
+            "message": "516명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "21",
-            "expected": 1062,
-            "baseline": 1056,
+            "expected": 794,
+            "baseline": 805,
             "ratio": 1.0,
             "level": "normal",
-            "message": "1,062명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "794명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "22",
-            "expected": 408,
-            "baseline": 370,
-            "ratio": 1.1,
+            "expected": 358,
+            "baseline": 345,
+            "ratio": 1.0,
             "level": "normal",
-            "message": "408명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "358명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "23",
-            "expected": 204,
-            "baseline": 159,
-            "ratio": 1.3,
+            "expected": 160,
+            "baseline": 157,
+            "ratio": 1.0,
             "level": "normal",
-            "message": "204명, 행사 없는 평일의 1.3배",
-            "recommended": false
+            "message": "160명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           }
         ]
       },
@@ -278,48 +318,58 @@
         "slots": [
           {
             "hour": "19",
-            "expected": 1332,
-            "baseline": 1332,
+            "expected": 1347,
+            "baseline": 1347,
             "ratio": 1.0,
             "level": "normal",
-            "message": "1,332명, 평소와 비슷",
-            "recommended": false
+            "message": "1,347명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
-            "expected": 1052,
-            "baseline": 1082,
+            "expected": 924,
+            "baseline": 966,
             "ratio": 1.0,
             "level": "normal",
-            "message": "1,052명, 평소와 비슷",
-            "recommended": true
+            "message": "924명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "21",
-            "expected": 930,
-            "baseline": 935,
+            "expected": 932,
+            "baseline": 940,
             "ratio": 1.0,
             "level": "normal",
-            "message": "930명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "932명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "22",
-            "expected": 876,
-            "baseline": 859,
+            "expected": 857,
+            "baseline": 850,
             "ratio": 1.0,
             "level": "normal",
-            "message": "876명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "857명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "23",
             "expected": 450,
-            "baseline": 424,
-            "ratio": 1.1,
+            "baseline": 436,
+            "ratio": 1.0,
             "level": "normal",
-            "message": "450명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "450명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           }
         ]
       },
@@ -332,44 +382,54 @@
             "baseline": 154,
             "ratio": 1.0,
             "level": "normal",
-            "message": "154명, 평소와 비슷",
-            "recommended": false
+            "message": "154명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "same_weekday"
           },
           {
             "hour": "20",
-            "expected": 108,
-            "baseline": 113,
-            "ratio": 1.0,
+            "expected": 95,
+            "baseline": 102,
+            "ratio": 0.9,
             "level": "normal",
-            "message": "108명, 평소와 비슷",
-            "recommended": true
+            "message": "95명, 평소와 비슷해요",
+            "recommended": true,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "21",
-            "expected": 99,
-            "baseline": 99,
+            "expected": 95,
+            "baseline": 95,
             "ratio": 1.0,
             "level": "normal",
-            "message": "99명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "95명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "22",
-            "expected": 79,
-            "baseline": 75,
+            "expected": 77,
+            "baseline": 73,
             "ratio": 1.1,
             "level": "normal",
-            "message": "79명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "77명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           },
           {
             "hour": "23",
             "expected": 25,
-            "baseline": 24,
+            "baseline": 23,
             "ratio": 1.1,
             "level": "normal",
-            "message": "25명, 행사 없는 평일과 비슷",
-            "recommended": false
+            "message": "25명, 평소와 비슷해요",
+            "recommended": false,
+            "uncertain": false,
+            "baseline_basis": "weekday_fallback"
           }
         ]
       }

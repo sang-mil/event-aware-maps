@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "id": "evt_20250913_865201",
     "type": "show",
@@ -26,14 +26,16 @@
           {
             "station_id": "olympic_park",
             "level": "crowded",
-            "message": "4,542명, 행사 없는 평일의 12.0배",
-            "walk_min": null
+            "message": "4,451명, 평소의 11.7배예요",
+            "walk_min": null,
+            "uncertain": false
           },
           {
             "station_id": "bangi",
             "level": "normal",
-            "message": "296명, 행사 없는 평일과 비슷",
-            "walk_min": null
+            "message": "283명, 평소의 0.8배예요",
+            "walk_min": null,
+            "uncertain": false
           }
         ]
       },
@@ -43,14 +45,16 @@
           {
             "station_id": "olympic_park",
             "level": "crowded",
-            "message": "1,679명, 행사 없는 평일의 5.1배",
-            "walk_min": null
+            "message": "1,676명, 평소의 5.1배예요",
+            "walk_min": null,
+            "uncertain": false
           },
           {
             "station_id": "bangi",
             "level": "normal",
-            "message": "361명, 행사 없는 평일과 비슷",
-            "walk_min": null
+            "message": "352명, 평소와 비슷해요",
+            "walk_min": null,
+            "uncertain": false
           }
         ]
       }

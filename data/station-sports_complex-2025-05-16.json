@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "station_id": "sports_complex",
     "date": "2025-05-16",
@@ -9,57 +9,67 @@
     "alternatives": [],
     "notify_hour": null,
     "no_data": null,
-    "focus_level": "crowded",
+    "focus_level": "normal",
     "headline": {
-      "highlight": "20시대",
-      "text": "에 타면 가장 덜 붐빌 거예요"
+      "highlight": "22시대",
+      "text": "에 타기 좋아요"
     },
-    "description": "22시대 626명, 행사 없는 평일의 1.7배.",
+    "description": "공연이 끝나는 22시대엔 평소의 1.3배가 탈 거예요.\n23시대엔 그 절반 정도로 줄어요.",
     "slots": [
       {
         "hour": "19",
-        "expected": 816,
-        "baseline": 816,
+        "expected": 632,
+        "baseline": 632,
         "ratio": 1.0,
         "level": "normal",
-        "message": "816명, 평소와 비슷",
-        "recommended": false
+        "message": "632명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "20",
-        "expected": 631,
-        "baseline": 674,
-        "ratio": 0.9,
-        "level": "normal",
-        "message": "631명, 평소와 비슷",
-        "recommended": true
+        "expected": 327,
+        "baseline": 502,
+        "ratio": 0.7,
+        "level": "relaxed",
+        "message": "327명, 평소의 0.7배예요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "21",
-        "expected": 1082,
-        "baseline": 1056,
-        "ratio": 1.0,
+        "expected": 472,
+        "baseline": 525,
+        "ratio": 0.9,
         "level": "normal",
-        "message": "1,082명, 행사 없는 평일과 비슷",
-        "recommended": false
+        "message": "472명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "22",
-        "expected": 626,
-        "baseline": 370,
-        "ratio": 1.7,
-        "level": "crowded",
-        "message": "626명, 행사 없는 평일의 1.7배",
-        "recommended": false
+        "expected": 420,
+        "baseline": 327,
+        "ratio": 1.3,
+        "level": "normal",
+        "message": "420명, 평소의 1.3배예요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "23",
-        "expected": 475,
-        "baseline": 159,
-        "ratio": 3.0,
-        "level": "crowded",
-        "message": "475명, 행사 없는 평일의 3.0배",
-        "recommended": false
+        "expected": 193,
+        "baseline": 143,
+        "ratio": 1.4,
+        "level": "normal",
+        "message": "193명, 평소의 1.4배예요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       }
     ]
   }

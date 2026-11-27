@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "station_id": "mongchontoseong",
     "date": "2025-12-18",
@@ -12,9 +12,9 @@
     "focus_level": "normal",
     "headline": {
       "highlight": "20시대",
-      "text": " 예상: 보통"
+      "text": "에 타기 좋아요"
     },
-    "description": "20시대 329명, 평소와 비슷.",
+    "description": "20시대엔 평소와 비슷하게 탈 거예요.\n21시대엔 352명으로 늘어요.",
     "slots": [
       {
         "hour": "19",
@@ -22,8 +22,10 @@
         "baseline": 437,
         "ratio": 1.0,
         "level": "normal",
-        "message": "437명, 평소와 비슷",
-        "recommended": true
+        "message": "437명, 평소와 비슷해요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       },
       {
         "hour": "20",
@@ -31,8 +33,10 @@
         "baseline": 329,
         "ratio": 1.0,
         "level": "normal",
-        "message": "329명, 평소와 비슷",
-        "recommended": false
+        "message": "329명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       },
       {
         "hour": "21",
@@ -40,8 +44,10 @@
         "baseline": 352,
         "ratio": 1.0,
         "level": "normal",
-        "message": "352명, 평소와 비슷",
-        "recommended": false
+        "message": "352명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       },
       {
         "hour": "22",
@@ -49,8 +55,10 @@
         "baseline": 283,
         "ratio": 1.0,
         "level": "normal",
-        "message": "283명, 평소와 비슷",
-        "recommended": false
+        "message": "283명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       },
       {
         "hour": "23",
@@ -58,8 +66,10 @@
         "baseline": 122,
         "ratio": 1.0,
         "level": "normal",
-        "message": "122명, 평소와 비슷",
-        "recommended": false
+        "message": "122명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       }
     ]
   }

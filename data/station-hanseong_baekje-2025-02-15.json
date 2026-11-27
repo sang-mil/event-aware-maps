@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "station_id": "hanseong_baekje",
     "date": "2025-02-15",
@@ -12,54 +12,64 @@
     "focus_level": "normal",
     "headline": {
       "highlight": "22시대",
-      "text": " 예상: 보통"
+      "text": "에 타기 좋아요"
     },
-    "description": "22시대 85명, 행사 없는 평일과 비슷.",
+    "description": "공연이 끝나는 22시대엔 평소와 비슷하게 탈 거예요.\n23시대엔 17명으로 줄어요.",
     "slots": [
       {
         "hour": "19",
-        "expected": 144,
-        "baseline": 144,
-        "ratio": 1.0,
+        "expected": 109,
+        "baseline": 133,
+        "ratio": 0.8,
         "level": "normal",
-        "message": "144명, 행사 없는 평일과 비슷",
-        "recommended": false
+        "message": "109명, 평소의 0.8배예요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "20",
-        "expected": 101,
-        "baseline": 107,
-        "ratio": 0.9,
-        "level": "normal",
-        "message": "101명, 행사 없는 평일과 비슷",
-        "recommended": true
+        "expected": 0,
+        "baseline": 95,
+        "ratio": 0.0,
+        "level": "relaxed",
+        "message": "0명, 평소의 0.0배예요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "21",
-        "expected": 102,
-        "baseline": 99,
-        "ratio": 1.0,
-        "level": "normal",
-        "message": "102명, 행사 없는 평일과 비슷",
-        "recommended": false
+        "expected": 41,
+        "baseline": 85,
+        "ratio": 0.5,
+        "level": "relaxed",
+        "message": "41명, 평소의 0.5배예요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "22",
-        "expected": 85,
-        "baseline": 75,
-        "ratio": 1.1,
+        "expected": 59,
+        "baseline": 63,
+        "ratio": 0.9,
         "level": "normal",
-        "message": "85명, 행사 없는 평일과 비슷",
-        "recommended": false
+        "message": "59명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       },
       {
         "hour": "23",
-        "expected": 27,
-        "baseline": 24,
-        "ratio": 1.1,
+        "expected": 17,
+        "baseline": 20,
+        "ratio": 0.9,
         "level": "normal",
-        "message": "27명, 행사 없는 평일과 비슷",
-        "recommended": false
+        "message": "17명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "weekday_fallback"
       }
     ]
   }

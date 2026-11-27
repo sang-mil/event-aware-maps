@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "station_id": "sports_complex",
     "date": "2025-10-27",
@@ -12,54 +12,64 @@
     "focus_level": "normal",
     "headline": {
       "highlight": "20시대",
-      "text": " 예상: 보통"
+      "text": "에 타기 좋아요"
     },
-    "description": "20시대 465명, 평소와 비슷.",
+    "description": "20시대엔 평소와 비슷하게 탈 거예요.\n21시대엔 475명으로 비슷해요.",
     "slots": [
       {
         "hour": "19",
-        "expected": 603,
-        "baseline": 603,
+        "expected": 586,
+        "baseline": 586,
         "ratio": 1.0,
         "level": "normal",
-        "message": "603명, 평소와 비슷",
-        "recommended": true
+        "message": "586명, 평소와 비슷해요",
+        "recommended": true,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       },
       {
         "hour": "20",
-        "expected": 465,
-        "baseline": 465,
+        "expected": 456,
+        "baseline": 456,
         "ratio": 1.0,
         "level": "normal",
-        "message": "465명, 평소와 비슷",
-        "recommended": false
+        "message": "456명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       },
       {
         "hour": "21",
-        "expected": 486,
-        "baseline": 486,
+        "expected": 475,
+        "baseline": 475,
         "ratio": 1.0,
         "level": "normal",
-        "message": "486명, 평소와 비슷",
-        "recommended": false
+        "message": "475명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       },
       {
         "hour": "22",
-        "expected": 292,
-        "baseline": 292,
+        "expected": 290,
+        "baseline": 290,
         "ratio": 1.0,
         "level": "normal",
-        "message": "292명, 평소와 비슷",
-        "recommended": false
+        "message": "290명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       },
       {
         "hour": "23",
-        "expected": 122,
-        "baseline": 122,
+        "expected": 118,
+        "baseline": 118,
         "ratio": 1.0,
         "level": "normal",
-        "message": "122명, 평소와 비슷",
-        "recommended": false
+        "message": "118명, 평소와 비슷해요",
+        "recommended": false,
+        "uncertain": false,
+        "baseline_basis": "same_weekday"
       }
     ]
   }

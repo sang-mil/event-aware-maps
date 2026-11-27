@@ -1,42 +1,115 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "condition_label": {
       "to_name": null,
       "hour_label": "23시대 출발"
     },
     "headline": {
-      "highlight": "방이역",
+      "highlight": "올림픽공원역",
       "text": "에서 타면 가장 덜 붐빌 거예요"
     },
     "last_train": null,
+    "similar": true,
     "options": [
-      {
-        "id": "walk_bangi",
-        "kind": "walk_to_other",
-        "recommended": true,
-        "title": "방이역에서 타기",
-        "subtitle": "가까운 다른 역까지 걸어가기",
-        "station_id": "bangi",
-        "board_hour": "23",
-        "walk_min": null,
-        "expected": 46,
-        "level": "normal",
-        "compare_message": "46명, 평소와 비슷"
-      },
       {
         "id": "now_olympic",
         "kind": "board_now",
-        "recommended": false,
+        "recommended": true,
         "title": "올림픽공원역에서 23시대에 타기",
         "subtitle": "가장 가까운 역",
         "station_id": "olympic_park",
         "board_hour": "23",
         "walk_min": null,
-        "expected": 57,
+        "expected": 67,
         "level": "normal",
-        "compare_message": "57명, 평소와 비슷"
+        "compare_message": "67명, 평소와 비슷해요",
+        "walk_by_venue": {
+          "kspo_dome": {
+            "walk_min": 12,
+            "distance_m": 783
+          },
+          "olympic_hall": {
+            "walk_min": 9,
+            "distance_m": 571
+          },
+          "ticketlink_live_arena": {
+            "walk_min": 10,
+            "distance_m": 607
+          },
+          "woori_art_hall": {
+            "walk_min": 13,
+            "distance_m": 824
+          },
+          "muse_live": {
+            "walk_min": 14,
+            "distance_m": 874
+          },
+          "grass_88": {
+            "walk_min": 16,
+            "distance_m": 1062
+          }
+        },
+        "share": 0.44,
+        "share_by_venue": {
+          "grass_88": 1.0,
+          "kspo_dome": 1.0,
+          "muse_live": 0.44,
+          "olympic_hall": 0.44,
+          "ticketlink_live_arena": 0.44,
+          "woori_art_hall": 1.0
+        },
+        "uncertain": false
+      },
+      {
+        "id": "walk_bangi",
+        "kind": "walk_to_other",
+        "recommended": false,
+        "title": "방이역에서 타기",
+        "subtitle": "가까운 다른 역까지 걸어가기",
+        "station_id": "bangi",
+        "board_hour": "23",
+        "walk_min": null,
+        "expected": 87,
+        "level": "normal",
+        "compare_message": "87명, 평소와 비슷해요",
+        "walk_by_venue": {
+          "kspo_dome": {
+            "walk_min": 27,
+            "distance_m": 1639
+          },
+          "olympic_hall": {
+            "walk_min": 15,
+            "distance_m": 881
+          },
+          "ticketlink_live_arena": {
+            "walk_min": 19,
+            "distance_m": 1149
+          },
+          "woori_art_hall": {
+            "walk_min": 23,
+            "distance_m": 1363
+          },
+          "muse_live": {
+            "walk_min": 14,
+            "distance_m": 813
+          },
+          "grass_88": {
+            "walk_min": 26,
+            "distance_m": 1602
+          }
+        },
+        "share": 0.56,
+        "share_by_venue": {
+          "grass_88": 0.0,
+          "kspo_dome": 0.0,
+          "muse_live": 0.56,
+          "olympic_hall": 0.56,
+          "ticketlink_live_arena": 0.56,
+          "woori_art_hall": 0.0
+        },
+        "uncertain": false
       }
     ]
   }

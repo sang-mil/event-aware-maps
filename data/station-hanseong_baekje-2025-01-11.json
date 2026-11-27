@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "station_id": "hanseong_baekje",
     "date": "2025-01-11",
@@ -8,59 +8,13 @@
     "alternatives_title": null,
     "alternatives": [],
     "notify_hour": null,
-    "no_data": null,
-    "focus_level": "normal",
-    "headline": {
-      "highlight": "22시대",
-      "text": " 예상: 보통"
+    "no_data": {
+      "message": "이 역은 아직 시간대별 승하차 자료가 부족해 예상할 수 없어요.",
+      "nearby": []
     },
-    "description": "22시대 87명, 행사 없는 평일의 1.2배.",
-    "slots": [
-      {
-        "hour": "19",
-        "expected": 144,
-        "baseline": 144,
-        "ratio": 1.0,
-        "level": "normal",
-        "message": "144명, 행사 없는 평일과 비슷",
-        "recommended": false
-      },
-      {
-        "hour": "20",
-        "expected": 93,
-        "baseline": 107,
-        "ratio": 0.9,
-        "level": "normal",
-        "message": "93명, 행사 없는 평일과 비슷",
-        "recommended": true
-      },
-      {
-        "hour": "21",
-        "expected": 101,
-        "baseline": 99,
-        "ratio": 1.0,
-        "level": "normal",
-        "message": "101명, 행사 없는 평일과 비슷",
-        "recommended": false
-      },
-      {
-        "hour": "22",
-        "expected": 87,
-        "baseline": 75,
-        "ratio": 1.2,
-        "level": "normal",
-        "message": "87명, 행사 없는 평일의 1.2배",
-        "recommended": false
-      },
-      {
-        "hour": "23",
-        "expected": 28,
-        "baseline": 24,
-        "ratio": 1.2,
-        "level": "normal",
-        "message": "28명, 행사 없는 평일의 1.2배",
-        "recommended": false
-      }
-    ]
+    "focus_level": "no_data",
+    "headline": null,
+    "description": null,
+    "slots": []
   }
 }

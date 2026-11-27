@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-26T20:48:47+09:00",
+  "updated_at": "2026-11-27T17:34:17+09:00",
   "data": {
     "option_id": "walk_bangi",
     "board_station_id": "bangi",
@@ -10,7 +10,7 @@
     "arrive_at": null,
     "last_train_at": null,
     "level": "normal",
-    "message": "332명, 평소와 비슷",
+    "message": "330명, 평소와 비슷해요",
     "steps": [
       {
         "type": "start",
@@ -39,15 +39,41 @@
       "items": [
         {
           "station_id": "olympic_park",
-          "expected": 423
+          "expected": 422
         },
         {
           "station_id": "bangi",
-          "expected": 332
+          "expected": 330
         }
       ],
-      "note": "20시대 예상: 올림픽공원역 423명, 방이역 332명"
+      "note": "20시대 예상: 올림픽공원역 422명, 방이역 330명"
     },
-    "map_links": null
+    "map_links": null,
+    "walk_by_venue": {
+      "kspo_dome": {
+        "walk_min": 27,
+        "distance_m": 1639
+      },
+      "olympic_hall": {
+        "walk_min": 15,
+        "distance_m": 881
+      },
+      "ticketlink_live_arena": {
+        "walk_min": 19,
+        "distance_m": 1149
+      },
+      "woori_art_hall": {
+        "walk_min": 23,
+        "distance_m": 1363
+      },
+      "muse_live": {
+        "walk_min": 14,
+        "distance_m": 813
+      },
+      "grass_88": {
+        "walk_min": 26,
+        "distance_m": 1602
+      }
+    }
   }
 }
