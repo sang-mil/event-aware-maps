@@ -61,7 +61,10 @@ export interface WalkRoute {
 export interface StationWalkRoute {
   from_station_id: string;
   to_station_id: string;
+  distance_m?: number | null;
   walk_min: number | null;
+  path?: [number, number][];
+  landing_url?: string | null;
 }
 
 export interface WalkRoutes {

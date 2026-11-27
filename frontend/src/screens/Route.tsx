@@ -26,7 +26,7 @@ import {
   UncertainMark,
 } from '@/components/ui';
 import { DEFAULT_ORIGIN_STATION, demoState, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track, viewTime } from '@/lib/app';
-import { useLoad, useRefs, useWalkMin } from '@/lib/useLoad';
+import { useLoad, useRefs, useStationWalkMin, useWalkMin } from '@/lib/useLoad';
 import { KakaoOverviewMap, KakaoWalkMap } from '@/components/KakaoWalkMap';
 
 /** 04 길찾기 탭 · 지도 */
@@ -354,6 +354,10 @@ export function Compare() {
   const events = useLoad(() => getEvents(params.departAt.slice(0, 10)), [params.departAt.slice(0, 10)]);
   const { st, vn } = useRefs();
   const walkMin = useWalkMin();
+  const stationWalkMin = useStationWalkMin();
+  const optionWalkMin = (option: CompareOption) => option.walk_min ?? (params.fromType === 'venue'
+    ? walkMin(params.fromId, option.station_id)
+    : stationWalkMin(params.fromId, option.station_id));
   useEffect(() => {
     if (res.status === 'ok') track('compare_view', { from, last_train_imminent: !!res.value.data.last_train?.imminent });
   }, [res.status, from]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -413,7 +417,7 @@ export function Compare() {
               <span style={{ fontSize: 14, fontWeight: 700, color: '#4E3DBC' }}>추천</span>
               <span style={{ fontSize: 21, fontWeight: 700 }}>{rec.title}</span>
               <span style={{ fontSize: 15, color: '#5F6573' }}>
-                {rec.subtitle}, <Walk min={rec.walk_min ?? (params.fromType === 'venue' ? walkMin(params.fromId, rec.station_id) : null)} />
+                {rec.subtitle}, <Walk min={optionWalkMin(rec)} />
               </span>
             </span>
             <LevelBadge level={rec.level} />
@@ -445,7 +449,7 @@ export function Compare() {
             <span className="main">
               <span className="title">{o.title}</span>
               <span className="sub">
-                {o.subtitle}, {o.compare_message}
+                {o.subtitle}, <Walk min={optionWalkMin(o)} />, {o.compare_message}
                 <UncertainMark show={o.uncertain} />
               </span>
             </span>
@@ -487,11 +491,11 @@ export function RouteScreen() {
   const hourLabel = `${Number(params.departAt.slice(11, 13))}시대 출발`;
   const max = Math.max(1, ...r.compare.items.map((i) => i.expected));
   const walkData = walks.status === 'ok' ? readWalkRoutes(walks.value.data) : null;
-  const walkRoute = params.fromType === 'venue' && walkData
-    ? walkData.routes.find((item) => item.venue_id === params.fromId && item.station_id === r.board_station_id)
-    : undefined;
+  const walkRoute = params.fromType === 'venue'
+    ? walkData?.routes.find((item) => item.venue_id === params.fromId && item.station_id === r.board_station_id)
+    : walkData?.station_routes?.find((item) => item.from_station_id === params.fromId && item.to_station_id === r.board_station_id);
   const place = (id: string) => walkData?.places.find((item) => item.id === id);
-  const originPlace = params.fromType === 'venue' ? place(params.fromId) : undefined;
+  const originPlace = place(params.fromId);
   const stationPlace = place(r.board_station_id);
   const mapUrl = (name: string) =>
     app === 'naver' ? `https://map.naver.com/p/search/${encodeURIComponent(name)}` : `https://map.kakao.com/link/search/${encodeURIComponent(name)}`;
@@ -509,9 +513,9 @@ export function RouteScreen() {
   return (
     <main className="screen">
       <BackHeader href={`/compare/?${back.toString()}`} />
-      {walkRoute && walkRoute.path.length > 1 && originPlace && stationPlace ? (
+      {walkRoute?.path && walkRoute.path.length > 1 && originPlace && stationPlace ? (
         <KakaoWalkMap path={walkRoute.path} origin={originPlace.name} destination={stationPlace.name} />
-      ) : walks.status === 'loading' && params.fromType === 'venue' ? (
+      ) : walks.status === 'loading' ? (
         <div role="status" className="card pad" style={{ margin: '0 16px' }}>도보 경로 데이터를 불러오는 중이에요.</div>
       ) : (
         <div role="status" className="card pad" style={{ margin: '0 16px' }}>이 출발지와 역 사이의 도보 경로 정보가 없습니다.</div>
