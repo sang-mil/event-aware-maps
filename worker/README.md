@@ -9,7 +9,7 @@
 - Worker 이름: `event-aware-maps-live-api`
 - 배포 명령: `npx wrangler deploy`
 - 빌드 명령: 비워 둡니다 (별도 빌드가 없습니다)
-- 미리보기 명령: `npx wrangler dev`
+- 브랜치 미리보기 명령: `npx wrangler preview` (로컬 시험은 `npx wrangler dev`)
 
 배포 전에 Cloudflare Worker의 **Settings → Variables and Secrets → Add → Secret**에서 아래 항목을 저장합니다.
 
