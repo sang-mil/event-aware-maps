@@ -46,28 +46,40 @@ def _address(doc: dict) -> str:
     return doc.get("road_address_name") or doc.get("address_name") or ""
 
 
-def _pick(docs: list[dict], accepted: list[str], region: str | None) -> dict | None:
-    """카카오가 돌려준 장소 중, 이름이 허용 이름과 맞고 (지정 시) 주소가 region 으로 시작하는 것.
-    정확히 같은 이름을 먼저, 없으면 허용 이름을 포함하는 이름 중 가장 짧은 것(주차장·출입구 같은 부속 시설보다 본 시설)."""
+STATION_CODE = "SW8"  # 카카오 장소 분류 코드: 지하철역
+# 공연장 자리에 오면 안 되는 분류(카카오 category_group_code): 대형마트·편의점·주차장·주유소·은행·음식점·카페·병원·약국·중개업소
+EXCLUDED_CODES = {"MT1", "CS2", "PK6", "OL7", "BK9", "FD6", "CE7", "HP8", "PM9", "AG2"}
+# 이름·분류에 이런 말이 있으면 본 시설이 아니라 안에 있는 가게·부속 시설로 본다
+EXCLUDED_WORDS = ("주차장", "출입구", "입구", "정문", "매표소", "화장실", "정류장", "ATM", "365코너", "마켓", "편의점",
+                  "사거리", "교차로")
+
+
+def _excluded(doc: dict) -> bool:
+    text = f"{doc.get('place_name', '')} {doc.get('category_name', '')}"
+    return doc.get("category_group_code") in EXCLUDED_CODES or any(w in text for w in EXCLUDED_WORDS)
+
+
+def _pick(docs: list[dict], accepted: list[str], region: str | None, station: bool = False) -> dict | None:
+    """카카오가 돌려준 장소 중 기준 장소와 같은 곳.
+
+    - 역: 분류가 지하철역(SW8)이고 이름이 '○○역'으로 시작 (예: '방이역 5호선'. '방이역사거리'는 제외)
+    - 공연장: 주소가 region 으로 시작, 가게·은행·화장실·주차장 같은 분류·이름이 아니고, 이름에 허용 이름이 들어 있음.
+      정확히 같은 이름을 먼저, 없으면 가장 짧은 이름.
+    """
     wanted = [_norm(a) for a in accepted if a]
-    ok = [d for d in docs if (region is None or _address(d).startswith(region))
-          and any(w in _norm(d.get("place_name", "")) for w in wanted)]
+    if station:
+        ok = [d for d in docs if d.get("category_group_code") == STATION_CODE
+              and any(_norm(d.get("place_name", "")).startswith(w) for w in wanted)]
+    else:
+        ok = [d for d in docs if (region is None or _address(d).startswith(region)) and not _excluded(d)
+              and any(w in _norm(d.get("place_name", "")) for w in wanted)]
     exact = [d for d in ok if _norm(d.get("place_name", "")) in wanted]
     pool = exact or ok
-    return min(pool, key=lambda d: (_is_sub_facility(d), len(d.get("place_name", "")), docs.index(d))) if pool else None
-
-
-SUB_FACILITY_WORDS = ("주차장", "출입구", "입구", "정문", "매표소", "화장실", "정류장")
-
-
-def _is_sub_facility(doc: dict) -> bool:
-    """주차장·출입구처럼 본 시설에 딸린 장소면 True (후순위)."""
-    text = f"{doc.get('place_name', '')} {doc.get('category_name', '')}"
-    return any(w in text for w in SUB_FACILITY_WORDS)
+    return min(pool, key=lambda d: (len(d.get("place_name", "")), docs.index(d))) if pool else None
 
 
 def find_place(name: str, key: str, opener=urlopen, aliases: list[str] | None = None,
-               region: str | None = None) -> dict:
+               region: str | None = None, station: bool = False) -> dict:
     """Find a place whose returned name actually matches the requested venue/station.
 
     이름 → 별칭 순서로 검색한다. 좌표는 카카오가 돌려준 값만 쓰고, 못 찾으면 카카오가 돌려준 후보를
@@ -79,11 +91,11 @@ def find_place(name: str, key: str, opener=urlopen, aliases: list[str] | None = 
         url = f"{LOCAL_URL}?{urlencode({'query': query, 'size': 15})}"
         docs = _request(url, key, opener).get("documents", [])
         seen.extend(docs)
-        place = _pick(docs, accepted, region)
+        place = _pick(docs, accepted, region, station)
         if place is not None:
             try:
                 return {"name": place["place_name"], "x": float(place["x"]), "y": float(place["y"]),
-                        "query": query, "address": _address(place)}
+                        "query": query, "address": _address(place), "category": place.get("category_name", "")}
             except (KeyError, TypeError, ValueError):
                 raise KakaoMapError(f"장소 좌표가 올바르지 않습니다: {name}") from None
     shown = []
@@ -138,14 +150,15 @@ def build(key: str, pause_seconds: float = 0.25, opener=urlopen, report: list[st
     station_ids = {s[0] for s in reference.STATIONS}
     places: dict[str, dict] = {}
     failures: list[str] = []
-    rows = [*({**v, "region": VENUE_REGION} for v in venues),
-            *({"id": s[0], "name": s[1], "region": None} for s in reference.STATIONS)]
+    rows = [*({**v, "region": VENUE_REGION, "station": False} for v in venues),
+            *({"id": s[0], "name": s[1], "region": None, "station": True} for s in reference.STATIONS)]
     for row in rows:
         try:
-            places[row["id"]] = find_place(row["name"], key, opener, row.get("search_aliases"), row["region"])
+            places[row["id"]] = find_place(row["name"], key, opener, row.get("search_aliases"), row["region"],
+                                           row["station"])
             if report is not None:
                 pl = places[row["id"]]
-                report.append(f"{row['name']} → {pl['name']} | {pl['address']} (검색어: {pl['query']})")
+                report.append(f"{row['name']} → {pl['name']} | {pl['address']} | {pl['category']} (검색어: {pl['query']})")
         except KakaoMapError as exc:
             failures.append(str(exc))  # 한 곳에서 멈추지 않고 전부 확인한 뒤 한꺼번에 알린다
         time.sleep(pause_seconds)

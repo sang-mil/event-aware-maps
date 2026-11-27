@@ -10,8 +10,9 @@ from maps import walk_routes
 SECRET = "TEST-KEY-123"
 
 
-def doc(name, x="127.1", y="37.5", addr="서울 송파구 방이동 1", cat="문화,예술 > 공연장"):
-    return {"place_name": name, "x": x, "y": y, "road_address_name": addr, "category_name": cat}
+def doc(name, x="127.1", y="37.5", addr="서울 송파구 방이동 1", cat="문화,예술 > 공연장", code="CT1"):
+    return {"place_name": name, "x": x, "y": y, "road_address_name": addr, "category_name": cat,
+            "category_group_code": code}
 
 
 def by_query(table):
@@ -52,7 +53,7 @@ def test_region_blocks_same_name_elsewhere(monkeypatch):
 
 def test_exact_or_shortest_name_beats_parking_lot(monkeypatch):
     monkeypatch.setattr(walk_routes, "_request", lambda *_: {"documents": [
-        doc("올림픽홀 주차장", "1", "1", cat="교통 > 주차장"),
+        doc("올림픽홀 주차장", "1", "1", cat="교통 > 주차장", code="PK6"),
         doc("올림픽공원 올림픽홀", "2", "2"),
         doc("올림픽홀", "3", "3"),
     ]})
@@ -61,6 +62,34 @@ def test_exact_or_shortest_name_beats_parking_lot(monkeypatch):
         doc("올림픽홀 주차장", "1", "1"), doc("올림픽공원 올림픽홀", "2", "2"),
     ]})
     assert walk_routes.find_place("올림픽홀", SECRET, region="서울 송파구")["x"] == 2.0   # 주차장은 뒤로
+
+
+def test_shops_atms_and_toilets_inside_a_venue_are_not_the_venue(monkeypatch):
+    # 2026-11-27 실제 실행 로그에서 본 형태: 경기장 안의 가게·ATM·화장실이 '포함' 규칙에 먼저 걸렸음 (값은 가짜)
+    monkeypatch.setattr(walk_routes, "_request", lambda *_: {"documents": [
+        doc("써브마켓 잠실야구장", "1", "1", cat="가정,생활 > 슈퍼마켓", code="MT1"),
+        doc("우리은행 365코너 잠실야구장", "2", "2", cat="금융,보험 > 금융서비스 > 은행 > ATM", code="BK9"),
+        doc("잠실야구장 개방화장실", "3", "3", cat="생활 > 공중화장실", code=""),
+        doc("잠실야구장", "4", "4", cat="스포츠,레저 > 스포츠시설 > 야구장", code=""),
+    ]})
+    assert walk_routes.find_place("잠실야구장", SECRET, region="서울 송파구")["x"] == 4.0
+    monkeypatch.setattr(walk_routes, "_request", lambda *_: {"documents": [
+        doc("써브마켓 잠실야구장", "1", "1", cat="가정,생활 > 슈퍼마켓", code="MT1"),
+    ]})
+    with pytest.raises(walk_routes.KakaoMapError):              # 가게만 있으면 실패로 남김(가게 좌표를 쓰지 않음)
+        walk_routes.find_place("잠실야구장", SECRET, region="서울 송파구")
+
+
+def test_station_must_be_subway_category(monkeypatch):
+    monkeypatch.setattr(walk_routes, "_request", lambda *_: {"documents": [
+        doc("방이역사거리", "1", "1", cat="교통,수송 > 교통시설 > 교차로", code=""),
+        doc("방이역 5호선", "2", "2", cat="교통,수송 > 지하철,전철 > 수도권5호선", code="SW8"),
+    ]})
+    got = walk_routes.find_place("방이역", SECRET, station=True)
+    assert (got["name"], got["x"]) == ("방이역 5호선", 2.0)
+    monkeypatch.setattr(walk_routes, "_request", lambda *_: {"documents": [doc("방이역사거리", code="")]})
+    with pytest.raises(walk_routes.KakaoMapError):
+        walk_routes.find_place("방이역", SECRET, station=True)
 
 
 def test_error_lists_candidates_and_never_the_key(monkeypatch):
@@ -83,10 +112,10 @@ def test_http_error_message_has_no_key_or_url():
 
 
 def test_build_checks_every_place_before_failing(monkeypatch):
-    def fake_find(name, key, opener=None, aliases=None, region=None):
+    def fake_find(name, key, opener=None, aliases=None, region=None, station=False):
         if name in ("KSPO DOME", "잠실야구장"):
             raise walk_routes.KakaoMapError(f"장소 이름과 일치하는 좌표를 찾지 못했습니다: {name}")
-        return {"name": name, "x": 127.0, "y": 37.5, "query": name, "address": "서울 송파구"}
+        return {"name": name, "x": 127.0, "y": 37.5, "query": name, "address": "서울 송파구", "category": ""}
     seen = []
     monkeypatch.setattr(walk_routes, "find_place", lambda *a, **k: (seen.append(a[0]), fake_find(*a, **k))[1])
     monkeypatch.setattr(walk_routes, "walking_route", lambda *a, **k: None)
@@ -99,7 +128,7 @@ def test_build_checks_every_place_before_failing(monkeypatch):
 
 def test_build_report_and_missing_routes_stay_null(monkeypatch):
     monkeypatch.setattr(walk_routes, "find_place", lambda name, *a, **k: {
-        "name": f"{name}(카카오)", "x": 127.0, "y": 37.5, "query": name, "address": "서울 송파구 방이동"})
+        "name": f"{name}(카카오)", "x": 127.0, "y": 37.5, "query": name, "address": "서울 송파구 방이동", "category": "x"})
     monkeypatch.setattr(walk_routes, "walking_route", lambda *a, **k: None)
     report: list[str] = []
     data = walk_routes.build(SECRET, pause_seconds=0, report=report)
