@@ -3,7 +3,12 @@ name: walk-routes-refresh
 on:
   schedule:
     - cron: "30 18 14 * *" # 매월 15일 03:30 KST
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "gh-pages 에 발행할지 (false 면 계산·검증과 장소 확인 로그만)"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -28,12 +33,15 @@ jobs:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: python backend/cli.py precompute-walk-routes --out site_data/walk-routes.json
       - name: gh-pages 준비
+        # 수동 실행에서 publish=false 면 발행하지 않는다. 예약 실행(schedule)에는 입력이 없어 그대로 발행한다.
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.publish }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch --depth=1 origin gh-pages
           git worktree add -B gh-pages pages origin/gh-pages
       - name: 경로 파일만 발행
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.publish }}
         run: |
           mkdir -p pages/data
           if cmp -s site_data/walk-routes.json pages/data/walk-routes.json; then

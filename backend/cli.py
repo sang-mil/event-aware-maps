@@ -302,10 +302,13 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_publish(args.src, args.out)
     if args.command == "precompute-walk-routes":
         try:
-            count = walk_routes.write(os.environ.get("KAKAO_REST_API_KEY", ""), args.out)
+            report: list[str] = []
+            count = walk_routes.write(os.environ.get("KAKAO_REST_API_KEY", ""), args.out, report)
         except walk_routes.KakaoMapError as e:
             print(e)
             return 1
+        for line in report:
+            print(f"  {line}")
         print(f"공연장·역 조합 {count}개의 도보 경로 데이터를 만들었습니다: {args.out}")
         return 0
     print(f"'{args.command}' 는 아직 만들지 않았습니다 (2단계 다음 작업).")

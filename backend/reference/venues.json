@@ -6,6 +6,10 @@
     "nearby_station_ids": [
       "olympic_park",
       "bangi"
+    ],
+    "search_aliases": [
+      "올림픽체조경기장",
+      "체조경기장"
     ]
   },
   {
@@ -24,6 +28,11 @@
     "nearby_station_ids": [
       "olympic_park",
       "bangi"
+    ],
+    "search_aliases": [
+      "SK핸드볼경기장",
+      "올림픽핸드볼경기장",
+      "핸드볼경기장"
     ]
   },
   {
