@@ -16,6 +16,10 @@ class RateLimited(CollectError):
     """HTTP 429. 잠시 기다렸다가 다시 시도할 수 있다."""
 
 
+class RetryableServerError(CollectError):
+    """일시적일 수 있는 HTTP 5xx 응답."""
+
+
 def _limit_detail(e: urllib.error.HTTPError) -> str:
     """서버가 알려 준 한도 정보(제한·남은 횟수·초기화까지 시간)와 메시지. 키나 주소는 넣지 않는다."""
     headers = e.headers or {}
@@ -36,6 +40,8 @@ def get_text(url: str, source: str) -> str:
     except urllib.error.HTTPError as e:
         if e.code == 429:
             raise RateLimited(f"{source}: HTTP 429 (요청이 너무 많음)" + _limit_detail(e)) from None
+        if 500 <= e.code < 600:
+            raise RetryableServerError(f"{source}: HTTP {e.code}") from None
         raise CollectError(f"{source}: HTTP {e.code}") from None
     except (urllib.error.URLError, TimeoutError, OSError) as e:
         raise CollectError(f"{source}: 연결 실패 ({type(e).__name__})") from None

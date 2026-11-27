@@ -12,7 +12,7 @@ import urllib.parse
 import xml.etree.ElementTree as ET
 from typing import Callable
 
-from .http import CollectError, RateLimited, get_text
+from .http import CollectError, RateLimited, RetryableServerError, get_text
 
 ENDPOINTS = {
     "linked": "https://api.kcisa.kr/openapi/API_CPM_009/request",
@@ -23,6 +23,7 @@ MAX_PAGES = 200  # 안전장치: 이보다 많으면 멈춘다
 # 서버 제한: "1 requests per 5 seconds" (2026-11 실제 429 응답 메시지). 여유를 두고 6초 간격
 MIN_INTERVAL_SEC = 6.0
 RETRIES_ON_429 = 3
+RETRIES_ON_SERVER_ERROR = 2
 
 
 def parse_page(xml_text: str, source: str) -> tuple[int, list[dict[str, str]]]:
@@ -46,14 +47,21 @@ def page_url(kind: str, key: str, page: int, rows: int = PAGE_SIZE) -> str:
 
 
 def _get_with_retry(get, url: str, source: str, wait: Callable[[float], None]) -> str:
-    for attempt in range(RETRIES_ON_429 + 1):
+    limited_retries = 0
+    server_retries = 0
+    while True:
         try:
             return get(url, source)
         except RateLimited:
-            if attempt == RETRIES_ON_429:
+            if limited_retries == RETRIES_ON_429:
                 raise
-            wait(MIN_INTERVAL_SEC * (attempt + 1))
-    raise AssertionError("unreachable")
+            limited_retries += 1
+            wait(MIN_INTERVAL_SEC * limited_retries)
+        except RetryableServerError:
+            if server_retries == RETRIES_ON_SERVER_ERROR:
+                raise
+            server_retries += 1
+            wait(MIN_INTERVAL_SEC * server_retries)
 
 
 def fetch_all(
@@ -66,7 +74,7 @@ def fetch_all(
 ) -> dict:
     """전체 페이지를 받아 {"total": n, "items": [...]} 로 돌려준다.
 
-    요청 사이에 MIN_INTERVAL_SEC 만큼 쉬고, 429가 오면 조금 더 기다렸다가 다시 시도한다.
+    요청 사이에 MIN_INTERVAL_SEC 만큼 쉬고, 429와 일시적 5xx는 기다렸다가 제한 횟수만큼 재시도한다.
     on_page(페이지 번호, 지금까지 받은 건수, 전체 건수) 로 진행 상황을 알린다.
     """
     if kind not in ENDPOINTS:
