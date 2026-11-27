@@ -18,6 +18,7 @@
           "additionalProperties": false
         },
         "headline": { "$ref": "common.schema.json#/$defs/headline" },
+        "similar": { "type": "boolean", "description": "(2026-11 추가, 선택) 1·2순위가 같은 단계이고 배수 차이가 작아 어느 쪽도 괜찮음" },
         "last_train": {
           "anyOf": [
             { "type": "null" },
@@ -49,6 +50,13 @@
               "expected": { "$ref": "common.schema.json#/$defs/count_or_null" },
               "level": { "$ref": "common.schema.json#/$defs/level" },
               "compare_message": { "type": "string" },
+              "share": { "type": "number", "minimum": 0, "maximum": 1, "description": "(2026-11 추가, 선택) 길 안내 분배 비율. 선택지 합 1" },
+              "share_by_venue": {
+                "type": "object",
+                "description": "(2026-11 추가, 선택) 출발 공연장별 분배 비율. 너무 먼(도보 기준 초과) 선택지는 0",
+                "propertyNames": { "$ref": "common.schema.json#/$defs/id" },
+                "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+              },
               "walk_by_venue": {
                 "type": "object",
                 "description": "(2026-11 추가, 선택) 출발 공연장 id → 이 역까지 카카오 도보 경로. 경로가 없는 공연장은 빠짐",

@@ -15,6 +15,8 @@ from __future__ import annotations
 import reference
 from congestion.outputs import HOURS, NAMES, slot_message
 
+from . import share as share_rule
+
 AREA = "olympic_park"
 NEAREST, OTHER = "olympic_park", "bangi"
 LINES = {"olympic_park": "5·9호선", "bangi": "5호선"}
@@ -48,16 +50,22 @@ def compare(day: dict, hour: int, walk: dict | None = None) -> dict | None:
     if not opts:
         return None
     best = opts[0]
+    walks = [walk_by_venue(o["station_id"], walk) for o in opts]
+    base_share = share_rule.shares(opts)
+    by_venue = share_rule.shares_by_venue(opts, walks)
     headline = ({"highlight": f"{best['hour']}시대", "text": "에 타면 가장 덜 붐빌 거예요"} if best["kind"] == "wait_later"
                 else {"highlight": NAMES[best["station_id"]], "text": "에서 타면 가장 덜 붐빌 거예요"})
     return {
         "condition_label": {"to_name": None, "hour_label": f"{hour}시대 출발"},
         "headline": headline,
         "last_train": None,
+        "similar": share_rule.similar(opts),
         "options": [{"id": o["id"], "kind": o["kind"], "recommended": i == 0, "title": o["title"], "subtitle": o["subtitle"],
                      "station_id": o["station_id"], "board_hour": f"{o['hour']:02d}", "walk_min": None,
                      "expected": round(o["s"]["expected"]), "level": o["s"]["level"], "compare_message": slot_message(o["s"]),
-                     "walk_by_venue": walk_by_venue(o["station_id"], walk),
+                     "walk_by_venue": walks[i],
+                     "share": base_share[i],
+                     "share_by_venue": {v: sh[i] for v, sh in by_venue.items()},
                      "uncertain": o["s"]["effect_unknown"]}
                     for i, o in enumerate(opts)],
     }
