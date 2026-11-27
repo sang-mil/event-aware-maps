@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import reference
 from congestion.outputs import HOURS, NAMES, slot_message
 
 AREA = "olympic_park"
@@ -36,7 +37,13 @@ def options(day: dict, hour: int) -> list[dict]:
     return out
 
 
-def compare(day: dict, hour: int) -> dict | None:
+def walk_by_venue(station_id: str, walk: dict | None) -> dict:
+    """출발 공연장마다 그 역까지 도보 (카카오 경로가 있는 공연장만). 화면이 출발 공연장 값을 고른다."""
+    walk = walk or {}
+    return {v: walk[(v, station_id)] for v in reference.olympic_venue_ids() if (v, station_id) in walk}
+
+
+def compare(day: dict, hour: int, walk: dict | None = None) -> dict | None:
     opts = options(day, hour)
     if not opts:
         return None
@@ -50,12 +57,13 @@ def compare(day: dict, hour: int) -> dict | None:
         "options": [{"id": o["id"], "kind": o["kind"], "recommended": i == 0, "title": o["title"], "subtitle": o["subtitle"],
                      "station_id": o["station_id"], "board_hour": f"{o['hour']:02d}", "walk_min": None,
                      "expected": round(o["s"]["expected"]), "level": o["s"]["level"], "compare_message": slot_message(o["s"]),
+                     "walk_by_venue": walk_by_venue(o["station_id"], walk),
                      "uncertain": o["s"]["effect_unknown"]}
                     for i, o in enumerate(opts)],
     }
 
 
-def route(day: dict, hour: int, option_id: str) -> dict | None:
+def route(day: dict, hour: int, option_id: str, walk: dict | None = None) -> dict | None:
     o = next((x for x in options(day, hour) if x["id"] == option_id), None)
     if o is None:
         return None
@@ -73,17 +81,18 @@ def route(day: dict, hour: int, option_id: str) -> dict | None:
         ],
         "compare": {"hour": f"{h:02d}", "items": items, "note": note},
         "map_links": None,
+        "walk_by_venue": walk_by_venue(sid, walk),
     }
 
 
-def build_files(d: str, day: dict) -> dict[str, dict]:
+def build_files(d: str, day: dict, walk: dict | None = None) -> dict[str, dict]:
     """한 날짜의 compare·route 파일 (data 부분). 이름: compare-{지역}-{날짜}-{시}, route-{지역}-{날짜}-{시}-{선택지}."""
     files: dict[str, dict] = {}
     for hour in HOURS:
-        c = compare(day, hour)
+        c = compare(day, hour, walk)
         if c is None:
             continue
         files[f"compare-{AREA}-{d}-{hour:02d}.json"] = c
         for opt in c["options"]:
-            files[f"route-{AREA}-{d}-{hour:02d}-{opt['id']}.json"] = route(day, hour, opt["id"])
+            files[f"route-{AREA}-{d}-{hour:02d}-{opt['id']}.json"] = route(day, hour, opt["id"], walk)
     return files

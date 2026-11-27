@@ -52,6 +52,20 @@
           "required": ["hour", "items", "note"],
           "additionalProperties": false
         },
+        "walk_by_venue": {
+          "type": "object",
+          "description": "(2026-11 추가, 선택) 출발 공연장 id → 이 역까지 카카오 도보 경로. 경로가 없는 공연장은 빠짐",
+          "propertyNames": { "$ref": "common.schema.json#/$defs/id" },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "walk_min": { "type": "integer", "minimum": 0 },
+              "distance_m": { "type": "integer", "minimum": 0 }
+            },
+            "required": ["walk_min", "distance_m"],
+            "additionalProperties": false
+          }
+        },
         "map_links": {
           "description": "지도 앱 링크. 형태 미정이라 지금은 null만 허용한다 (types.ts는 unknown). 형태가 정해지면 필드를 추가한다.",
           "type": "null"

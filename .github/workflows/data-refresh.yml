@@ -41,6 +41,15 @@ jobs:
       - name: DB 만들기 (승하차는 요약 파일)
         run: python backend/cli.py build-db
 
+      - name: 발행된 도보 경로 받기 (없으면 도보 시간은 '정보 없음')
+        run: |
+          if git fetch --depth=1 origin gh-pages 2>/dev/null && git show origin/gh-pages:data/walk-routes.json > backend/data/raw/walk-routes.json 2>/dev/null; then
+            echo "walk-routes.json 받음"
+          else
+            rm -f backend/data/raw/walk-routes.json
+            echo "walk-routes.json 없음"
+          fi
+
       - name: 계산하고 검증해서 만들기
         run: |
           AS_OF="$(TZ=Asia/Seoul date +%Y-%m-%dT%H:%M:%S)+09:00"

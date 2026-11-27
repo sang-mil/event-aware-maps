@@ -200,3 +200,16 @@ def write(key: str, out: Path, report: list[str] | None = None) -> int:
     if report is not None:
         report.append(f"도보 경로 {len(data['routes'])}개 중 경로 없음 {missing}개")
     return len(data["routes"])
+
+
+def load_lookup(path: Path) -> dict[tuple[str, str], dict]:
+    """발행된 walk-routes.json → {(공연장, 역): {"walk_min", "distance_m"}}. 경로를 못 구한 조합은 넣지 않는다.
+    파일이 없으면 빈 표(도보 시간은 null 로 남음). 스키마를 통과하지 않으면 쓰지 않는다."""
+    if not path.is_file():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    errors = errors_of("walk-routes.json", data)
+    if errors:
+        raise KakaoMapError("walk-routes.json 형식이 올바르지 않습니다: " + "; ".join(errors[:3]))
+    return {(r["venue_id"], r["station_id"]): {"walk_min": r["walk_min"], "distance_m": r["distance_m"]}
+            for r in data["routes"] if r["walk_min"] is not None and r["distance_m"] is not None}
