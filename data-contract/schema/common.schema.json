@@ -46,7 +46,9 @@
         "ratio": { "type": ["number", "null"], "minimum": 0, "description": "expected / baseline. 모르면 null" },
         "level": { "$ref": "#/$defs/level" },
         "message": { "type": "string" },
-        "recommended": { "type": "boolean" }
+        "recommended": { "type": "boolean" },
+        "uncertain": { "type": "boolean", "description": "(2026-11 추가, 선택) 관객 수를 모르는 공연이 있어 실제로는 더 붐빌 수 있음" },
+        "baseline_basis": { "enum": ["same_weekday", "weekday_fallback"], "description": "(2026-11 추가, 선택) 평소 기준선: 같은 요일 / 표본이 적어 행사 없는 월~목으로 대신" }
       },
       "required": ["hour", "expected", "baseline", "ratio", "level", "message", "recommended"],
       "additionalProperties": false

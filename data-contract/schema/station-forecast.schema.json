@@ -24,7 +24,8 @@
               "station_id": { "$ref": "common.schema.json#/$defs/id" },
               "level": { "$ref": "common.schema.json#/$defs/level" },
               "walk_min": { "$ref": "common.schema.json#/$defs/minutes_or_null" },
-              "message": { "type": "string" }
+              "message": { "type": "string" },
+              "uncertain": { "type": "boolean", "description": "(2026-11 추가, 선택) 관객 수를 모르는 공연이 있어 실제로는 더 붐빌 수 있음" }
             },
             "required": ["station_id", "level", "walk_min", "message"],
             "additionalProperties": false
