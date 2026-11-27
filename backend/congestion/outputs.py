@@ -106,8 +106,9 @@ def ranking(day: dict, hour: int) -> list[str]:
     return sorted(have, key=lambda sid: (_ORDER[day[sid][hour]["level"]], day[sid][hour]["ratio"], day[sid][hour]["expected"]))
 
 
-def forecast(d: str, day: dict, exits: dict) -> dict:
-    has_event = bool(exits.get(d))
+def forecast(d: str, day: dict, exits: dict, has_event: bool | None = None) -> dict:
+    """has_event: 예측에 넣지 않은 공연(잠실)도 있는 날이면 True 로 넘긴다."""
+    has_event = bool(exits.get(d)) if has_event is None else has_event
     summaries, ranks = {}, {}
     for h in HOURS:
         order = ranking(day, h)
@@ -172,7 +173,10 @@ def station_forecast(d: str, sid: str, day: dict, exits: dict, station_walk: dic
     return out
 
 
-def nearest_level(day: dict, exit_hour: int) -> str:
-    """올림픽공원 공연의 가장 가까운 역(올림픽공원역)의 끝나는 시간대 단계."""
-    s = day["olympic_park"].get(min(max(exit_hour, HOURS[0]), HOURS[-1]))
+def nearest_level(day: dict, exit_hour: int | None, station: str = "olympic_park") -> str:
+    """공연의 가장 가까운 역의 끝나는 시간대 단계. 끝나는 시각을 모르거나 예상 시간대(19~23시) 밖이면 no_data
+    (가장 가까운 시간대 값을 빌려 쓰지 않는다)."""
+    if exit_hour is None or exit_hour not in HOURS:
+        return "no_data"
+    s = day[station].get(exit_hour)
     return s["level"] if s else "no_data"

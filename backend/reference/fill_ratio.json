@@ -1,0 +1,1094 @@
+{
+ "method": "KSPO 2025 실제 관람객수 ÷ KOPIS 공연장 객석 수, 같은 날짜·제목으로 짝지은 공연의 중앙값",
+ "computed_at": "2026-11-27T17:19:08+09:00",
+ "ratio": {
+  "*": 0.84,
+  "grass_88": 1.0,
+  "kspo_dome": 0.67,
+  "olympic_hall": 1.142,
+  "ticketlink_live_arena": 0.7,
+  "woori_art_hall": 0.782
+ },
+ "samples": {
+  "*": 134,
+  "grass_88": 5,
+  "kspo_dome": 70,
+  "olympic_hall": 39,
+  "ticketlink_live_arena": 15,
+  "woori_art_hall": 5
+ },
+ "pairs": [
+  {
+   "date": "2025-01-10",
+   "kspo_title": "나훈아 2024 고마웠습니다-라스트 콘서트(LAST CONCERT)",
+   "kopis_title": "나훈아 라스트 콘서트: 고마웠습니다 [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9008,
+   "seats": 15000
+  },
+  {
+   "date": "2025-01-11",
+   "kspo_title": "나훈아 2024 고마웠습니다-라스트 콘서트(LAST CONCERT)",
+   "kopis_title": "나훈아 라스트 콘서트: 고마웠습니다 [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9008,
+   "seats": 15000
+  },
+  {
+   "date": "2025-01-12",
+   "kspo_title": "나훈아 2024 고마웠습니다-라스트 콘서트(LAST CONCERT)",
+   "kopis_title": "나훈아 라스트 콘서트: 고마웠습니다 [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9008,
+   "seats": 15000
+  },
+  {
+   "date": "2025-01-17",
+   "kspo_title": "GFRIEND 10th Anniversary < Season of Memories >, I.M WORLD TOUR 〈Off The Beat〉 FINAL IN SEOUL",
+   "kopis_title": "I.M WORLD TOUR: Off The Beat FINAL IN SEOUL",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 5654,
+   "seats": 5003
+  },
+  {
+   "date": "2025-01-19",
+   "kspo_title": "2025 DAVICHI CONCERT 〈A Stitch in Time〉, GFRIEND 10th Anniversary < Season of Memories >, I.M WORLD TOUR 〈Off The Beat〉 FINAL IN SEOUL",
+   "kopis_title": "DAVICHI CONCERT: A Stitch in Time",
+   "venue_id": "kspo_dome",
+   "audience": 13454,
+   "seats": 15000
+  },
+  {
+   "date": "2025-01-26",
+   "kspo_title": "2025 SUHO CONCERT 〈SU:HOMME〉 ENCORE",
+   "kopis_title": "SUHO CONCERT, SU: HOMME [서울 (앵콜) ]",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 3300,
+   "seats": 5003
+  },
+  {
+   "date": "2025-01-31",
+   "kspo_title": "THE BOYZ FAN-CON 〈THE B LAND〉",
+   "kopis_title": "THE BOYZ FAN-CON: THE B LAND",
+   "venue_id": "kspo_dome",
+   "audience": 8600,
+   "seats": 15000
+  },
+  {
+   "date": "2025-02-01",
+   "kspo_title": "THE BOYZ FAN-CON 〈THE B LAND〉",
+   "kopis_title": "THE BOYZ FAN-CON: THE B LAND",
+   "venue_id": "kspo_dome",
+   "audience": 8600,
+   "seats": 15000
+  },
+  {
+   "date": "2025-02-02",
+   "kspo_title": "THE BOYZ FAN-CON 〈THE B LAND〉",
+   "kopis_title": "THE BOYZ FAN-CON: THE B LAND",
+   "venue_id": "kspo_dome",
+   "audience": 8600,
+   "seats": 15000
+  },
+  {
+   "date": "2025-02-08",
+   "kspo_title": "2025 황영웅 앨범 발매 쇼케이스 PANORAMA : SHOWKING",
+   "kopis_title": "황영웅 앨범 발매 쇼케이스, PANORAMA: SHOWKING",
+   "venue_id": "kspo_dome",
+   "audience": 9000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-02-08",
+   "kspo_title": "2025 검정치마 단독공연 SONGS TO BRING YOU HOME",
+   "kopis_title": "검정치마 단독공연: SONGS TO BRING YOU HOME",
+   "venue_id": "olympic_hall",
+   "audience": 3100,
+   "seats": 2452
+  },
+  {
+   "date": "2025-02-09",
+   "kspo_title": "2025 검정치마 단독공연 SONGS TO BRING YOU HOME",
+   "kopis_title": "검정치마 단독공연: SONGS TO BRING YOU HOME",
+   "venue_id": "olympic_hall",
+   "audience": 3100,
+   "seats": 2452
+  },
+  {
+   "date": "2025-02-14",
+   "kspo_title": "2025 윤하 앵콜 콘서트 〈GROWTH THEORY : Final Edition〉",
+   "kopis_title": "윤하 앵콜 콘서트, GROWTH THEORY: Final Edition",
+   "venue_id": "kspo_dome",
+   "audience": 7549,
+   "seats": 15000
+  },
+  {
+   "date": "2025-02-15",
+   "kspo_title": "2025 박지현 콘서트 쇼맨쉽 SHOWMANSHIP",
+   "kopis_title": "박지현 첫번째 단독 콘서트: 쇼맨쉽 SHOWMANSHIP [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 4150,
+   "seats": 2452
+  },
+  {
+   "date": "2025-02-15",
+   "kspo_title": "2025 윤하 앵콜 콘서트 〈GROWTH THEORY : Final Edition〉",
+   "kopis_title": "윤하 앵콜 콘서트, GROWTH THEORY: Final Edition",
+   "venue_id": "kspo_dome",
+   "audience": 7549,
+   "seats": 15000
+  },
+  {
+   "date": "2025-02-16",
+   "kspo_title": "2025 윤하 앵콜 콘서트 〈GROWTH THEORY : Final Edition〉",
+   "kopis_title": "윤하 앵콜 콘서트, GROWTH THEORY: Final Edition",
+   "venue_id": "kspo_dome",
+   "audience": 7550,
+   "seats": 15000
+  },
+  {
+   "date": "2025-02-21",
+   "kspo_title": "2025 ONEW CONCERT [ONEW THE LIVE : CONNECTION] IN SEOUL",
+   "kopis_title": "ONEW CONCERT, ONEW THE LIVE: CONNECTION [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 2465,
+   "seats": 2452
+  },
+  {
+   "date": "2025-02-22",
+   "kspo_title": "2025 영탁 단독 콘서트 TAK SHOW3 - 앙코르",
+   "kopis_title": "영탁 단독 콘서트: TAK SHOW3 [서울 (앵콜) ]",
+   "venue_id": "kspo_dome",
+   "audience": 9000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-02-22",
+   "kspo_title": "2025 ONEW CONCERT [ONEW THE LIVE : CONNECTION] IN SEOUL",
+   "kopis_title": "ONEW CONCERT, ONEW THE LIVE: CONNECTION [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 2465,
+   "seats": 2452
+  },
+  {
+   "date": "2025-02-23",
+   "kspo_title": "2025 영탁 단독 콘서트 TAK SHOW3 - 앙코르",
+   "kopis_title": "영탁 단독 콘서트: TAK SHOW3 [서울 (앵콜) ]",
+   "venue_id": "kspo_dome",
+   "audience": 9000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-02-23",
+   "kspo_title": "2025 ONEW CONCERT [ONEW THE LIVE : CONNECTION] IN SEOUL",
+   "kopis_title": "ONEW CONCERT, ONEW THE LIVE: CONNECTION [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 2465,
+   "seats": 2452
+  },
+  {
+   "date": "2025-02-28",
+   "kspo_title": "j-hope Tour HOPE ON THE STAGE in SEOUL",
+   "kopis_title": "j-hope Tour: HOPE ON THE STAGE [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 11575,
+   "seats": 15000
+  },
+  {
+   "date": "2025-03-01",
+   "kspo_title": "j-hope Tour HOPE ON THE STAGE in SEOUL",
+   "kopis_title": "j-hope Tour: HOPE ON THE STAGE [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 11575,
+   "seats": 15000
+  },
+  {
+   "date": "2025-03-01",
+   "kspo_title": "keshi: REQUIEM TOUR IN SEOU",
+   "kopis_title": "케시 내한공연, keshi: REQUIEM TOUR [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 4578,
+   "seats": 2452
+  },
+  {
+   "date": "2025-03-02",
+   "kspo_title": "j-hope Tour HOPE ON THE STAGE in SEOUL",
+   "kopis_title": "j-hope Tour: HOPE ON THE STAGE [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 11575,
+   "seats": 15000
+  },
+  {
+   "date": "2025-03-07",
+   "kspo_title": "TAEYEON CONCERT - The TENSE",
+   "kopis_title": "TAEYEON CONCERT: The TENSE [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9066,
+   "seats": 15000
+  },
+  {
+   "date": "2025-03-08",
+   "kspo_title": "TAEYEON CONCERT - The TENSE",
+   "kopis_title": "TAEYEON CONCERT: The TENSE [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9066,
+   "seats": 15000
+  },
+  {
+   "date": "2025-03-09",
+   "kspo_title": "TAEYEON CONCERT - The TENSE",
+   "kopis_title": "TAEYEON CONCERT: The TENSE [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9067,
+   "seats": 15000
+  },
+  {
+   "date": "2025-03-21",
+   "kspo_title": "2025 NCT WISH ASIA TOUR LOG in SEOUL, 2025 BTOB FAN-CON 3,2,1 GO! MELympic 콘서트 주간 3위",
+   "kopis_title": "BTOB FAN-CON: 3,2,1 GO! MELympic",
+   "venue_id": "olympic_hall",
+   "audience": 5700,
+   "seats": 2452
+  },
+  {
+   "date": "2025-03-22",
+   "kspo_title": "2025 ATEEZ WORLD TOUR [TOWARDS THE LIGHT : WILL TO POWER] FINALE IN SEOUL, 2025 NCT WISH ASIA TOUR LOG in SEOUL, 2025 BTOB FAN-CON 3,2,1 GO! MELympic 콘서트 주간 3위",
+   "kopis_title": "BTOB FAN-CON: 3,2,1 GO! MELympic",
+   "venue_id": "olympic_hall",
+   "audience": 13800,
+   "seats": 2452
+  },
+  {
+   "date": "2025-03-22",
+   "kspo_title": "2025 NCT WISH ASIA TOUR LOG in SEOUL, 2025 BTOB FAN-CON 3,2,1 GO! MELympic 콘서트 주간 3위",
+   "kopis_title": "BTOB FAN-CON: 3,2,1 GO! MELympic",
+   "venue_id": "olympic_hall",
+   "audience": 5700,
+   "seats": 2452
+  },
+  {
+   "date": "2025-03-23",
+   "kspo_title": "2025 NCT WISH ASIA TOUR LOG in SEOUL",
+   "kopis_title": "NCT WISH ASIA TOUR: LOG [서울]",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 3200,
+   "seats": 5003
+  },
+  {
+   "date": "2025-03-23",
+   "kspo_title": "2025 NCT WISH ASIA TOUR LOG in SEOUL, 2025 ATEEZ WORLD TOUR [TOWARDS THE LIGHT : WILL TO POWER] FINALE IN SEOUL, 2025 BTOB FAN-CON 3,2,1 GO! MELympic 콘서트 주간 3위",
+   "kopis_title": "NCT WISH ASIA TOUR: LOG [서울]",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 13800,
+   "seats": 5003
+  },
+  {
+   "date": "2025-03-23",
+   "kspo_title": "2025 ATEEZ WORLD TOUR [TOWARDS THE LIGHT : WILL TO POWER] FINALE IN SEOUL, 2025 BTOB FAN-CON 3,2,1 GO! MELympic 콘서트 주간 3위",
+   "kopis_title": "BTOB FAN-CON: 3,2,1 GO! MELympic",
+   "venue_id": "olympic_hall",
+   "audience": 10600,
+   "seats": 2452
+  },
+  {
+   "date": "2025-03-28",
+   "kspo_title": "정동원棟동 이야기話화 3rd 전국투어 콘서트 - 서울",
+   "kopis_title": "정동원棟동 이야기話화 3rd 전국투어 콘서트 [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 2700,
+   "seats": 2452
+  },
+  {
+   "date": "2025-03-29",
+   "kspo_title": "〈미스터트롯3〉 전국투어 콘서트",
+   "kopis_title": "미스터트롯3 전국투어 콘서트",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 2800,
+   "seats": 5003
+  },
+  {
+   "date": "2025-03-30",
+   "kspo_title": "〈미스터트롯3〉 전국투어 콘서트",
+   "kopis_title": "미스터트롯3 전국투어 콘서트",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 2800,
+   "seats": 5003
+  },
+  {
+   "date": "2025-04-05",
+   "kspo_title": "EUNHYUK LIVE TOUR 2025 -Limitless: Time- Special in SEOUL, 2025 IVE THE 3RD FAN CONCERT 〈IVE SCOUT〉",
+   "kopis_title": "EUNHYUK LIVE TOUR, Limitless: Time-Special [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 12800,
+   "seats": 2452
+  },
+  {
+   "date": "2025-04-06",
+   "kspo_title": "EUNHYUK LIVE TOUR 2025 -Limitless: Time- Special in SEOUL, 2025 IVE THE 3RD FAN CONCERT 〈IVE SCOUT〉",
+   "kopis_title": "EUNHYUK LIVE TOUR, Limitless: Time-Special [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 12800,
+   "seats": 2452
+  },
+  {
+   "date": "2025-04-12",
+   "kspo_title": "2025 STAYC TOUR STAY TUNED, 2025 2NE1 CONCERT ［WELCOME BACK］ ENCORE IN SEOUL",
+   "kopis_title": "2NE1 CONCERT, WELCOME BACK [서울 (앵콜) ]",
+   "venue_id": "kspo_dome",
+   "audience": 11160,
+   "seats": 15000
+  },
+  {
+   "date": "2025-04-13",
+   "kspo_title": "2025 STAYC TOUR STAY TUNED, 2025 2NE1 CONCERT ［WELCOME BACK］ ENCORE IN SEOUL",
+   "kopis_title": "2NE1 CONCERT, WELCOME BACK [서울 (앵콜) ]",
+   "venue_id": "kspo_dome",
+   "audience": 11160,
+   "seats": 15000
+  },
+  {
+   "date": "2025-04-18",
+   "kspo_title": "2025 ZEROBASEONE FAN-CON［BLUE MANSION］",
+   "kopis_title": "ZEROBASEONE FAN-CON: BLUE MANSION",
+   "venue_id": "kspo_dome",
+   "audience": 6000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-04-19",
+   "kspo_title": "2025 OH MY GIRL CONCERT [Milky Way], 2025 ZEROBASEONE FAN-CON［BLUE MANSION］",
+   "kopis_title": "ZEROBASEONE FAN-CON: BLUE MANSION",
+   "venue_id": "kspo_dome",
+   "audience": 8900,
+   "seats": 15000
+  },
+  {
+   "date": "2025-04-20",
+   "kspo_title": "2025 OH MY GIRL CONCERT [Milky Way], 2025 ZEROBASEONE FAN-CON［BLUE MANSION］",
+   "kopis_title": "ZEROBASEONE FAN-CON: BLUE MANSION",
+   "venue_id": "kspo_dome",
+   "audience": 8900,
+   "seats": 15000
+  },
+  {
+   "date": "2025-04-26",
+   "kspo_title": "2024-25 TAEMIN WORLD TOUR [Ephemeral Gaze] Finale",
+   "kopis_title": "TAEMIN WORLD TOUR: Ephemeral Gaze Finale",
+   "venue_id": "kspo_dome",
+   "audience": 8550,
+   "seats": 15000
+  },
+  {
+   "date": "2025-04-26",
+   "kspo_title": "DAESUNG 2025 ASIA TOUR：D’s WAVE IN SEOUL",
+   "kopis_title": "DAESUNG ASIA TOUR: D's WAVE IN SEOUL",
+   "venue_id": "olympic_hall",
+   "audience": 1450,
+   "seats": 2452
+  },
+  {
+   "date": "2025-04-27",
+   "kspo_title": "2024-25 TAEMIN WORLD TOUR [Ephemeral Gaze] Finale",
+   "kopis_title": "TAEMIN WORLD TOUR: Ephemeral Gaze Finale",
+   "venue_id": "kspo_dome",
+   "audience": 8550,
+   "seats": 15000
+  },
+  {
+   "date": "2025-04-27",
+   "kspo_title": "DAESUNG 2025 ASIA TOUR：D’s WAVE IN SEOUL",
+   "kopis_title": "DAESUNG ASIA TOUR: D's WAVE IN SEOUL",
+   "venue_id": "olympic_hall",
+   "audience": 1450,
+   "seats": 2452
+  },
+  {
+   "date": "2025-05-02",
+   "kspo_title": "Xdinary Heroes〈Beautiful Mind〉World Tour in SEOUL",
+   "kopis_title": "Xdinary Heroes Beautiful Mind World Tour in SEOUL",
+   "venue_id": "olympic_hall",
+   "audience": 2500,
+   "seats": 2452
+  },
+  {
+   "date": "2025-05-03",
+   "kspo_title": "YUURI ARENA LIVE 2025 at SEOUL, Xdinary Heroes〈Beautiful Mind〉World Tour in SEOUL",
+   "kopis_title": "Xdinary Heroes Beautiful Mind World Tour in SEOUL",
+   "venue_id": "olympic_hall",
+   "audience": 16000,
+   "seats": 2452
+  },
+  {
+   "date": "2025-05-04",
+   "kspo_title": "YUURI ARENA LIVE 2025 at SEOUL, Xdinary Heroes〈Beautiful Mind〉World Tour in SEOUL",
+   "kopis_title": "Xdinary Heroes Beautiful Mind World Tour in SEOUL",
+   "venue_id": "olympic_hall",
+   "audience": 16000,
+   "seats": 2452
+  },
+  {
+   "date": "2025-05-09",
+   "kspo_title": "DAY6 3RD WORLD TOUR〈FOREVER YOUNG〉FINALE in SEOUL",
+   "kopis_title": "DAY6 3RD WORLD TOUR: FOREVER YOUNG FINALE [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 15200,
+   "seats": 15000
+  },
+  {
+   "date": "2025-05-11",
+   "kspo_title": "2025 N.Flying LIVE ＆CON4 : FULL CIRCLE",
+   "kopis_title": "N.Flying LIVE, &CON4: FULL CIRCLE",
+   "venue_id": "olympic_hall",
+   "audience": 4050,
+   "seats": 2452
+  },
+  {
+   "date": "2025-05-11",
+   "kspo_title": "DAY6 3RD WORLD TOUR〈FOREVER YOUNG〉FINALE in SEOUL",
+   "kopis_title": "DAY6 3RD WORLD TOUR: FOREVER YOUNG FINALE [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 15200,
+   "seats": 15000
+  },
+  {
+   "date": "2025-05-16",
+   "kspo_title": "DAY6 3RD WORLD TOUR〈FOREVER YOUNG〉FINALE in SEOUL",
+   "kopis_title": "DAY6 3RD WORLD TOUR: FOREVER YOUNG FINALE [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 16000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-05-16",
+   "kspo_title": "2025 BIBI 1st WORLD TOUR ［EVE］ IN SEOUL",
+   "kopis_title": "BIBI 1st WORLD TOUR: EVE [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 2698,
+   "seats": 2452
+  },
+  {
+   "date": "2025-05-17",
+   "kspo_title": "2025 KAI SOLO CONCERT TOUR 〈KAION〉 IN SEOUL",
+   "kopis_title": "KAI SOLO CONCERT TOUR: KAION [서울]",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 3500,
+   "seats": 5003
+  },
+  {
+   "date": "2025-05-18",
+   "kspo_title": "2025 KAI SOLO CONCERT TOUR 〈KAION〉 IN SEOUL",
+   "kopis_title": "KAI SOLO CONCERT TOUR: KAION [서울]",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 3500,
+   "seats": 5003
+  },
+  {
+   "date": "2025-05-23",
+   "kspo_title": "SHINee WORLD Ⅶ [E.S.S.A.Y] (Every Stage Shines Around You)",
+   "kopis_title": "SHINee WORLD Ⅶ: E.S.S.A.Y (Every Stage Shines Around You)",
+   "venue_id": "kspo_dome",
+   "audience": 9500,
+   "seats": 15000
+  },
+  {
+   "date": "2025-05-23",
+   "kspo_title": "[서울] 2025 멜로망스 전국투어 콘서트 〈Romance Station〉",
+   "kopis_title": "멜로망스 전국투어 콘서트: Romance Station [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 2529,
+   "seats": 2452
+  },
+  {
+   "date": "2025-05-24",
+   "kspo_title": "2025 Jay Park World Tour [Serenades & Body Rolls], SHINee WORLD Ⅶ [E.S.S.A.Y] (Every Stage Shines Around You), [서울] 2025 멜로망스 전국투어 콘서트 〈Romance Station〉",
+   "kopis_title": "SHINee WORLD Ⅶ: E.S.S.A.Y (Every Stage Shines Around You)",
+   "venue_id": "kspo_dome",
+   "audience": 15613,
+   "seats": 15000
+  },
+  {
+   "date": "2025-05-25",
+   "kspo_title": "2025 Jay Park World Tour [Serenades & Body Rolls], [서울] 2025 멜로망스 전국투어 콘서트 〈Romance Station〉",
+   "kopis_title": "멜로망스 전국투어 콘서트: Romance Station [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 6113,
+   "seats": 2452
+  },
+  {
+   "date": "2025-05-25",
+   "kspo_title": "2025 Jay Park World Tour [Serenades & Body Rolls], [서울] 2025 멜로망스 전국투어 콘서트 〈Romance Station〉, SHINee WORLD Ⅶ [E.S.S.A.Y] (Every Stage Shines Around You)",
+   "kopis_title": "멜로망스 전국투어 콘서트: Romance Station [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 15613,
+   "seats": 2452
+  },
+  {
+   "date": "2025-06-07",
+   "kspo_title": "윤종신 전국투어 콘서트 그때 - 서울",
+   "kopis_title": "윤종신 전국투어 콘서트: 그때 [서울]",
+   "venue_id": "woori_art_hall",
+   "audience": 1050,
+   "seats": 1184
+  },
+  {
+   "date": "2025-06-07",
+   "kspo_title": "윤종신 전국투어 콘서트 그때 - 서울, 2025 BAEKHYUN WORLD TOUR 〈Reverie〉 in SEOUL, 2025 ILLIT GLITTER DAY IN SEOUL",
+   "kopis_title": "윤종신 전국투어 콘서트: 그때 [서울]",
+   "venue_id": "woori_art_hall",
+   "audience": 16500,
+   "seats": 1184
+  },
+  {
+   "date": "2025-06-07",
+   "kspo_title": "2025 BAEKHYUN WORLD TOUR 〈Reverie〉 in SEOUL, 2025 ILLIT GLITTER DAY IN SEOUL",
+   "kopis_title": "BAEKHYUN WORLD TOUR: Reverie [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 15450,
+   "seats": 15000
+  },
+  {
+   "date": "2025-06-08",
+   "kspo_title": "윤종신 전국투어 콘서트 그때 - 서울, 2025 BAEKHYUN WORLD TOUR 〈Reverie〉 in SEOUL",
+   "kopis_title": "BAEKHYUN WORLD TOUR: Reverie [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 14000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-06-08",
+   "kspo_title": "윤종신 전국투어 콘서트 그때 - 서울, 2025 BAEKHYUN WORLD TOUR 〈Reverie〉 in SEOUL, 2025 ILLIT GLITTER DAY IN SEOUL",
+   "kopis_title": "BAEKHYUN WORLD TOUR: Reverie [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 16500,
+   "seats": 15000
+  },
+  {
+   "date": "2025-06-14",
+   "kspo_title": "뷰티풀 민트 라이프 2025, 2025 IRENE & SEULGI Concert Tour [ BALANCE ] in SEOUL",
+   "kopis_title": "IRENE & SEULGI Concert Tour: BALANCE [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 16500,
+   "seats": 2452
+  },
+  {
+   "date": "2025-06-15",
+   "kspo_title": "뷰티풀 민트 라이프 2025, 2025 IRENE & SEULGI Concert Tour [ BALANCE ] in SEOUL",
+   "kopis_title": "IRENE & SEULGI Concert Tour: BALANCE [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 16500,
+   "seats": 2452
+  },
+  {
+   "date": "2025-06-20",
+   "kspo_title": "［서울］뮤지컬 번개맨 시즌2 - 여름맞이 특별공연",
+   "kopis_title": "번개맨 시즌2: 번개맨! VS 번개맨? [서울 송파]",
+   "venue_id": "woori_art_hall",
+   "audience": 400,
+   "seats": 1184
+  },
+  {
+   "date": "2025-06-20",
+   "kspo_title": "[서울 앵콜] 2025 박지현 콘서트 쇼맨쉽 SHOWMANSHIP",
+   "kopis_title": "박지현 콘서트: 쇼맨쉽 SHOWMANSHIP [서울 (앵콜) ]",
+   "venue_id": "olympic_hall",
+   "audience": 2800,
+   "seats": 2452
+  },
+  {
+   "date": "2025-06-21",
+   "kspo_title": "[서울 앵콜] 2025 박지현 콘서트 쇼맨쉽 SHOWMANSHIP",
+   "kopis_title": "박지현 콘서트: 쇼맨쉽 SHOWMANSHIP [서울 (앵콜) ]",
+   "venue_id": "olympic_hall",
+   "audience": 2800,
+   "seats": 2452
+  },
+  {
+   "date": "2025-06-22",
+   "kspo_title": "[서울 앵콜] 2025 박지현 콘서트 쇼맨쉽 SHOWMANSHIP",
+   "kopis_title": "박지현 콘서트: 쇼맨쉽 SHOWMANSHIP [서울 (앵콜) ]",
+   "venue_id": "olympic_hall",
+   "audience": 2800,
+   "seats": 2452
+  },
+  {
+   "date": "2025-06-27",
+   "kspo_title": "2025 PALMTREE ISLAND 3rd GALA CONCERT",
+   "kopis_title": "PALMTREE ISLAND 3rd GALA CONCERT",
+   "venue_id": "olympic_hall",
+   "audience": 2173,
+   "seats": 2452
+  },
+  {
+   "date": "2025-07-04",
+   "kspo_title": "2025 RIIZE CONCERT TOUR [RIIZING LOUD] IN SEOUL",
+   "kopis_title": "RIIZE CONCERT TOUR: RIIZING LOUD [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 10000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-07-05",
+   "kspo_title": "2025 RIIZE CONCERT TOUR [RIIZING LOUD] IN SEOUL",
+   "kopis_title": "RIIZE CONCERT TOUR: RIIZING LOUD [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 10000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-07-06",
+   "kspo_title": "2025 RIIZE CONCERT TOUR [RIIZING LOUD] IN SEOUL",
+   "kopis_title": "RIIZE CONCERT TOUR: RIIZING LOUD [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 10000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-07-11",
+   "kspo_title": "HIGHLIGHT LIVE 2025 [RIDE OR DIE]",
+   "kopis_title": "HIGHLIGHT LIVE: RIDE OR DIE",
+   "venue_id": "kspo_dome",
+   "audience": 13000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-07-12",
+   "kspo_title": "HIGHLIGHT LIVE 2025 [RIDE OR DIE]",
+   "kopis_title": "HIGHLIGHT LIVE: RIDE OR DIE",
+   "venue_id": "kspo_dome",
+   "audience": 13000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-07-13",
+   "kspo_title": "HIGHLIGHT LIVE 2025 [RIDE OR DIE]",
+   "kopis_title": "HIGHLIGHT LIVE: RIDE OR DIE",
+   "venue_id": "kspo_dome",
+   "audience": 13000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-07-18",
+   "kspo_title": "2025 MONSTA X CONNECT X",
+   "kopis_title": "MONSTA X: CONNECT X",
+   "venue_id": "kspo_dome",
+   "audience": 13000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-07-19",
+   "kspo_title": "2025 MONSTA X CONNECT X",
+   "kopis_title": "MONSTA X: CONNECT X",
+   "venue_id": "kspo_dome",
+   "audience": 13000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-07-20",
+   "kspo_title": "2025 MONSTA X CONNECT X",
+   "kopis_title": "MONSTA X: CONNECT X",
+   "venue_id": "kspo_dome",
+   "audience": 13000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-07-25",
+   "kspo_title": "BOYNEXTDOOR TOUR [KNOCK ON Vol.1] FINAL",
+   "kopis_title": "BOYNEXTDOOR TOUR: KNOCK ON Vol.1 FINAL",
+   "venue_id": "kspo_dome",
+   "audience": 9500,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-02",
+   "kspo_title": "그룹사운드 잔나비 앵콜 콘서트 <모든소년소녀들 2125>",
+   "kopis_title": "그룹사운드 잔나비 앵콜 콘서트: 모든소년소녀들 2125 [서울 (앵콜) ]",
+   "venue_id": "kspo_dome",
+   "audience": 11238,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-02",
+   "kspo_title": "그룹사운드 잔나비 앵콜 콘서트 <모든소년소녀들 2125>, 2025 WayV Concert Tour [NO Way OUT] in SEOUL, 2025 ONEW WORLD TOUR [ONEW THE LIVE : PERCENT (%)] IN SEOUL",
+   "kopis_title": "그룹사운드 잔나비 앵콜 콘서트: 모든소년소녀들 2125 [서울 (앵콜) ]",
+   "venue_id": "kspo_dome",
+   "audience": 22898,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-03",
+   "kspo_title": "2025 WayV Concert Tour [NO Way OUT] in SEOUL, 2025 ONEW WORLD TOUR [ONEW THE LIVE : PERCENT (%)] IN SEOUL, 그룹사운드 잔나비 앵콜 콘서트 <모든소년소녀들 2125>",
+   "kopis_title": "그룹사운드 잔나비 앵콜 콘서트: 모든소년소녀들 2125 [서울 (앵콜) ]",
+   "venue_id": "kspo_dome",
+   "audience": 26398,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-03",
+   "kspo_title": "그룹사운드 잔나비 앵콜 콘서트 <모든소년소녀들 2125>",
+   "kopis_title": "그룹사운드 잔나비 앵콜 콘서트: 모든소년소녀들 2125 [서울 (앵콜) ]",
+   "venue_id": "kspo_dome",
+   "audience": 11238,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-08",
+   "kspo_title": "THE BOYZ〈THE BLAZE〉WORLD TOUR in SEOUL",
+   "kopis_title": "THE BOYZ: THE BLAZE WORLD TOUR [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-09",
+   "kspo_title": "THE BOYZ〈THE BLAZE〉WORLD TOUR in SEOUL",
+   "kopis_title": "THE BOYZ: THE BLAZE WORLD TOUR [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-10",
+   "kspo_title": "THE BOYZ〈THE BLAZE〉WORLD TOUR in SEOUL",
+   "kopis_title": "THE BOYZ: THE BLAZE WORLD TOUR [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-17",
+   "kspo_title": "2025 PLAVE Asia Tour ［DASH: Quantum Leap］ in Seoul",
+   "kopis_title": "PLAVE Asia Tour, DASH: Quantum Leap [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9600,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-23",
+   "kspo_title": "SUPER JUNIOR 20th Anniversary TOUR 〈SUPER SHOW 10〉 in SEOUL",
+   "kopis_title": "SUPER JUNIOR 20th Anniversary TOUR: SUPER SHOW 10 [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 6000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-24",
+   "kspo_title": "SUPER JUNIOR 20th Anniversary TOUR 〈SUPER SHOW 10〉 in SEOUL",
+   "kopis_title": "SUPER JUNIOR 20th Anniversary TOUR: SUPER SHOW 10 [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 6000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-29",
+   "kspo_title": "2025 aespa LIVE TOUR - SYNK : aeXIS LINE",
+   "kopis_title": "aespa LIVE TOUR, SYNK: aeXIS LINE",
+   "venue_id": "kspo_dome",
+   "audience": 9500,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-30",
+   "kspo_title": "2025 aespa LIVE TOUR - SYNK : aeXIS LINE, 이승환 35주년 콘서트 HEAVEN [ ENCORE ] - 서울",
+   "kopis_title": "aespa LIVE TOUR, SYNK: aeXIS LINE",
+   "venue_id": "kspo_dome",
+   "audience": 12200,
+   "seats": 15000
+  },
+  {
+   "date": "2025-08-31",
+   "kspo_title": "2025 aespa LIVE TOUR - SYNK : aeXIS LINE, 이승환 35주년 콘서트 HEAVEN [ ENCORE ] - 서울",
+   "kopis_title": "aespa LIVE TOUR, SYNK: aeXIS LINE",
+   "venue_id": "kspo_dome",
+   "audience": 12200,
+   "seats": 15000
+  },
+  {
+   "date": "2025-09-06",
+   "kspo_title": "Someday Festival 2025 - week 1",
+   "kopis_title": "Someday Festival week 1",
+   "venue_id": "grass_88",
+   "audience": 5667,
+   "seats": 10000
+  },
+  {
+   "date": "2025-09-06",
+   "kspo_title": "Someday Festival 2025 - week 1, 크리스토퍼 내한공연 CHRISTOPHER LIVE IN SEOUL 2025",
+   "kopis_title": "Someday Festival week 1",
+   "venue_id": "grass_88",
+   "audience": 11334,
+   "seats": 10000
+  },
+  {
+   "date": "2025-09-07",
+   "kspo_title": "Someday Festival 2025 - week 1",
+   "kopis_title": "Someday Festival week 1",
+   "venue_id": "grass_88",
+   "audience": 5666,
+   "seats": 10000
+  },
+  {
+   "date": "2025-09-13",
+   "kspo_title": "Gen Hoshino presents MAD HOPE Asia Tour in SEOUL",
+   "kopis_title": "Gen Hoshino presents MAD HOPE Asia Tour in SEOUL",
+   "venue_id": "olympic_hall",
+   "audience": 2700,
+   "seats": 2452
+  },
+  {
+   "date": "2025-09-20",
+   "kspo_title": "KB 조이올팍 페스티벌 2025",
+   "kopis_title": "KB 조이올팍 페스티벌",
+   "venue_id": "grass_88",
+   "audience": 10000,
+   "seats": 10000
+  },
+  {
+   "date": "2025-09-21",
+   "kspo_title": "KB 조이올팍 페스티벌 2025",
+   "kopis_title": "KB 조이올팍 페스티벌",
+   "venue_id": "grass_88",
+   "audience": 10000,
+   "seats": 10000
+  },
+  {
+   "date": "2025-09-26",
+   "kspo_title": "2025 KEYLAND : Uncanny Valley",
+   "kopis_title": "KEYLAND: Uncanny Valley",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 4000,
+   "seats": 5003
+  },
+  {
+   "date": "2025-09-27",
+   "kspo_title": "2025 KEYLAND : Uncanny Valley",
+   "kopis_title": "KEYLAND: Uncanny Valley",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 4000,
+   "seats": 5003
+  },
+  {
+   "date": "2025-09-28",
+   "kspo_title": "2025 KEYLAND : Uncanny Valley",
+   "kopis_title": "KEYLAND: Uncanny Valley",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 4000,
+   "seats": 5003
+  },
+  {
+   "date": "2025-10-03",
+   "kspo_title": "허용별 콘서트 : 보컬 전쟁 시즌2 The War of Vocalists II - 서울 앵콜",
+   "kopis_title": "허용별 콘서트, 보컬 전쟁 시즌2: The War of Vocalists Ⅱ [서울 (앵콜) ]",
+   "venue_id": "olympic_hall",
+   "audience": 2600,
+   "seats": 2452
+  },
+  {
+   "date": "2025-10-04",
+   "kspo_title": "2025 QWER 1ST WORLDTOUR [ROCKATION]",
+   "kopis_title": "QWER 1ST WORLDTOUR: ROCKATION",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 3266,
+   "seats": 5003
+  },
+  {
+   "date": "2025-10-04",
+   "kspo_title": "2025 ZEROBASEONE WORLD TOUR ［HERE ＆ NOW］ IN SEOUL",
+   "kopis_title": "ZEROBASEONE WORLD TOUR: HERE & NOW [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 9300,
+   "seats": 15000
+  },
+  {
+   "date": "2025-10-10",
+   "kspo_title": "2025-26 TREASURE TOUR［PULSE ON］IN SEOUL",
+   "kopis_title": "TREASURE TOUR: PULSE ON [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 8560,
+   "seats": 15000
+  },
+  {
+   "date": "2025-10-10",
+   "kspo_title": "2025 하현상 콘서트 〈Navy Horizon〉",
+   "kopis_title": "하현상 콘서트: Navy Horizon",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 2867,
+   "seats": 5003
+  },
+  {
+   "date": "2025-10-11",
+   "kspo_title": "2025 쎄시봉 ［The Last］ 콘서트 - 서울",
+   "kopis_title": "쎄시봉: The Last Concert [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 2410,
+   "seats": 2452
+  },
+  {
+   "date": "2025-10-12",
+   "kspo_title": "2025 쎄시봉 ［The Last］ 콘서트 - 서울",
+   "kopis_title": "쎄시봉: The Last Concert [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 2410,
+   "seats": 2452
+  },
+  {
+   "date": "2025-10-25",
+   "kspo_title": "NEXZ SPECIAL CONCERT〈ONE BEAT〉",
+   "kopis_title": "NEXZ SPECIAL CONCERT: ONE BEAT",
+   "venue_id": "olympic_hall",
+   "audience": 2496,
+   "seats": 2452
+  },
+  {
+   "date": "2025-10-26",
+   "kspo_title": "NEXZ SPECIAL CONCERT〈ONE BEAT〉",
+   "kopis_title": "NEXZ SPECIAL CONCERT: ONE BEAT",
+   "venue_id": "olympic_hall",
+   "audience": 2496,
+   "seats": 2452
+  },
+  {
+   "date": "2025-10-31",
+   "kspo_title": "IVE WORLD TOUR [SHOW WHAT I AM]",
+   "kopis_title": "IVE WORLD TOUR: SHOW WHAT I AM",
+   "venue_id": "kspo_dome",
+   "audience": 11000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-11-02",
+   "kspo_title": "IVE WORLD TOUR [SHOW WHAT I AM]",
+   "kopis_title": "IVE WORLD TOUR: SHOW WHAT I AM",
+   "venue_id": "kspo_dome",
+   "audience": 11000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-11-02",
+   "kspo_title": "2025 THE신승훈SHOW 〈SINCERELY 35〉",
+   "kopis_title": "THE신승훈SHOW: SINCERELY 35",
+   "venue_id": "olympic_hall",
+   "audience": 2450,
+   "seats": 2452
+  },
+  {
+   "date": "2025-11-08",
+   "kspo_title": "뮤지컬 〈빨래〉 20주년 콘서트",
+   "kopis_title": "빨래 20주년 콘서트",
+   "venue_id": "woori_art_hall",
+   "audience": 926,
+   "seats": 1184
+  },
+  {
+   "date": "2025-11-08",
+   "kspo_title": "2025 김동률 콘서트 산책",
+   "kopis_title": "김동률 콘서트: 산책",
+   "venue_id": "kspo_dome",
+   "audience": 10049,
+   "seats": 15000
+  },
+  {
+   "date": "2025-11-09",
+   "kspo_title": "뮤지컬 〈빨래〉 20주년 콘서트",
+   "kopis_title": "빨래 20주년 콘서트",
+   "venue_id": "woori_art_hall",
+   "audience": 925,
+   "seats": 1184
+  },
+  {
+   "date": "2025-11-10",
+   "kspo_title": "2025 김동률 콘서트 산책",
+   "kopis_title": "김동률 콘서트: 산책",
+   "venue_id": "kspo_dome",
+   "audience": 10049,
+   "seats": 15000
+  },
+  {
+   "date": "2025-11-13",
+   "kspo_title": "2025 김동률 콘서트 산책",
+   "kopis_title": "김동률 콘서트: 산책",
+   "venue_id": "kspo_dome",
+   "audience": 10049,
+   "seats": 15000
+  },
+  {
+   "date": "2025-12-05",
+   "kspo_title": "2025 god CONCERT < ICONIC BOX > - 서울, 2025 정승환의 안녕, 겨울",
+   "kopis_title": "god CONCERT: ICONIC BOX",
+   "venue_id": "kspo_dome",
+   "audience": 20004,
+   "seats": 15000
+  },
+  {
+   "date": "2025-12-06",
+   "kspo_title": "2025 god CONCERT < ICONIC BOX > - 서울, 2025 정승환의 안녕, 겨울, 2025 손태진 전국투어 콘서트 〈It‘s Son Time〉",
+   "kopis_title": "god CONCERT: ICONIC BOX",
+   "venue_id": "kspo_dome",
+   "audience": 23004,
+   "seats": 15000
+  },
+  {
+   "date": "2025-12-07",
+   "kspo_title": "2025 손태진 전국투어 콘서트 〈It‘s Son Time〉",
+   "kopis_title": "손태진 전국투어 콘서트: It's Son Time [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 3000,
+   "seats": 2452
+  },
+  {
+   "date": "2025-12-07",
+   "kspo_title": "2025 손태진 전국투어 콘서트 〈It‘s Son Time〉, 2025 god CONCERT < ICONIC BOX > - 서울, 2025 정승환의 안녕, 겨울",
+   "kopis_title": "손태진 전국투어 콘서트: It's Son Time [서울]",
+   "venue_id": "olympic_hall",
+   "audience": 23005,
+   "seats": 2452
+  },
+  {
+   "date": "2025-12-07",
+   "kspo_title": "2025 god CONCERT < ICONIC BOX > - 서울, 2025 정승환의 안녕, 겨울",
+   "kopis_title": "god CONCERT: ICONIC BOX",
+   "venue_id": "kspo_dome",
+   "audience": 20005,
+   "seats": 15000
+  },
+  {
+   "date": "2025-12-12",
+   "kspo_title": "2025-26 로이킴 LIVE TOUR ［ja, daumm］ - 서울",
+   "kopis_title": "로이킴 LIVE TOUR: ja, daumm [서울]",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 2700,
+   "seats": 5003
+  },
+  {
+   "date": "2025-12-14",
+   "kspo_title": "2025-26 로이킴 LIVE TOUR ［ja, daumm］ - 서울, 2025 박지현 팬콘서트 멤버쉽 MEMBERSHIP, 2025 이문세 ‘The Best’",
+   "kopis_title": "로이킴 LIVE TOUR: ja, daumm [서울]",
+   "venue_id": "ticketlink_live_arena",
+   "audience": 23500,
+   "seats": 5003
+  },
+  {
+   "date": "2025-12-14",
+   "kspo_title": "2025 이문세 ‘The Best’",
+   "kopis_title": "이문세: The Best [서울]",
+   "venue_id": "kspo_dome",
+   "audience": 18000,
+   "seats": 15000
+  },
+  {
+   "date": "2025-12-19",
+   "kspo_title": "2025 DAY6 Special Concert ‘The Present’, 2025 N.Flying LIVE ‘&CON4 ENCORE : Let’s Roll &4EVER, 2025 규현(KYUHYUN) Concert ‘The Classic’",
+   "kopis_title": "DAY6 Special Concert: The Present",
+   "venue_id": "kspo_dome",
+   "audience": 20420,
+   "seats": 15000
+  },
+  {
+   "date": "2025-12-20",
+   "kspo_title": "2025 규현(KYUHYUN) Concert ‘The Classic’, 2025 N.Flying LIVE ‘&CON4 ENCORE : Let’s Roll &4EVER, 2025 DAY6 Special Concert ‘The Present’",
+   "kopis_title": "DAY6 Special Concert: The Present",
+   "venue_id": "kspo_dome",
+   "audience": 20420,
+   "seats": 15000
+  }
+ ]
+}
