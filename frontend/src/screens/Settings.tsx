@@ -10,7 +10,7 @@ export function Settings() {
   const [prefs, setPrefs] = useState({ day_before: true, departure: false });
   useEffect(() => setPrefs(loadPreferences()), []);
   const alerts = [
-    { key: 'day_before' as const, title: '행사 전날 알림', sub: '올림픽공원과 잠실에 큰 행사가 있으면 알려드려요' },
+    { key: 'day_before' as const, title: '행사 전날 알림', sub: '올림픽공원·잠실 행사 전날에 알려드려요' },
     { key: 'departure' as const, title: '출발 시간 알림', sub: '역 상세에서 고른 시간에 맞춰 알려드려요' },
   ];
   const toggle = (k: 'day_before' | 'departure') => {
@@ -71,7 +71,9 @@ export function Settings() {
         </div>
       </section>
       <p className="note" style={{ padding: '16px 24px' }}>
-        로그인 없이 쓰는 서비스예요. 이름이나 연락처 같은 개인정보를 받지 않고, 설정은 이 기기에만 저장돼요.
+        로그인 없이 쓰는 서비스라 개인정보를 받지 않아요.
+        <br />
+        설정은 이 기기에만 저장돼요.
       </p>
     </main>
   );

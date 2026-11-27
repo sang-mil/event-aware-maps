@@ -223,7 +223,7 @@ export function Calendar() {
                       <LineBadge line={st[sid]?.lines[0]} />
                       <span className="main">
                         <span className="title">{stationName(st, sid)}</span>
-                        <span className="sub">{slot.level === 'crowded' ? `공연이 끝나 ${slot.message}가 탈 거예요` : slot.message}</span>
+                        <span className="sub">{slot.message}</span>
                       </span>
                       <LevelBadge level={slot.level} />
                       <Icon.chevron />
@@ -297,9 +297,7 @@ export function EventsToday() {
       {res.value.fromCache && <StaleNotice updatedAt={res.value.updatedAt} />}
       <section className="intro" style={{ paddingBottom: 8, gap: 10 }}>
         <h1 className="h1 big">
-          송파에서 오늘
-          <br />
-          <span className="t">{list.length}</span>개 열려요
+          송파에서 오늘 <span className="t">{list.length}</span>개 열려요
         </h1>
         <span className="t" style={{ fontSize: 15, color: '#5F6573' }}>
           {dateLabel(res.value.data.date, true)}
@@ -415,14 +413,20 @@ export function EventScreen() {
         {canceled && (
           <div role="alert" className="alert red">
             <strong>이 공연은 취소됐어요</strong>
-            <span>KSPO 공연 정보 기준이에요. 등록한 알림도 함께 지웠어요.</span>
+            <span>
+              KSPO 공연 정보 기준이에요.
+              <br />
+              등록한 알림도 함께 지웠어요.
+            </span>
           </div>
         )}
         {e.status === 'changed' && (
           <div role="status" className="alert yellow">
             <strong>공연 시간이 바뀌었어요</strong>
             <span>
-              끝나는 시간이 <Time iso={e.change?.prev_end_at} />에서 <Time iso={e.change?.new_end_at} />로 바뀌어 알림 시간도 맞춰 옮겼어요
+              끝나는 시간이 <Time iso={e.change?.prev_end_at} />에서 <Time iso={e.change?.new_end_at} />로 바뀌어
+              <br />
+              알림 시간도 맞춰 옮겼어요
             </span>
           </div>
         )}
@@ -479,12 +483,12 @@ export function EventScreen() {
             </span>
             <span style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
               <strong style={{ fontSize: 17 }}>{denied ? '알림이 꺼져 있어요' : '이 공연 보러 가세요?'}</strong>
-              <span style={{ fontSize: 15, lineHeight: 1.45, color: '#5F6573' }}>
+              <span style={{ fontSize: 15, lineHeight: 1.45, color: '#5F6573', whiteSpace: 'pre-line' }}>
                 {denied
-                  ? '브라우저 설정에서 알림을 켜거나, 캘린더에 넣어 두면 끝나기 30분 전에 알려드려요'
+                  ? '브라우저 설정에서 알림을 켜거나,\n캘린더에 넣어 두면 30분 전에 알려드려요'
                   : notReady
-                    ? '앱 알림은 준비 중이에요. 휴대폰 캘린더에 넣어 두면 끝나기 30분 전에 알려드려요'
-                    : '휴대폰 캘린더에 넣어 두면 끝나기 30분 전에 알려드려요'}
+                    ? '앱 알림은 준비 중이에요.\n캘린더에 넣어 두면 30분 전에 알려드려요'
+                    : '휴대폰 캘린더에 넣어 두면\n끝나기 30분 전에 알려드려요'}
               </span>
             </span>
           </span>
@@ -604,7 +608,7 @@ function downloadIcs(e: EventDetail, venueName: string) {
 
 const GAME = {
   before: { dot: '#9AA0AC', color: '#4A4F5C', label: '경기 전', head: '아직 시작하지 않았어요', guide: '경기가 시작되고 끝나는 대로 이 화면에서 알려드려요.' },
-  live: { dot: '#C2281B', color: '#C2281B', label: '경기 중', head: '아직 경기가 진행 중이에요', guide: '끝나는 순간 관람객이 한꺼번에 나와요. 끝나면 바로 알려드릴게요.' },
+  live: { dot: '#C2281B', color: '#C2281B', label: '경기 중', head: '아직 경기가 진행 중이에요', guide: '끝나는 순간 관람객이 한꺼번에 나와요.\n끝나면 바로 알려드릴게요.' },
   end: { dot: '#17171C', color: '#17171C', label: '경기 끝', head: '경기가 끝났어요', guide: '관람객이 한꺼번에 나오는 시간이라 주변 역이 붐빌 거예요.' },
 };
 
@@ -649,7 +653,7 @@ export function GameScreen() {
           {g.label}
         </span>
         <strong style={{ fontSize: 21 }}>{g.head}</strong>
-        <span style={{ fontSize: 15, lineHeight: 1.55, color: '#4A4F5C' }}>{g.guide}</span>
+        <span style={{ fontSize: 15, lineHeight: 1.55, color: '#4A4F5C', whiteSpace: 'pre-line' }}>{g.guide}</span>
         {e.game_state === 'live' &&
           (pushReady ? (
             <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn dark'} style={{ height: 48, borderRadius: 14, fontSize: 16, flex: 'none' }}>

@@ -28,7 +28,7 @@ export function Splash() {
 
 const STEPS = [
   { d: 'M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM8 3v4M16 3v4', title: '오늘 송파 공연과 경기를 한눈에', sub: '올림픽공원 공연과 잠실 경기를 함께 보여드려요' },
-  { d: 'M4 20V10M10 20V4M16 20v-7M22 20H2', title: '근처 역이 언제 붐비는지', sub: '쌓인 승차 기록으로 시간대별 혼잡을 예상해 드려요' },
+  { d: 'M4 20V10M10 20V4M16 20v-7M22 20H2', title: '근처 역이 언제 붐비는지', sub: '승차 기록으로 시간대별 혼잡을 예상해요' },
   { d: 'M6 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM8 19h5a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h5', title: '덜 붐비는 역과 시간 추천', sub: '조금 걸을지, 조금 늦게 탈지 비교해서 골라요' },
 ];
 
@@ -106,7 +106,9 @@ export function Onboarding() {
           </Link>
         )}
         <span style={{ fontSize: 13, lineHeight: 1.55, color: '#5F6573' }}>
-          허용하지 않아도 올림픽공원 기준으로 쓸 수 있어요. 개인정보는 받지 않아요.
+          허용하지 않아도 올림픽공원 기준으로 쓸 수 있어요.
+          <br />
+          개인정보는 받지 않아요.
         </span>
       </div>
       <BottomBar>
@@ -166,7 +168,9 @@ export function Install({ from, event }: { from: string | null; event: string | 
         <strong style={{ fontSize: 17 }}>안드로이드와 PC는 바로 돼요</strong>
         <span style={{ fontSize: 15, lineHeight: 1.5, color: '#5F6573' }}>브라우저에서 알림 허용만 누르면 받을 수 있어요</span>
       </section>
-      <p className="note">iOS 16.4 이상에서 지원돼요. 추가하기 어렵다면 공연 상세의 ‘캘린더에 추가하기’를 써 주세요.</p>
+      <p className="note">iOS 16.4 이상에서 지원돼요.
+        <br />
+        추가하기 어렵다면 공연 상세의 ‘캘린더에 추가하기’를 써 주세요.</p>
     </main>
   );
 }

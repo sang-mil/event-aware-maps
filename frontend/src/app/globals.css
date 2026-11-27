@@ -17,7 +17,8 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); }
 body {
-  font-family: var(--font-plex); /* layout.tsx 의 next/font 가 대체 글꼴까지 넣어 줘요 */
+  /* Pretendard 를 받기 전·못 받았을 때는 기기 기본 한글 글꼴(맥: 애플 SD 고딕 Neo, 윈도우: 맑은 고딕)로 보여요 */
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', 'Noto Sans KR', system-ui, sans-serif;
   color: var(--ink);
   letter-spacing: -0.02em;
   word-break: keep-all;
@@ -143,3 +144,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 .na { color: var(--ink-3); font-weight: 400; }
 
 /* 작은 회색 글씨는 15px 이상으로 둬요. 윈도우에서 13~14px 한글이 거칠게 보여서 키웠어요. */
+
+/* 줄이 넘어갈 때 마지막 줄에 한 단어만 남지 않게 (디자인 'Pretendard' 페이지와 같은 기준) */
+h1, h2 { text-wrap: balance; }
+p, li, span, strong, dd { text-wrap: pretty; }

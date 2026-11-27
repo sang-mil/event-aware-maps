@@ -394,7 +394,9 @@ export function Offline({ lastUpdatedAt, onRetry }: { lastUpdatedAt: string | nu
           불러오지 못했어요
         </h1>
         <p className="lead">
-          인터넷 연결을 확인하고 다시 시도해 주세요. 마지막으로 받은 정보는 <Time iso={lastUpdatedAt} /> 기준이에요.
+          인터넷 연결을 확인하고 다시 시도해 주세요.
+          <br />
+          마지막으로 받은 정보는 <Time iso={lastUpdatedAt} /> 기준이에요.
         </p>
       </section>
       <BottomBar>
