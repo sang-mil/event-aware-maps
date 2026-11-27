@@ -22,6 +22,38 @@ from publish.schema import errors_of  # noqa: E402
 SECRET = "TEST-KEY-123"
 
 
+def test_kopis_worker_proxy_url_does_not_contain_service_key(monkeypatch):
+    monkeypatch.setenv("KOPIS_PROXY_URL", "https://example.workers.dev")
+    url = kc._url("pblprfr", SECRET, stdate="20261201", eddate="20261207", cpage=1, rows=100,
+                  signgucode="11", signgucodesub="1171")
+    parsed = urlparse(url)
+    assert parsed.path == "/api/kopis/pblprfr"
+    assert "service" not in parse_qs(parsed.query)
+    assert SECRET not in url
+
+
+def test_kopis_worker_proxy_uses_bearer_token(monkeypatch):
+    monkeypatch.setenv("KOPIS_PROXY_URL", "https://example.workers.dev")
+    monkeypatch.setenv("KOPIS_PROXY_TOKEN", "TEST-PROXY-TOKEN")
+    captured = {}
+
+    def fake_get_text(url, source, headers=None):
+        captured.update(url=url, source=source, headers=headers)
+        return "<root />"
+
+    monkeypatch.setattr(kc, "get_text", fake_get_text)
+    result = kc._get_text("https://example.workers.dev/api/kopis/pblprfr", "kopis_list")
+    assert result == "<root />"
+    assert captured["headers"] == {"Authorization": "Bearer TEST-PROXY-TOKEN"}
+    assert SECRET not in captured["url"]
+
+
+def test_kopis_worker_proxy_requires_https_origin(monkeypatch):
+    monkeypatch.setenv("KOPIS_PROXY_URL", "http://example.workers.dev/api")
+    with pytest.raises(CollectError, match="HTTPS Worker 주소"):
+        kc._url("pblprfr", SECRET, stdate="20261201")
+
+
 def perf(mt20id="PF1", hall="FC001247-01", sched="금요일(19:00), 토요일 ~ 일요일(16:00,19:00)", runtime="2시간",
          frm="2099.01.09", to="2099.01.11", title="가짜 콘서트 [서울]"):
     return {"mt20id": mt20id, "prfnm": title, "prfpdfrom": frm, "prfpdto": to, "mt10id": hall.split("-")[0],

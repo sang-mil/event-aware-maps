@@ -5,6 +5,7 @@ const AREAS = Object.freeze({
 
 const CACHE_SECONDS = 300;
 const SOURCE = "서울특별시 공공데이터 · 서울시 실시간 도시데이터";
+const KOPIS_API = "http://www.kopis.or.kr/openApi/restful";
 
 function normalizeCityData(payload) {
   const city = payload?.CITYDATA;
@@ -51,6 +52,102 @@ function jsonResponse(body, status = 200, extraHeaders = {}) {
   });
 }
 
+function kopisResponse(body, status = 200, contentType = "application/xml; charset=utf-8") {
+  return new Response(body, {
+    status,
+    headers: {
+      "Content-Type": contentType,
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
+}
+
+function validDate(value) {
+  if (!/^\d{8}$/.test(value ?? "")) return false;
+  const year = Number(value.slice(0, 4));
+  const month = Number(value.slice(4, 6));
+  const day = Number(value.slice(6, 8));
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+  return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day;
+}
+
+function isValidKopisRequest(url, match) {
+  const [, resource, id] = match;
+  if (id) {
+    if (url.search) return false;
+    return resource === "pblprfr" ? /^PF\d{6,}$/.test(id) : /^FC\d{6}$/.test(id);
+  }
+  if (resource !== "pblprfr") return false;
+  const allowed = new Set(["stdate", "eddate", "cpage", "rows", "signgucode", "signgucodesub"]);
+  for (const key of url.searchParams.keys()) {
+    if (!allowed.has(key) || url.searchParams.getAll(key).length !== 1) return false;
+  }
+  const start = url.searchParams.get("stdate");
+  const end = url.searchParams.get("eddate");
+  const page = url.searchParams.get("cpage");
+  const rows = url.searchParams.get("rows");
+  if (!validDate(start) || !validDate(end) || !/^\d{1,3}$/.test(page ?? "") || Number(page) < 1 || Number(page) > 999) return false;
+  if (!/^\d{1,3}$/.test(rows ?? "") || Number(rows) < 1 || Number(rows) > 100) return false;
+  if (url.searchParams.get("signgucode") !== "11" || url.searchParams.get("signgucodesub") !== "1171") return false;
+  const startDay = Date.UTC(Number(start.slice(0, 4)), Number(start.slice(4, 6)) - 1, Number(start.slice(6, 8)));
+  const endDay = Date.UTC(Number(end.slice(0, 4)), Number(end.slice(4, 6)) - 1, Number(end.slice(6, 8)));
+  const span = (endDay - startDay) / 86_400_000 + 1;
+  return span > 0 && span <= 31;
+}
+
+async function fetchKopis(request, env) {
+  if (!env.KOPIS_API_KEY || !env.KOPIS_PROXY_TOKEN) {
+    return jsonResponse({ error: "service_not_configured" }, 503);
+  }
+  if (request.headers.get("Authorization") !== `Bearer ${env.KOPIS_PROXY_TOKEN}`) {
+    return jsonResponse({ error: "unauthorized" }, 401);
+  }
+
+  const url = new URL(request.url);
+  const match = url.pathname.match(/^\/api\/kopis\/(pblprfr|prfplc)(?:\/([A-Z0-9]+))?$/);
+  if (!match || !isValidKopisRequest(url, match)) {
+    return jsonResponse({ error: "invalid_kopis_request" }, 400);
+  }
+
+  const upstreamPath = `/${match[1]}${match[2] ? `/${match[2]}` : ""}`;
+  const upstreamUrl = new URL(`${KOPIS_API}${upstreamPath}`);
+  for (const [name, value] of url.searchParams) upstreamUrl.searchParams.set(name, value);
+  upstreamUrl.searchParams.set("service", env.KOPIS_API_KEY);
+
+  let upstream;
+  try {
+    upstream = await fetch(upstreamUrl, {
+      headers: { Accept: "application/xml, text/xml" },
+      signal: AbortSignal.timeout(15_000),
+      redirect: "manual",
+    });
+  } catch {
+    return jsonResponse({ error: "upstream_unavailable" }, 502);
+  }
+
+  if (!upstream.ok) {
+    return jsonResponse({ error: "upstream_error", status: upstream.status }, upstream.status);
+  }
+  const contentType = upstream.headers.get("content-type") ?? "";
+  if (!contentType.includes("xml") && !contentType.includes("text/plain")) {
+    return jsonResponse({ error: "invalid_upstream_response" }, 502);
+  }
+
+  let body;
+  try {
+    body = await upstream.text();
+  } catch {
+    return jsonResponse({ error: "invalid_upstream_response" }, 502);
+  }
+  const encodedKey = encodeURIComponent(env.KOPIS_API_KEY);
+  body = body.replaceAll(env.KOPIS_API_KEY, "[redacted]").replaceAll(encodedKey, "[redacted]");
+  if (!body.trimStart().startsWith("<")) {
+    return jsonResponse({ error: "invalid_upstream_response" }, 502);
+  }
+  return kopisResponse(body);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -69,6 +166,10 @@ export default {
 
     if (request.method !== "GET") {
       return jsonResponse({ error: "method_not_allowed" }, 405);
+    }
+
+    if (url.pathname.startsWith("/api/kopis/")) {
+      return fetchKopis(request, env);
     }
 
     const match = url.pathname.match(/^\/api\/realtime\/([a-z-]+)$/);

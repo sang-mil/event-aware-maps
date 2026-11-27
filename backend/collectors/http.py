@@ -28,8 +28,9 @@ def _limit_detail(e: urllib.error.HTTPError) -> str:
     return ("\n  " + "\n  ".join(parts)) if parts else ""
 
 
-def get_text(url: str, source: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": "tumgil-collector"})
+def get_text(url: str, source: str, headers: dict[str, str] | None = None) -> str:
+    request_headers = {"User-Agent": "tumgil-collector", **(headers or {})}
+    req = urllib.request.Request(url, headers=request_headers)
     try:
         with urllib.request.urlopen(req, timeout=TIMEOUT_SEC) as res:
             return res.read().decode("utf-8")
