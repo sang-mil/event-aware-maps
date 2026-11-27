@@ -1,3 +1,5 @@
+import { handlePushRequest, handleScheduled } from "./push.js";
+
 const AREAS = Object.freeze({
   "olympic-park": "올림픽공원",
   "jamsil": "잠실 관광특구",
@@ -44,7 +46,7 @@ function jsonResponse(body, status = 200, extraHeaders = {}) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
       "Cache-Control": status === 200 ? `public, max-age=${CACHE_SECONDS}` : "no-store",
       ...extraHeaders,
@@ -157,15 +159,19 @@ export default {
         status: 204,
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, OPTIONS",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type",
           "Access-Control-Max-Age": "86400",
         },
       });
     }
 
-    if (request.method !== "GET") {
-      return jsonResponse({ error: "method_not_allowed" }, 405);
+    const pushResponse = await handlePushRequest(request, env, url);
+    if (pushResponse) return pushResponse;
+    if (request.method !== "GET") return jsonResponse({ error: "method_not_allowed" }, 405);
+
+    if (url.pathname === "/api/push/status") {
+      return jsonResponse({ ready: !!(env.PUSH_DB && env.VAPID_PUBLIC_KEY && env.VAPID_PRIVATE_KEY) });
     }
 
     if (url.pathname.startsWith("/api/kopis/")) {
@@ -233,5 +239,9 @@ export default {
     });
     await cache.put(cacheKey, response.clone());
     return response;
+  },
+
+  async scheduled(controller, env) {
+    await handleScheduled(controller, env);
   },
 };

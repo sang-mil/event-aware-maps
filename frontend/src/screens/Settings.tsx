@@ -2,21 +2,28 @@
 
 import Link from 'next/link';
 import { useEffect, useState, type ReactNode } from 'react';
-import { loadPreferences, pushReady, savePreferences } from '@/api';
+import { loadPreferences, pushReady, savePreferences, unsubscribePush } from '@/api';
 import { BackHeader, Icon, Ph } from '@/components/ui';
+import { requestPush } from '@/lib/app';
 
 /** 01-3 설정 */
 export function Settings() {
   const [prefs, setPrefs] = useState({ day_before: true, departure: false });
+  const [pushMessage, setPushMessage] = useState<string | null>(null);
   useEffect(() => setPrefs(loadPreferences()), []);
   const alerts = [
     { key: 'day_before' as const, title: '행사 전날 알림', sub: '올림픽공원·잠실 행사 전날에 알려드려요' },
     { key: 'departure' as const, title: '출발 시간 알림', sub: '역 상세에서 고른 시간에 맞춰 알려드려요' },
   ];
-  const toggle = (k: 'day_before' | 'departure') => {
+  const toggle = async (k: 'day_before' | 'departure') => {
     const next = { ...prefs, [k]: !prefs[k] };
+    if (next[k] && !(await requestPush())) {
+      setPushMessage('알림 구독을 등록하지 못했어요. 권한과 연결을 확인해 주세요.');
+      return;
+    }
     setPrefs(next);
-    savePreferences(next);
+    await savePreferences(next);
+    setPushMessage(null);
   };
   return (
     <main className="screen">
@@ -49,6 +56,26 @@ export function Settings() {
           </div>
         ))}
         {!pushReady && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 14, color: '#8A5300' }}>알림은 준비 중이에요. 알림 서버가 연결되면 켤 수 있어요.</p>}
+        {pushReady && (
+          <div style={{ padding: '8px 20px 16px' }}>
+            <button
+              type="button"
+              className="btn secondary"
+              style={{ minHeight: 44, borderRadius: 12 }}
+              onClick={async () => {
+                if (await unsubscribePush()) {
+                  setPrefs({ day_before: false, departure: false });
+                  setPushMessage('이 기기의 알림과 예약을 모두 해제했어요.');
+                } else {
+                  setPushMessage('알림 해제에 실패했어요. 잠시 후 다시 시도해 주세요.');
+                }
+              }}
+            >
+              이 기기의 알림 모두 해제
+            </button>
+            {pushMessage && <p role="status" style={{ margin: '8px 0 0', fontSize: 14, color: '#5F6573' }}>{pushMessage}</p>}
+          </div>
+        )}
       </section>
       <div className="section-title">
         <h2>정보</h2>
@@ -71,9 +98,9 @@ export function Settings() {
         </div>
       </section>
       <p className="note" style={{ padding: '16px 24px' }}>
-        로그인 없이 쓰는 서비스라 개인정보를 받지 않아요.
+        로그인 없이 이용할 수 있고, 알림 설정 일부는 알림 전송을 위해 Worker에 저장돼요.
         <br />
-        설정은 이 기기에만 저장돼요.
+        일반 설정은 기기에, 알림 설정과 예약은 발송을 위해 Worker에 저장돼요.
       </p>
     </main>
   );
@@ -104,10 +131,11 @@ export function Privacy() {
       <h2>1. 처리하는 정보</h2>
       <ul>
         <li>위치: 허용한 경우에만, 근처 역과 도보 시간을 계산할 때 기기 안에서 써요. 서버에 저장하지 않아요</li>
-        <li>알림 구독 정보: 알림을 허용한 경우, 알림을 보내기 위한 기기별 구독 값을 저장해요</li>
-        <li>알림을 신청한 공연과 출발 시간</li>
+        <li>알림 구독 정보: 무작위 기기 식별자, 푸시 전송 주소와 암호화 키를 Worker의 Cloudflare D1에 저장해요</li>
+        <li>알림을 신청한 공연, 역, 발송 시각과 전날 알림 설정</li>
+        <li>중복 발송 방지 기록은 행사일 뒤 30일 동안 보관해요</li>
         <li>귀가 후 피드백 응답(여유, 보통, 붐빔): 누가 답했는지 알 수 없게 저장해요</li>
-        <li>최근 검색과 설정: 이 기기에만 저장해요</li>
+        <li>최근 검색과 일반 설정은 이 기기에만 저장해요</li>
       </ul>
       <h2>2. 쓰는 목적</h2>
       <ul>
@@ -117,7 +145,7 @@ export function Privacy() {
       </ul>
       <h2>3. 보관 기간</h2>
       <ul>
-        <li>알림 구독 정보는 알림을 끄거나 앱을 삭제하면 지체 없이 지워요</li>
+        <li>설정에서 ‘이 기기의 알림 모두 해제’를 누르면 구독 정보와 예약을 삭제해요. 앱을 삭제해도 브라우저 데이터가 남아 있으면 이 버튼으로 구독을 해제할 수 있어요</li>
         <li>
           피드백 응답은 통계로 만든 뒤 지워요(보관 기간: <Ph />)
         </li>
@@ -129,12 +157,12 @@ export function Privacy() {
           지도는 카카오맵으로 보여줘요. 길찾기 탭이나 경로 상세에서 지도를 열면 브라우저가 카카오 서버에서 지도를 받아 오고, 이때 접속 정보(IP 주소, 브라우저 종류 등)가 카카오에 전달돼요. 내 위치는 카카오로 보내지 않아요
         </li>
         <li>
-          알림 발송은 발송 업체(<Ph />)에 맡기며, 맡긴 정보는 발송에만 써요
+          Cloudflare Worker가 푸시 업체(브라우저·운영체제의 푸시 서비스)로 알림을 보내요. 푸시 내용은 암호화해 전송하고, 푸시 업체는 기기 연결을 위해 구독 주소를 처리해요
         </li>
       </ul>
       <h2>5. 내 정보 지우기</h2>
       <ul>
-        <li>설정에서 알림을 끄면 구독 정보가 지워져요</li>
+        <li>설정에서 ‘이 기기의 알림 모두 해제’를 누르면 이 기기의 구독 정보와 예약이 지워져요</li>
         <li>브라우저 사이트 데이터를 지우면 기기에 저장된 기록이 모두 지워져요</li>
       </ul>
       <h2>6. 개인정보 보호 담당</h2>

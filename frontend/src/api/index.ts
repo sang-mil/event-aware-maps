@@ -145,18 +145,29 @@ export const getRoute = (optionId: string, p: CompareParams) => {
 };
 
 // ── 쓰기 API (API 명세서 7~8장) ──────────────────────────────
-// 쓰기는 실제 서버가 있어야 해요. 서버가 없으면(목업) 아무것도 저장하지 않고, 화면은 "준비 중"으로 보여줘요.
+// 피드백은 API 서버로, 웹 푸시는 별도 Worker API로 전송해요. 둘 다 설정되지 않으면 기록하지 않아요.
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? '';
 const VAPID_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? '';
+const PUSH_API_BASE = (process.env.NEXT_PUBLIC_PUSH_API_BASE ?? '').replace(/\/$/, '');
 
 /** 피드백 같은 쓰기 API를 쓸 수 있는지 (서버 주소가 있을 때) */
 export const serverReady = !usingMock;
-/** 웹 푸시 알림을 실제로 보낼 수 있는지 (서버 주소 + 푸시 공개 키가 있을 때) */
-export const pushReady = serverReady && !!VAPID_KEY;
+/** 웹 푸시 기능을 사용할 수 있는지 (푸시 Worker 주소와 공개 키가 설정된 경우) */
+export const pushReady = !!PUSH_API_BASE && !!VAPID_KEY;
 
 async function send(method: 'POST' | 'PUT' | 'DELETE', path: string, body?: unknown) {
   const res = await fetch(`${API_BASE}${path}`, {
+    method,
+    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.status === 204 ? null : res.json().catch(() => null);
+}
+
+async function sendPush(method: 'POST' | 'PUT' | 'DELETE', path: string, body?: unknown) {
+  const res = await fetch(`${PUSH_API_BASE}${path}`, {
     method,
     headers: body ? { 'Content-Type': 'application/json' } : undefined,
     body: body ? JSON.stringify(body) : undefined,
@@ -186,6 +197,14 @@ function deviceId(): string {
   return id;
 }
 
+function vapidApplicationServerKey(key: string): Uint8Array<ArrayBuffer> {
+  const base64 = key.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(key.length / 4) * 4, '=');
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+  return bytes;
+}
+
 /** POST /push/subscriptions — 알림 권한을 받은 뒤 이 기기의 푸시 구독을 서버에 등록해요 */
 export async function subscribePush(): Promise<boolean> {
   if (!pushReady || !('serviceWorker' in navigator)) return false;
@@ -193,8 +212,28 @@ export async function subscribePush(): Promise<boolean> {
     const reg = await navigator.serviceWorker.ready;
     const sub =
       (await reg.pushManager.getSubscription()) ??
-      (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: VAPID_KEY }));
-    await send('POST', '/push/subscriptions', { device_id: deviceId(), subscription: sub.toJSON() });
+      (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: vapidApplicationServerKey(VAPID_KEY) }));
+    await sendPush('POST', '/push/subscriptions', {
+      device_id: deviceId(),
+      subscription: sub.toJSON(),
+      preferences: loadPreferences(),
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** 서버와 이 브라우저의 푸시 구독·예약을 모두 해제해요. */
+export async function unsubscribePush(): Promise<boolean> {
+  if (!pushReady || !('serviceWorker' in navigator)) return false;
+  try {
+    await sendPush('DELETE', `/push/subscriptions/${encodeURIComponent(deviceId())}`);
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.getSubscription();
+    if (subscription) await subscription.unsubscribe();
+    local('alerts', {});
+    local('prefs', { day_before: false, departure: false });
     return true;
   } catch {
     return false;
@@ -223,10 +262,10 @@ export async function setAlert(
   const map = local<Record<string, string>>('alerts') ?? {};
   try {
     if (on) {
-      const res = (await send('POST', '/alerts', { device_id: deviceId(), ...body })) as { alert_id?: string } | null;
+      const res = (await sendPush('POST', '/alerts', { device_id: deviceId(), ...body })) as { alert_id?: string } | null;
       map[key] = res?.alert_id ?? key;
     } else if (map[key]) {
-      await send('DELETE', `/alerts/${encodeURIComponent(map[key])}`);
+      await sendPush('DELETE', `/alerts/${encodeURIComponent(map[key])}`);
       delete map[key];
     }
     local('alerts', map);
@@ -239,7 +278,7 @@ export async function setAlert(
 /** 알림 설정. 설정 화면 값은 기기에 두고, 서버가 있으면 서버에도 보내요(PUT .../preferences). */
 export async function savePreferences(prefs: { day_before: boolean; departure: boolean }) {
   local('prefs', prefs);
-  if (pushReady) await send('PUT', `/push/subscriptions/${deviceId()}/preferences`, prefs).catch(() => undefined);
+  if (pushReady) await sendPush('PUT', `/push/subscriptions/${deviceId()}/preferences`, prefs).catch(() => undefined);
 }
 
 export function loadPreferences(): { day_before: boolean; departure: boolean } {

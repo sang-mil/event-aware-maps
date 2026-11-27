@@ -30,7 +30,8 @@ NEXT_PUBLIC_BASE_PATH=/event-aware-maps npm run build   # GitHub Pages 하위 �
 | `NEXT_PUBLIC_API_BASE` | 백엔드 API 주소 (예: `https://api.example.com/api/v1`) | `public/mock/` 목업을 읽고, 쓰기(알림·피드백)는 "준비 중" |
 | `NEXT_PUBLIC_REALTIME_API_BASE` | 서울시 실시간 데이터 Worker 주소 (도메인만, 경로 제외) | 운영 Worker 주소를 사용해요 |
 | `NEXT_PUBLIC_DATA_BASE` | GitHub Pages에 발행된 2025년 예측 JSON 기본 주소 | `public/mock/` 목업을 읽어요 |
-| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | 웹 푸시 공개 키 (백엔드가 발급) | 알림은 "준비 중" |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | 웹 푸시 공개 키 (Worker용 VAPID 키 쌍에서 공개 부분) | 비어 있으면 알림은 "준비 중" |
+| `NEXT_PUBLIC_PUSH_API_BASE` | 푸시 쓰기 API 주소 (예: `https://...workers.dev/api`) | 비어 있으면 알림 기능을 꺼 둬요. Worker와 D1 준비 후 설정 |
 | `NEXT_PUBLIC_BASE_PATH` | 하위 경로에 배포할 때 (예: `/event-aware-maps`) | 사이트 맨 위 경로 |
 
 ## 구조

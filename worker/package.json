@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@portable/web-push": "^0.2.0"
+  }
+}

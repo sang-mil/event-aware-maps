@@ -391,6 +391,7 @@ export function EventScreen() {
   const [tab, setTab] = useState<'end' | 'later'>('end');
   const [push, setPush] = useState<PushSupport>('default');
   const [going, setGoing] = useState(false);
+  const [notifyMsg, setNotifyMsg] = useState<string | null>(null);
   const [calMsg, setCalMsg] = useState<string | null>(null);
   const [iphone, setIphone] = useState(false);
   const key = alertKey('show_end', id);
@@ -411,12 +412,21 @@ export function EventScreen() {
   const block = tab === 'later' && e.after_end.later ? e.after_end.later : e.after_end.end;
 
   const toggleGoing = async () => {
+    if (!going && !e.end_at) {
+      setNotifyMsg('공연 종료 시각이 확인되지 않아 알림을 예약할 수 없어요.');
+      return;
+    }
     if (!going && push !== 'granted') {
       const ok = await requestPush();
       setPush(pushSupport());
       if (!ok) return;
     }
-    if (!(await setAlert(key, !going, { kind: 'show_end', event_id: id }))) return;
+    const notifyAt = e.end_at ? new Date(Date.parse(e.end_at) - 30 * 60 * 1000).toISOString() : undefined;
+    if (!(await setAlert(key, !going, { kind: 'show_end', event_id: id, notify_at: notifyAt }))) {
+      setNotifyMsg('알림을 예약하지 못했어요. 잠시 후 다시 시도해 주세요.');
+      return;
+    }
+    setNotifyMsg(null);
     if (!going) track('notify_on', { kind: 'show_end', event_id: id });
     setGoing(!going);
   };
@@ -482,22 +492,25 @@ export function EventScreen() {
       </section>
 
       {!canceled && !noPush && (
-        <button
-          type="button"
-          onClick={toggleGoing}
-          aria-pressed={going}
-          style={{ margin: '12px 16px 0', width: 'calc(100% - 32px)', border: 0, borderRadius: 20, padding: '16px 20px', background: '#FFFFFF', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14, boxShadow: `inset 0 0 0 ${going ? 2 : 0}px #17171C` }}
-        >
-          <span className="tile" aria-hidden="true" style={{ width: 40, height: 40, borderRadius: 12, background: going ? '#17171C' : '#EEF0F3', color: going ? '#FFFFFF' : '#5F6573' }}>
-            <Icon.bell filled={going} />
-          </span>
-          <span style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <strong style={{ fontSize: 17 }}>{going ? '공연 끝나기 30분 전에 알려드릴게요' : '이 공연 보러 가세요?'}</strong>
-            <span style={{ fontSize: 15, lineHeight: 1.45, color: '#5F6573' }}>
-              {going ? '그때 어느 역이 덜 붐비는지 함께 보내드려요. 다시 누르면 취소돼요' : '끝나기 30분 전, 덜 붐비는 역을 알림으로 받아요'}
+        <>
+          <button
+            type="button"
+            onClick={toggleGoing}
+            aria-pressed={going}
+            style={{ margin: '12px 16px 0', width: 'calc(100% - 32px)', border: 0, borderRadius: 20, padding: '16px 20px', background: '#FFFFFF', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14, boxShadow: `inset 0 0 0 ${going ? 2 : 0}px #17171C` }}
+          >
+            <span className="tile" aria-hidden="true" style={{ width: 40, height: 40, borderRadius: 12, background: going ? '#17171C' : '#EEF0F3', color: going ? '#FFFFFF' : '#5F6573' }}>
+              <Icon.bell filled={going} />
             </span>
-          </span>
-        </button>
+            <span style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <strong style={{ fontSize: 17 }}>{going ? '공연 끝나기 30분 전에 알려드릴게요' : '이 공연 보러 가세요?'}</strong>
+              <span style={{ fontSize: 15, lineHeight: 1.45, color: '#5F6573' }}>
+                {going ? '그때 어느 역이 덜 붐비는지 함께 보내드려요. 다시 누르면 취소돼요' : '끝나기 30분 전, 덜 붐비는 역을 알림으로 받아요'}
+              </span>
+            </span>
+          </button>
+          {notifyMsg && <p role="status" style={{ margin: '8px 20px 0', color: '#8A5300', fontSize: 14 }}>{notifyMsg}</p>}
+        </>
       )}
       {!canceled && noPush && (
         <section className="card pad" style={{ marginTop: 12, gap: 14 }}>
@@ -657,7 +670,7 @@ export function GameScreen() {
   const toggle = async () => {
     if (!pushReady) return;
     if (!on && pushSupport() !== 'granted' && !(await requestPush())) return;
-    if (!(await setAlert(key, !on, { kind: 'game_end', event_id: id }))) return;
+    if (!(await setAlert(key, !on, { kind: 'game_end', event_id: id, notify_at: e.end_at ?? undefined }))) return;
     if (!on) track('notify_on', { kind: 'game_end', event_id: id });
     setOn(!on);
   };
@@ -680,7 +693,7 @@ export function GameScreen() {
         </span>
         <strong style={{ fontSize: 21 }}>{g.head}</strong>
         <span style={{ fontSize: 15, lineHeight: 1.55, color: '#4A4F5C', whiteSpace: 'pre-line' }}>{g.guide}</span>
-        {e.game_state === 'live' &&
+        {e.game_state === 'live' && e.end_at &&
           (pushReady ? (
             <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn dark'} style={{ height: 48, borderRadius: 14, fontSize: 16, flex: 'none' }}>
               {on ? '경기가 끝나면 알려드릴게요' : '경기 끝나면 알림 받기'}
