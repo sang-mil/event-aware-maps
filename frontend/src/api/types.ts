@@ -74,6 +74,10 @@ export interface Slot {
   level: Level;
   message: string;
   recommended: boolean;
+  /** 관객 수를 모르는 공연이 있어 실제로는 더 붐빌 수 있음 (이슈 #38) */
+  uncertain?: boolean;
+  /** '평소' 기준: 같은 요일(same_weekday) 또는 행사 없는 월~목으로 대신(weekday_fallback) */
+  baseline_basis?: 'same_weekday' | 'weekday_fallback';
 }
 
 export interface Headline {
@@ -109,6 +113,7 @@ export interface AfterEndStation {
   level: Level;
   message: string | null;
   walk_min: number | null;
+  uncertain?: boolean;
 }
 
 export interface EventDetail extends EventItem {
@@ -164,7 +169,7 @@ export interface StationForecast {
   description: string | null;
   slots: Slot[];
   alternatives_title: string | null;
-  alternatives: { station_id: string; level: Level; walk_min: number | null; message: string }[];
+  alternatives: { station_id: string; level: Level; walk_min: number | null; message: string; uncertain?: boolean }[];
   notify_hour: string | null;
   no_data: { message: string; nearby: { station_id: string; level: Level; walk_min: number | null }[] } | null;
 }
@@ -181,6 +186,7 @@ export interface CompareOption {
   expected: number | null;
   level: Level;
   compare_message: string;
+  uncertain?: boolean;
 }
 
 export interface Compare {

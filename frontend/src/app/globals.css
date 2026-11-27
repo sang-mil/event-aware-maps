@@ -148,3 +148,6 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 /* 줄이 넘어갈 때 마지막 줄에 한 단어만 남지 않게 (디자인 'Pretendard' 페이지와 같은 기준) */
 h1, h2 { text-wrap: balance; }
 p, li, span, strong, dd { text-wrap: pretty; }
+
+/* 작은 보조 표시 (예: 관객 수 미확인) */
+.mark { display: inline-flex; align-items: center; height: 22px; padding: 0 7px; margin-left: 6px; border-radius: 6px; background: #EEF0F3; color: #4A4F5C; font-size: 12px; font-weight: 700; white-space: nowrap; vertical-align: 1px; }

@@ -42,7 +42,7 @@
         "id": "later_olympic",
         "kind": "wait_later",
         "recommended": false,
-        "title": "올림픽공원역에서 21시 이후에 타기",
+        "title": "올림픽공원역에서 21시대에 타기",
         "subtitle": "1시간쯤 기다리기",
         "station_id": "olympic_park",
         "board_hour": "21",

@@ -23,9 +23,10 @@ import {
   Walk,
   stationName,
   venueName,
+  UncertainMark,
 } from '@/components/ui';
 import { DEFAULT_ORIGIN_STATION, demoState, LEVEL, fmtMin, fmtNum, hourKey, isoAt, nowMin, sessionList, store, today, track, viewTime } from '@/lib/app';
-import { useLoad, useRefs } from '@/lib/useLoad';
+import { useLoad, useRefs, useWalkMin } from '@/lib/useLoad';
 import { KakaoOverviewMap, KakaoWalkMap } from '@/components/KakaoWalkMap';
 
 /** 04 길찾기 탭 · 지도 */
@@ -350,6 +351,7 @@ export function Compare() {
   const res = useLoad(() => getCompare(params, late), [key]);
   const events = useLoad(() => getEvents(params.departAt.slice(0, 10)), [params.departAt.slice(0, 10)]);
   const { st, vn } = useRefs();
+  const walkMin = useWalkMin();
   useEffect(() => {
     if (res.status === 'ok') track('compare_view', { from, last_train_imminent: !!res.value.data.last_train?.imminent });
   }, [res.status, from]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -409,13 +411,16 @@ export function Compare() {
               <span style={{ fontSize: 14, fontWeight: 700, color: '#4E3DBC' }}>추천</span>
               <span style={{ fontSize: 21, fontWeight: 700 }}>{rec.title}</span>
               <span style={{ fontSize: 15, color: '#5F6573' }}>
-                {rec.subtitle}, <Walk min={rec.walk_min} />
+                {rec.subtitle}, <Walk min={rec.walk_min ?? (params.fromType === 'venue' ? walkMin(params.fromId, rec.station_id) : null)} />
               </span>
             </span>
             <LevelBadge level={rec.level} />
           </span>
           <span style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 15, color: '#5F6573' }}>{rec.compare_message}</span>
+            <span style={{ fontSize: 15, color: '#5F6573' }}>
+              {rec.compare_message}
+              <UncertainMark show={rec.uncertain} />
+            </span>
             <span className="t" style={{ fontSize: 24, fontWeight: 800 }}>
               {rec.expected != null ? (
                 <>
@@ -439,6 +444,7 @@ export function Compare() {
               <span className="title">{o.title}</span>
               <span className="sub">
                 {o.subtitle}, {o.compare_message}
+                <UncertainMark show={o.uncertain} />
               </span>
             </span>
             <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>

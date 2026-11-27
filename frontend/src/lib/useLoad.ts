@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { ApiError, getStations, getVenues, type ApiErrorCode, type Loaded, type Station, type Venue } from '@/api';
+import { ApiError, getStations, getVenues, getWalkRoutes, readWalkRoutes, type ApiErrorCode, type Loaded, type Station, type Venue } from '@/api';
 
 export type LoadState<T> =
   | { status: 'loading' }
@@ -43,4 +43,15 @@ export function useRefs() {
   if (venues.status === 'ok') venues.value.data.forEach((v) => (vn[v.id] = v));
   const ready = stations.status === 'ok' && venues.status === 'ok';
   return { st, vn, ready, venues: venues.status === 'ok' ? venues.value.data : [] };
+}
+
+/**
+ * 공연장 → 역 도보 시간(분). 백엔드가 미리 계산해 발행한 walk-routes.json 에서 찾아요.
+ * 경로가 없으면 null 이고, 화면은 "도보 시간 정보 없음"으로 보여줘요(값을 지어내지 않아요).
+ */
+export function useWalkMin() {
+  const walks = useLoad(getWalkRoutes, []);
+  const data = walks.status === 'ok' ? readWalkRoutes(walks.value.data) : null;
+  return (venueId: string | null | undefined, stationId: string): number | null =>
+    venueId ? data?.routes.find((r) => r.venue_id === venueId && r.station_id === stationId)?.walk_min ?? null : null;
 }

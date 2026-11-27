@@ -452,3 +452,13 @@ export function LoadError({
     </main>
   );
 }
+
+/** 관객 수를 모르는 공연이 있어 예상보다 더 붐빌 수 있다는 작은 표시 */
+export function UncertainMark({ show }: { show?: boolean }) {
+  if (!show) return null;
+  return (
+    <span className="mark" title="관객 수를 모르는 공연이 있어 예상보다 더 붐빌 수 있어요">
+      관객 수 미확인
+    </span>
+  );
+}

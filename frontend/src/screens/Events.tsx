@@ -26,9 +26,10 @@ import {
   placeLabel,
   stationName,
   venueName,
+  UncertainMark,
 } from '@/components/ui';
 import { REPLAY_MAX, REPLAY_MIN, dateLabel, demoState, isIphone, pushSupport, requestPush, today, track, type PushSupport } from '@/lib/app';
-import { useLoad, useRefs } from '@/lib/useLoad';
+import { useLoad, useRefs, useWalkMin } from '@/lib/useLoad';
 
 const AREAS = [
   ['all', '전체'],
@@ -364,6 +365,7 @@ export function EventScreen() {
   const variant = demo === 'changed' || demo === 'canceled' ? demo : undefined;
   const res = useLoad(() => getEvent(id, variant), [id, variant]);
   const { st, vn } = useRefs();
+  const walkMin = useWalkMin();
   const [tab, setTab] = useState<'end' | 'later'>('end');
   const [push, setPush] = useState<PushSupport>('default');
   const [going, setGoing] = useState(false);
@@ -535,8 +537,9 @@ export function EventScreen() {
             <span className="main">
               <span className="title">{stationName(st, s.station_id)}</span>
               <span className="sub">
-                <Walk min={s.walk_min} />
+                <Walk min={s.walk_min ?? walkMin(e.venue_id, s.station_id)} />
                 {s.message ? `, ${s.message}` : ''}
+                <UncertainMark show={s.uncertain} />
               </span>
             </span>
             <LevelBadge level={s.level} />
@@ -620,6 +623,7 @@ export function GameScreen() {
   const variant = demo === 'before' || demo === 'end' ? demo : undefined;
   const res = useLoad(() => getEvent(id, variant), [id, variant]);
   const { st, vn } = useRefs();
+  const walkMin = useWalkMin();
   const key = alertKey('game_end', id);
   const [on, setOn] = useState(false);
   useEffect(() => setOn(hasAlert(key)), [key]);
@@ -685,7 +689,7 @@ export function GameScreen() {
             <span className="main">
               <span className="title">{stationName(st, s.station_id)}</span>
               <span className="sub">
-                <Walk min={s.walk_min} />
+                <Walk min={s.walk_min ?? walkMin(e.venue_id, s.station_id)} />
               </span>
             </span>
             <LevelBadge level={s.level} />

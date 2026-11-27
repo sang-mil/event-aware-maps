@@ -23,6 +23,7 @@ import {
   stationName,
   venueName,
   TimeSheet,
+  UncertainMark,
   Walk,
 } from '@/components/ui';
 import { DEMO_QUIET_DAY, dateLabel, demoState, LEVEL, nowMin, today, viewTime, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
@@ -84,7 +85,7 @@ export function Home() {
       const slot = f.stations.find((s) => s.station_id === id)?.slots.find((s) => s.hour === hour);
       const station = st[id];
       const note = slot ? slot.message : station && !station.has_data ? '혼잡 정보 없음' : '이 시간대 혼잡 정보 없음';
-      return { id, station, level: (slot?.level ?? 'no_data') as Level, note, best: summary?.best_station_id === id };
+      return { id, station, level: (slot?.level ?? 'no_data') as Level, note, best: summary?.best_station_id === id, uncertain: !!slot?.uncertain };
     })
     .filter((x): x is NonNullable<typeof x> => !!x)
     .slice(0, 3);
@@ -151,6 +152,7 @@ export function Home() {
               <span className="sub">
                 <Walk min={null} />, {s.best && <b className="best">가장 덜 붐빔</b>}
                 {!s.best && s.note}
+                <UncertainMark show={s.uncertain} />
               </span>
             </span>
             <LevelBadge level={s.level} />

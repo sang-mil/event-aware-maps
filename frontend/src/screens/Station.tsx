@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { alertKey, getStationForecast, hasAlert, pushReady, setAlert } from '@/api';
 import { SourceNote } from '@/components/DataNote';
-import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, Walk, stationName } from '@/components/ui';
+import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, UncertainMark, Walk, stationName } from '@/components/ui';
 import { LEVEL, today, dateLabel, isoAt, requestPush, pushSupport, track } from '@/lib/app';
 import { useLoad, useRefs } from '@/lib/useLoad';
 
@@ -114,6 +114,7 @@ export function Station() {
                   <span className="title">{stationName(st, a.station_id)}</span>
                   <span className="sub">
                     <Walk min={a.walk_min} />, {a.message}
+                    <UncertainMark show={a.uncertain} />
                   </span>
                 </span>
                 <LevelBadge level={a.level} />
@@ -138,11 +139,17 @@ export function Station() {
                 <span style={{ fontSize: 15, color: '#5F6573' }}>
                   {s.message} <span className="sr">{LEVEL[s.level].label}</span>
                   {s.recommended && <b style={{ marginLeft: 6, color: '#4E3DBC' }}>추천</b>}
+                  <UncertainMark show={s.uncertain} />
                 </span>
               </span>
             </li>
           ))}
         </ul>
+        {f.slots.some((s) => s.baseline_basis === 'weekday_fallback') && (
+          <p style={{ margin: 0, padding: '0 20px 14px', fontSize: 14, lineHeight: 1.5, color: '#5F6573' }}>
+            ‘평소’는 행사 없는 월~목 기록으로 비교했어요.
+          </p>
+        )}
       </section>
       <SourceNote />
 
