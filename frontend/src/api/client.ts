@@ -10,6 +10,9 @@ import type { Envelope } from './types';
  */
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? '';
+const REALTIME_API_BASE = (
+  process.env.NEXT_PUBLIC_REALTIME_API_BASE ?? 'https://event-aware-maps-live-api.sangmil6369.workers.dev'
+).replace(/\/$/, '');
 const DATA_BASE = (process.env.NEXT_PUBLIC_DATA_BASE ?? '').replace(/\/$/, '');
 const CACHE_PREFIX = 'tumgil:cache:';
 
@@ -17,6 +20,8 @@ const CACHE_PREFIX = 'tumgil:cache:';
 const usingApi = !!API_BASE;
 /** 발행된 정적 JSON 파일을 읽는지 (API 서버가 있으면 서버가 먼저예요) */
 export const usingStaticData = !usingApi && !!DATA_BASE;
+/** 서울시 실시간 장소 정보를 Worker에서 읽는지 */
+export const usingRealtimeApi = !!REALTIME_API_BASE;
 /** 쓰기 API(피드백·알림)를 쓸 서버가 없는지. 정적 파일만 읽을 때도 서버는 없어요. */
 export const usingMock = !usingApi;
 
@@ -108,6 +113,31 @@ export async function getJson<T>(apiPath: string, files: JsonFiles<T>): Promise<
   const body = (await res.json()) as Envelope<T>;
   writeCache(key, body);
   return { data: body.data, updatedAt: body.updated_at, fromCache: false };
+}
+
+/** 서울시 실시간 Worker 응답을 읽고, 실패하면 이 기기에 저장한 마지막 응답을 사용해요. */
+export async function getRealtimeJson<T>(path: string): Promise<Loaded<T>> {
+  const key = `realtime:${path}`;
+  if (!REALTIME_API_BASE) return fromCacheOrThrow<T>(key);
+
+  let res: Response;
+  try {
+    res = await fetch(`${REALTIME_API_BASE}${path}`, { cache: 'no-store' });
+  } catch {
+    return fromCacheOrThrow<T>(key);
+  }
+  if (!res.ok) return fromCacheOrThrow<T>(key);
+
+  let data: T;
+  try {
+    data = (await res.json()) as T;
+  } catch {
+    return fromCacheOrThrow<T>(key);
+  }
+  const observedAt = (data as { crowd?: { observed_at?: string | null } })?.crowd?.observed_at;
+  const updatedAt = observedAt || res.headers.get('X-Data-Retrieved-At') || new Date().toISOString();
+  writeCache(key, { schema_version: 'realtime-v1', updated_at: updatedAt, data });
+  return { data, updatedAt, fromCache: false };
 }
 
 function fromCacheOrThrow<T>(key: string): Loaded<T> {

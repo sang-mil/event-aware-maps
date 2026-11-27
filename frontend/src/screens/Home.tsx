@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SourceNote } from '@/components/DataNote';
-import { getEvents, getForecast, postFeedback, serverReady, type Level } from '@/api';
+import { getEvents, getForecast, getRealtimeCrowd, postFeedback, serverReady, usingRealtimeApi, type Level, type RealtimeCrowd } from '@/api';
 import {
   Headline,
   Icon,
@@ -26,7 +26,7 @@ import {
   Walk,
 } from '@/components/ui';
 import { DEMO_QUIET_DAY, dateLabel, demoState, LEVEL, nowMin, today, viewTime, asset, fmtMin, requestLocation, store, track, useLocationGranted } from '@/lib/app';
-import { useLoad, useRefs } from '@/lib/useLoad';
+import { useLoad, useRefs, type LoadState } from '@/lib/useLoad';
 
 export interface PendingFeedback {
   station_id: string;
@@ -46,6 +46,8 @@ export function Home() {
 
   const forecast = useLoad(() => (demo === 'offline' ? Promise.reject(new Error('demo')) : getForecast(date)), [date, demo]);
   const events = useLoad(() => getEvents(date), [date]);
+  const olympicCrowd = useLoad(() => getRealtimeCrowd('olympic-park'), []);
+  const jamsilCrowd = useLoad(() => getRealtimeCrowd('jamsil'), []);
   const { st, vn } = useRefs();
   const locGranted = useLocationGranted();
   const [locOn, setLocOn] = useState(false);
@@ -156,6 +158,26 @@ export function Home() {
         ))}
       </section>
 
+      <SectionTitle>현장 실시간 혼잡</SectionTitle>
+      <section className="card" aria-label="올림픽공원과 잠실의 실시간 장소 혼잡 정보">
+        {!usingRealtimeApi ? (
+          <div className="row" role="status" style={{ minHeight: 64 }}>
+            <span className="main">
+              <span className="title">실시간 현장 정보가 아직 연결되지 않았어요</span>
+              <span className="sub">서울시 공공데이터 Worker 주소를 설정하면 표시돼요</span>
+            </span>
+          </div>
+        ) : (
+          <>
+            <RealtimeCrowdRow title="올림픽공원" state={olympicCrowd} />
+            <RealtimeCrowdRow title="잠실" state={jamsilCrowd} />
+          </>
+        )}
+        <p className="note" style={{ margin: 0, padding: '0 16px 14px', lineHeight: 1.5 }}>
+          위의 역 혼잡 예측은 선택한 2025년 날짜 기준이고, 이 값은 현재 관측 기준이에요. 서울시가 추정한 장소 인구라 역 승차 인원이나 열차 안 혼잡도와는 달라요.
+        </p>
+      </section>
+
       <SectionTitle right={<Link href="/events/">전체</Link>}>오늘 공연과 경기</SectionTitle>
       <section className="card">
         {ev.events.length > 0 ? (
@@ -227,6 +249,38 @@ export function Home() {
       {fb && <FeedbackSheet fb={fb} onClose={() => setFb(null)} />}
     </main>
   );
+}
+
+function RealtimeCrowdRow({ title, state }: { title: string; state: LoadState<RealtimeCrowd> }) {
+  if (state.status === 'loading') {
+    return <div className="row" role="status" style={{ minHeight: 64 }}><span className="main"><span className="title">{title}</span><span className="sub">현장 정보를 확인하고 있어요</span></span></div>;
+  }
+  if (state.status === 'error') {
+    return <div className="row" role="status" style={{ minHeight: 64 }}><span className="main"><span className="title">{title}</span><span className="sub">현재 혼잡 정보를 불러오지 못했어요</span></span><button type="button" className="chip" onClick={state.retry}>다시 시도</button></div>;
+  }
+
+  const { crowd } = state.value.data;
+  const min = formatPopulation(crowd.population_min);
+  const max = formatPopulation(crowd.population_max);
+  const range = min && max ? `추정 인구 ${min}~${max}명` : '추정 인구 정보 없음';
+  const observed = crowd.observed_at ? `관측 기준 ${crowd.observed_at}` : '관측 시각 정보 없음';
+
+  return (
+    <div className="row" style={{ minHeight: 72, alignItems: 'flex-start' }}>
+      <span className="main" style={{ gap: 5 }}>
+        <span className="title">{title} · {crowd.level ?? '혼잡 정보 없음'}</span>
+        <span className="sub">{crowd.message ?? '혼잡 안내 문구가 없어요'}</span>
+        <span className="sub">{range} · {observed}</span>
+        {state.value.fromCache && <span className="sub" role="status">연결이 끊겨 기기에 저장된 이전 정보를 보여드려요</span>}
+      </span>
+    </div>
+  );
+}
+
+function formatPopulation(value: string | number | null): string | null {
+  if (value === null || value === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? new Intl.NumberFormat('ko-KR').format(parsed) : null;
 }
 
 /** 01-2 귀가 후 피드백 */

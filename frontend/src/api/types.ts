@@ -2,6 +2,21 @@
 
 export type Level = 'relaxed' | 'normal' | 'crowded' | 'no_data';
 
+/** 서울시 실시간 도시데이터 Worker가 현재 장소 혼잡 정보만 추려 보낸 응답 */
+export type RealtimeAreaId = 'olympic-park' | 'jamsil';
+
+export interface RealtimeCrowd {
+  area: { name: string | null; code: string | null };
+  crowd: {
+    level: string | null;
+    message: string | null;
+    population_min: string | number | null;
+    population_max: string | number | null;
+    observed_at: string | null;
+  };
+  source: string;
+}
+
 export interface Envelope<T> {
   schema_version: string;
   updated_at: string;
