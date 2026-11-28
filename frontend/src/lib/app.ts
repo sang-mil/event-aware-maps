@@ -162,6 +162,13 @@ export function isIphone() {
   return typeof navigator !== 'undefined' && /iPhone|iPad|iPod/.test(navigator.userAgent);
 }
 
+/** 아이폰에서 홈 화면에 추가하지 않고 사파리 탭으로 연 상태. 이때는 알림을 받을 수 없어요. */
+export function needsInstall() {
+  if (!isIphone()) return false;
+  const standalone = window.matchMedia?.('(display-mode: standalone)').matches || (navigator as { standalone?: boolean }).standalone === true;
+  return !standalone;
+}
+
 /** 위치 권한이 허용돼 있는지. 확인할 수 없으면 false (E1: 올림픽공원 기준) */
 export function useLocationGranted(): boolean | null {
   const [granted, setGranted] = useState<boolean | null>(null);

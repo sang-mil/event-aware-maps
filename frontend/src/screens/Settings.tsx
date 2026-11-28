@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { usePushReady } from '@/lib/useLoad';
 import { useEffect, useState, type ReactNode } from 'react';
-import { loadPreferences, savePreferences, unsubscribePush } from '@/api';
+import { currentSubscription, loadPreferences, savePreferences, unsubscribePush } from '@/api';
 import { BackHeader, Icon } from '@/components/ui';
-import { requestPush } from '@/lib/app';
+import { needsInstall, requestPush } from '@/lib/app';
 
 // 개인정보 처리방침·이용약관의 운영자 정보 (2026-11-28 운영자 확인)
 const OPERATOR = '윤희원';
@@ -18,7 +18,19 @@ export function Settings() {
   const [prefs, setPrefs] = useState({ day_before: true, departure: false });
   const [pushMessage, setPushMessage] = useState<string | null>(null);
   const [savingPreference, setSavingPreference] = useState(false);
-  useEffect(() => setPrefs(loadPreferences()), []);
+  const [install, setInstall] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    setInstall(needsInstall());
+    // 이 기기가 실제로 구독돼 있을 때만 저장된 설정대로 켜 보여요. 구독 전이면 모두 꺼짐.
+    currentSubscription().then((sub) => {
+      if (alive) setPrefs(sub ? loadPreferences() : { day_before: false, departure: false });
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  const canToggle = pushReady && !install;
   const alerts = [
     { key: 'day_before' as const, title: '행사 전날 알림', sub: '올림픽공원·잠실 행사 전날에 알려드려요' },
     { key: 'departure' as const, title: '출발 시간 알림', sub: '역 상세에서 고른 시간에 맞춰 알려드려요' },
@@ -65,11 +77,11 @@ export function Settings() {
             <button
               type="button"
               role="switch"
-              aria-checked={pushReady && prefs[a.key]}
+              aria-checked={canToggle && prefs[a.key]}
               aria-label={a.title}
               className="switch"
-              disabled={!pushReady || savingPreference}
-              style={pushReady ? undefined : { opacity: 0.5, cursor: 'default' }}
+              disabled={!canToggle || savingPreference}
+              style={canToggle ? undefined : { opacity: 0.5, cursor: 'default' }}
               onClick={() => toggle(a.key)}
             >
               <span />
@@ -77,7 +89,15 @@ export function Settings() {
           </div>
         ))}
         {!pushReady && <p style={{ margin: 0, padding: '4px 20px 12px', fontSize: 14, color: '#8A5300' }}>알림은 준비 중이에요. 알림 서버가 연결되면 켤 수 있어요.</p>}
-        {pushReady && (
+        {pushReady && install && (
+          <div style={{ padding: '4px 20px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: '#8A5300' }}>아이폰은 홈 화면에 추가해야 알림을 받을 수 있어요.</p>
+            <Link href="/install/?from=settings" className="link-u" style={{ fontSize: 14 }}>
+              홈 화면에 추가하는 방법 보기
+            </Link>
+          </div>
+        )}
+        {pushReady && !install && (
           <div style={{ padding: '8px 20px 16px' }}>
             <button
               type="button"
