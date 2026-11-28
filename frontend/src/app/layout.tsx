@@ -19,6 +19,22 @@ export const metadata: Metadata = {
     apple: `${base}/brand/apple-touch-icon.png`,
   },
   appleWebApp: { capable: true, title: '틈길', statusBarStyle: 'default' },
+  // 링크를 카카오톡·문서에 붙였을 때 보이는 미리보기 카드
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://event-aware-maps.pages.dev'),
+  openGraph: {
+    type: 'website',
+    locale: 'ko_KR',
+    siteName: '틈길',
+    title: '틈길 · 공연이 끝나고 편안하게 집에 가요',
+    description: '올림픽공원·잠실 공연이 끝날 때 어느 역에서 몇 시에 타면 덜 붐빌지 알려드려요.',
+    images: [{ url: `${base}/brand/icon-512.png`, width: 512, height: 512, alt: '틈길' }],
+  },
+  twitter: {
+    card: 'summary',
+    title: '틈길 · 공연이 끝나고 편안하게 집에 가요',
+    description: '올림픽공원·잠실 공연이 끝날 때 어느 역에서 몇 시에 타면 덜 붐빌지 알려드려요.',
+    images: [`${base}/brand/icon-512.png`],
+  },
 };
 
 export const viewport: Viewport = {

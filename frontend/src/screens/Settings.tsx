@@ -4,8 +4,13 @@ import Link from 'next/link';
 import { usePushReady } from '@/lib/useLoad';
 import { useEffect, useState, type ReactNode } from 'react';
 import { loadPreferences, savePreferences, unsubscribePush } from '@/api';
-import { BackHeader, Icon, Ph } from '@/components/ui';
+import { BackHeader, Icon } from '@/components/ui';
 import { requestPush } from '@/lib/app';
+
+// 개인정보 처리방침·이용약관의 운영자 정보 (2026-11-28 운영자 확인)
+const OPERATOR = '윤희원';
+const CONTACT = 'wonhee0619@gmail.com';
+const EFFECTIVE_DATE = '2026년 12월 1일';
 
 /** 01-3 설정 */
 export function Settings() {
@@ -118,7 +123,7 @@ function Doc({ title, intro, children }: { title: string; intro: string; childre
           {intro}
         </p>
         <span style={{ fontSize: 15, color: '#5F6573' }}>
-          시행일 <Ph />
+          시행일 {EFFECTIVE_DATE}
         </span>
       </section>
       <article className="doc">{children}</article>
@@ -149,7 +154,7 @@ export function Privacy() {
       <ul>
         <li>설정에서 ‘이 기기의 알림 모두 해제’를 누르면 구독 정보와 예약을 삭제해요. 앱을 삭제해도 브라우저 데이터가 남아 있으면 이 버튼으로 구독을 해제할 수 있어요</li>
         <li>
-          피드백 응답은 통계로 만든 뒤 지워요(보관 기간: <Ph />)
+          귀가 후 피드백은 현재 서버에 저장하지 않아요. 저장하게 되면 이 방침을 고쳐 시행 7일 전에 알려드려요
         </li>
       </ul>
       <h2>4. 다른 곳에 주는 경우</h2>
@@ -170,10 +175,10 @@ export function Privacy() {
       <h2>6. 개인정보 보호 담당</h2>
       <ul>
         <li>
-          담당: <Ph />
+          담당: {OPERATOR}
         </li>
         <li>
-          문의: <Ph />
+          문의: <a href={`mailto:${CONTACT}`} style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}>{CONTACT}</a>
         </li>
       </ul>
       <h2>7. 바뀌는 경우</h2>
@@ -226,10 +231,10 @@ export function Terms() {
       <h2>7. 운영자</h2>
       <ul>
         <li>
-          운영: <Ph />
+          운영: {OPERATOR}
         </li>
         <li>
-          문의: <Ph />
+          문의: <a href={`mailto:${CONTACT}`} style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}>{CONTACT}</a>
         </li>
       </ul>
     </Doc>
