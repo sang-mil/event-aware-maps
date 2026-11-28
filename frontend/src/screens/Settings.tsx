@@ -28,8 +28,11 @@ export function Settings() {
       setPushMessage('알림 구독을 등록하지 못했어요. 권한과 연결을 확인해 주세요.');
       return;
     }
+    if (!(await savePreferences(next))) {
+      setPushMessage('알림 설정을 저장하지 못했어요. 잠시 후 다시 시도해 주세요.');
+      return;
+    }
     setPrefs(next);
-    await savePreferences(next);
     setPushMessage(null);
   };
   return (

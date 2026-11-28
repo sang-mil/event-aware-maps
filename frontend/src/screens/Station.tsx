@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { alertKey, getStationForecast, hasAlert, setAlert } from '@/api';
+import { alertKey, getStationForecast, hasAlert, loadPreferences, setAlert } from '@/api';
 import { SourceNote } from '@/components/DataNote';
 import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, UncertainMark, Walk, stationName } from '@/components/ui';
 import { LEVEL, today, dateLabel, isoAt, requestPush, pushSupport, track } from '@/lib/app';
@@ -21,6 +21,7 @@ export function Station() {
   const { st } = useRefs();
   const stationWalkMin = useStationWalkMin();
   const [on, setOn] = useState(false);
+  const [notifyMsg, setNotifyMsg] = useState<string | null>(null);
   const key = alertKey('departure', `${id}:${date}`);
   useEffect(() => {
     setOn(hasAlert(key));
@@ -79,9 +80,17 @@ export function Station() {
   const notifyHour = f.notify_hour ? Number(f.notify_hour) : null;
   const toggle = async () => {
     if (!pushReady || notifyHour === null) return;
+    if (!on && !loadPreferences().departure) {
+      setNotifyMsg('설정에서 출발 시간 알림을 먼저 켜 주세요.');
+      return;
+    }
     if (!on && pushSupport() !== 'granted' && !(await requestPush())) return;
     const ok = await setAlert(key, !on, { kind: 'departure', station_id: id, notify_at: isoAt(date, notifyHour * 60) });
-    if (!ok) return;
+    if (!ok) {
+      setNotifyMsg('알림을 예약하지 못했어요. 설정과 연결을 확인해 주세요.');
+      return;
+    }
+    setNotifyMsg(null);
     if (!on) track('notify_on', { kind: 'departure', station_id: id });
     setOn(!on);
   };
@@ -154,6 +163,7 @@ export function Station() {
         )}
       </section>
       <SourceNote />
+      {notifyMsg && <p role="status" style={{ margin: 0, padding: '4px 24px 12px', fontSize: 14, color: '#8A5300' }}>{notifyMsg} <Link href="/settings/">알림 설정</Link></p>}
 
       <BottomBar>
         {notifyHour !== null ? (

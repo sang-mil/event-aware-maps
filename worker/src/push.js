@@ -128,6 +128,10 @@ export async function handlePushRequest(request, env, url) {
       WHERE device_id = ?
     `).bind(Number(body.day_before), Number(body.departure), new Date().toISOString(), subscriptionPreferences[1]).run();
     if (!result.meta.changes) return response({ error: "subscription_not_found" }, 404);
+    if (!body.departure) {
+      await db.prepare("DELETE FROM alerts WHERE device_id = ? AND kind = 'departure'")
+        .bind(subscriptionPreferences[1]).run();
+    }
     return response({ ok: true });
   }
 
@@ -142,6 +146,12 @@ export async function handlePushRequest(request, env, url) {
     const stationId = typeof body.station_id === "string" && /^[a-z0-9_-]{1,80}$/.test(body.station_id) ? body.station_id : "";
     if ((body.kind === "departure" && !stationId) || (body.kind !== "departure" && !eventId)) {
       return response({ error: "invalid_alert_target" }, 400);
+    }
+    if (body.kind === "departure") {
+      const subscription = await db.prepare("SELECT departure FROM push_subscriptions WHERE device_id = ?")
+        .bind(body.device_id).first();
+      if (!subscription) return response({ error: "subscription_not_found" }, 404);
+      if (!subscription.departure) return response({ error: "departure_alerts_disabled" }, 409);
     }
     const id = makeId();
     const now = new Date().toISOString();
@@ -194,13 +204,13 @@ async function sendToSubscription(row, payload, env) {
   }
 }
 
-const STATION_NAMES = Object.freeze({
+export const STATION_NAMES = Object.freeze({
   olympic_park: "올림픽공원역",
   bangi: "방이역",
   mongchontoseong: "몽촌토성역",
   hanseong_baekje: "한성백제역",
-  jamsil: "잠실역",
-  jamsilsaenae: "잠실새내역",
+  sports_complex: "종합운동장역",
+  jamsil_saenae: "잠실새내역",
 });
 
 export async function sendDueAlerts(env, scheduledTime = Date.now()) {
@@ -211,10 +221,11 @@ export async function sendDueAlerts(env, scheduledTime = Date.now()) {
   const expiredBefore = new Date(scheduledTime - 6 * 60 * 60 * 1000).toISOString();
   await db.prepare("DELETE FROM alerts WHERE notify_at < ?").bind(expiredBefore).run();
   const due = await db.prepare(`
-    SELECT a.id, a.device_id, a.kind, a.event_id, a.station_id,
+    SELECT a.id, a.device_id, a.kind, a.event_id, a.station_id, a.attempts,
       s.endpoint, s.p256dh, s.auth
     FROM alerts a JOIN push_subscriptions s ON s.device_id = a.device_id
     WHERE a.notify_at <= ? AND a.attempts < 6
+      AND (a.kind <> 'departure' OR s.departure = 1)
       AND (a.last_attempt_at IS NULL OR a.last_attempt_at <= ?)
     ORDER BY a.notify_at LIMIT 5
   `).bind(now, retryBefore).all();
@@ -330,7 +341,7 @@ async function sendDayBeforeAlerts(env, scheduledTime = Date.now()) {
 export async function handleScheduled(controller, env) {
   if (!env.PUSH_DB) return;
   if (controller.cron === "* * * * *") await sendDueAlerts(env, controller.scheduledTime);
-  if (controller.cron === "5-55/10 * * * *" && ["09", "10"].includes(kstHour(new Date(controller.scheduledTime)))) {
+  if (controller.cron === "0-50/10 * * * *" && kstHour(new Date(controller.scheduledTime)) === "18") {
     await sendDayBeforeAlerts(env, controller.scheduledTime);
   }
 }
