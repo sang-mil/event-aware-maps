@@ -21,6 +21,7 @@ export function Station() {
   const { st } = useRefs();
   const stationWalkMin = useStationWalkMin();
   const [on, setOn] = useState(false);
+  const [savingAlert, setSavingAlert] = useState(false);
   const [notifyMsg, setNotifyMsg] = useState<string | null>(null);
   const key = alertKey('departure', `${id}:${date}`);
   useEffect(() => {
@@ -79,20 +80,32 @@ export function Station() {
 
   const notifyHour = f.notify_hour ? Number(f.notify_hour) : null;
   const toggle = async () => {
-    if (!pushReady || notifyHour === null) return;
-    if (!on && !loadPreferences().departure) {
+    if (!pushReady || notifyHour === null || savingAlert) return;
+    const previous = on;
+    const next = !on;
+    if (next && !loadPreferences().departure) {
       setNotifyMsg('설정에서 출발 시간 알림을 먼저 켜 주세요.');
       return;
     }
-    if (!on && pushSupport() !== 'granted' && !(await requestPush())) return;
-    const ok = await setAlert(key, !on, { kind: 'departure', station_id: id, notify_at: isoAt(date, notifyHour * 60) });
-    if (!ok) {
-      setNotifyMsg('알림을 예약하지 못했어요. 설정과 연결을 확인해 주세요.');
-      return;
-    }
+    setOn(next);
+    setSavingAlert(true);
     setNotifyMsg(null);
-    if (!on) track('notify_on', { kind: 'departure', station_id: id });
-    setOn(!on);
+    try {
+      if (next && pushSupport() !== 'granted' && !(await requestPush())) {
+        setOn(previous);
+        setNotifyMsg('알림 권한을 허용하지 않아 예약을 취소했어요.');
+        return;
+      }
+      const ok = await setAlert(key, next, { kind: 'departure', station_id: id, notify_at: isoAt(date, notifyHour * 60) });
+      if (!ok) {
+        setOn(previous);
+        setNotifyMsg('알림을 예약하지 못했어요. 설정과 연결을 확인해 주세요.');
+        return;
+      }
+      if (next) track('notify_on', { kind: 'departure', station_id: id });
+    } finally {
+      setSavingAlert(false);
+    }
   };
 
   return (
@@ -176,8 +189,8 @@ export function Station() {
                 {notifyHour}시가 지나 알림을 받을 수 없어요
               </button>
             ) : pushReady ? (
-              <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn primary'} style={{ flex: 2 }}>
-                {on ? `${notifyHour}시에 알려드릴게요` : `${notifyHour}시에 알림 받기`}
+              <button type="button" aria-pressed={on} aria-busy={savingAlert} disabled={savingAlert} onClick={toggle} className={on ? 'btn secondary' : 'btn primary'} style={{ flex: 2 }}>
+                {savingAlert ? (on ? '알림 예약 중…' : '예약 취소 중…') : on ? `${notifyHour}시에 알려드릴게요` : `${notifyHour}시에 알림 받기`}
               </button>
             ) : (
               // 알림 서버가 붙기 전에는 켜진 것처럼 보이지 않게 막아 둬요

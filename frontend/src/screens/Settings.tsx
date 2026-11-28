@@ -17,23 +17,34 @@ export function Settings() {
   const pushReady = usePushReady(); // 서버까지 준비됐을 때만 알림을 켜요
   const [prefs, setPrefs] = useState({ day_before: true, departure: false });
   const [pushMessage, setPushMessage] = useState<string | null>(null);
+  const [savingPreference, setSavingPreference] = useState(false);
   useEffect(() => setPrefs(loadPreferences()), []);
   const alerts = [
     { key: 'day_before' as const, title: '행사 전날 알림', sub: '올림픽공원·잠실 행사 전날에 알려드려요' },
     { key: 'departure' as const, title: '출발 시간 알림', sub: '역 상세에서 고른 시간에 맞춰 알려드려요' },
   ];
   const toggle = async (k: 'day_before' | 'departure') => {
+    if (savingPreference) return;
+    const previous = prefs;
     const next = { ...prefs, [k]: !prefs[k] };
-    if (next[k] && !(await requestPush())) {
-      setPushMessage('알림 구독을 등록하지 못했어요. 권한과 연결을 확인해 주세요.');
-      return;
-    }
-    if (!(await savePreferences(next))) {
-      setPushMessage('알림 설정을 저장하지 못했어요. 잠시 후 다시 시도해 주세요.');
-      return;
-    }
     setPrefs(next);
-    setPushMessage(null);
+    setSavingPreference(true);
+    setPushMessage('알림 설정을 저장하고 있어요.');
+    try {
+      if (next[k] && !(await requestPush())) {
+        setPrefs(previous);
+        setPushMessage('알림 구독을 등록하지 못했어요. 권한과 연결을 확인해 주세요.');
+        return;
+      }
+      if (!(await savePreferences(next))) {
+        setPrefs(previous);
+        setPushMessage('알림 설정을 저장하지 못했어요. 잠시 후 다시 시도해 주세요.');
+        return;
+      }
+      setPushMessage(null);
+    } finally {
+      setSavingPreference(false);
+    }
   };
   return (
     <main className="screen">
@@ -57,7 +68,7 @@ export function Settings() {
               aria-checked={pushReady && prefs[a.key]}
               aria-label={a.title}
               className="switch"
-              disabled={!pushReady}
+              disabled={!pushReady || savingPreference}
               style={pushReady ? undefined : { opacity: 0.5, cursor: 'default' }}
               onClick={() => toggle(a.key)}
             >
@@ -72,13 +83,17 @@ export function Settings() {
               type="button"
               className="btn secondary"
               style={{ minHeight: 44, borderRadius: 12 }}
+              disabled={savingPreference}
               onClick={async () => {
+                if (savingPreference) return;
+                setSavingPreference(true);
                 if (await unsubscribePush()) {
                   setPrefs({ day_before: false, departure: false });
                   setPushMessage('이 기기의 알림과 예약을 모두 해제했어요.');
                 } else {
                   setPushMessage('알림 해제에 실패했어요. 잠시 후 다시 시도해 주세요.');
                 }
+                setSavingPreference(false);
               }}
             >
               이 기기의 알림 모두 해제
