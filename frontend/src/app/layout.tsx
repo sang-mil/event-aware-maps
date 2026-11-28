@@ -27,13 +27,13 @@ export const metadata: Metadata = {
     siteName: '틈길',
     title: '틈길 · 공연이 끝나고 편안하게 집에 가요',
     description: '올림픽공원·잠실 공연이 끝날 때 어느 역에서 몇 시에 타면 덜 붐빌지 알려드려요.',
-    images: [{ url: `${base}/brand/icon-512.png`, width: 512, height: 512, alt: '틈길' }],
+    images: [{ url: `${base}/brand/og-image.png`, width: 1200, height: 630, alt: '틈길 · 공연이 끝나고 편안하게 집에 가요' }],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: '틈길 · 공연이 끝나고 편안하게 집에 가요',
     description: '올림픽공원·잠실 공연이 끝날 때 어느 역에서 몇 시에 타면 덜 붐빌지 알려드려요.',
-    images: [`${base}/brand/icon-512.png`],
+    images: [`${base}/brand/og-image.png`],
   },
 };
 
