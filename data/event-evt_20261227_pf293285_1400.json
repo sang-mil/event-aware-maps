@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-28T12:06:23+09:00",
+  "data": {
+    "id": "evt_20261227_pf293285_1400",
+    "type": "show",
+    "title": "최현우 30주년 기념 공연: LEGACY",
+    "venue_id": "woori_art_hall",
+    "area": "olympic_park",
+    "date": "2026-12-27",
+    "start_at": "2026-12-27T14:00:00+09:00",
+    "end_at": "2026-12-27T16:00:00+09:00",
+    "end_at_source": "estimated",
+    "status": "scheduled",
+    "change": null,
+    "game_state": null,
+    "nearest_station": {
+      "station_id": "olympic_park",
+      "level": "no_data"
+    },
+    "linkable": true,
+    "after_end": {
+      "end": {
+        "hour_label": "16~17시 예상",
+        "stations": [
+          {
+            "station_id": "olympic_park",
+            "level": "no_data",
+            "message": null,
+            "walk_min": 13,
+            "uncertain": false
+          },
+          {
+            "station_id": "bangi",
+            "level": "no_data",
+            "message": null,
+            "walk_min": 23,
+            "uncertain": false
+          }
+        ]
+      },
+      "no_data_message": "16시대는 혼잡 예상 정보가 없어요. 예상은 19~23시만 제공해요."
+    },
+    "same_day": [
+      {
+        "id": "evt_20261227_pf292160_1500",
+        "title": "겨울왕국 [서울]",
+        "venue_id": "charlotte_theater",
+        "start_at": "2026-12-27T15:00:00+09:00",
+        "end_at": "2026-12-27T17:15:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261227_pf286543_1500",
+        "title": "백 번째 리뷰",
+        "venue_id": "muse_live",
+        "start_at": "2026-12-27T15:00:00+09:00",
+        "end_at": "2026-12-27T16:20:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261227_pf307297_1600",
+        "title": "THE BOYZ CONCERT: ZENERATION Ⅲ",
+        "venue_id": "kspo_dome",
+        "start_at": "2026-12-27T16:00:00+09:00",
+        "end_at": "2026-12-27T18:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261227_pf307364_1700",
+        "title": "CRUSH CONCERT: CRUSH H♥UR",
+        "venue_id": "ticketlink_live_arena",
+        "start_at": "2026-12-27T17:00:00+09:00",
+        "end_at": "2026-12-27T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      },
+      {
+        "id": "evt_20261227_pf304898_1700",
+        "title": "헐리우드 인 크리스마스 [서울]",
+        "venue_id": "lotte_concert_hall",
+        "start_at": "2026-12-27T17:00:00+09:00",
+        "end_at": "2026-12-27T19:00:00+09:00",
+        "end_at_source": "estimated",
+        "type": "show"
+      }
+    ],
+    "crossing_note": null
+  }
+}

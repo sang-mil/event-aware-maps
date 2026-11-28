@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-27T20:24:37+09:00",
+  "updated_at": "2026-11-28T12:06:23+09:00",
   "data": {
     "month": "2026-12",
     "days": [
@@ -670,6 +670,40 @@
             "show": true
           },
           "olympic_park": {
+            "show": true
+          }
+        }
+      },
+      {
+        "date": "2026-12-27",
+        "has_show": true,
+        "has_game": false,
+        "count": 6,
+        "by_venue": {
+          "woori_art_hall": {
+            "show": true
+          },
+          "charlotte_theater": {
+            "show": true
+          },
+          "muse_live": {
+            "show": true
+          },
+          "kspo_dome": {
+            "show": true
+          },
+          "ticketlink_live_arena": {
+            "show": true
+          },
+          "lotte_concert_hall": {
+            "show": true
+          }
+        },
+        "by_area": {
+          "olympic_park": {
+            "show": true
+          },
+          "jamsil": {
             "show": true
           }
         }
