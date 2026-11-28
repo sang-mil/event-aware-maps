@@ -176,9 +176,17 @@ async function send(method: 'POST' | 'PUT' | 'DELETE', path: string, body?: unkn
     headers: body ? { 'Content-Type': 'application/json' } : undefined,
     body: body ? JSON.stringify(body) : undefined,
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new PushHttpError(res.status);
   return res.status === 204 ? null : res.json().catch(() => null);
 }
+
+class PushHttpError extends Error {
+  constructor(readonly status: number) {
+    super(`HTTP ${status}`);
+  }
+}
+/** 서버에 이 기기 구독이 없을 때(404). 지울 것도 바꿀 것도 없으니 실패로 보지 않아요. */
+const notRegistered = (e: unknown) => e instanceof PushHttpError && e.status === 404;
 
 async function sendPush(method: 'POST' | 'PUT' | 'DELETE', path: string, body?: unknown) {
   const res = await fetch(`${PUSH_API_BASE}${path}`, {
@@ -186,7 +194,7 @@ async function sendPush(method: 'POST' | 'PUT' | 'DELETE', path: string, body?: 
     headers: body ? { 'Content-Type': 'application/json' } : undefined,
     body: body ? JSON.stringify(body) : undefined,
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new PushHttpError(res.status);
   return res.status === 204 ? null : res.json().catch(() => null);
 }
 
@@ -238,13 +246,26 @@ export async function subscribePush(): Promise<boolean> {
   }
 }
 
+/** 이 브라우저의 푸시 구독. 푸시 기능이 없거나 구독 전이면 null. */
+export async function currentSubscription(): Promise<PushSubscription | null> {
+  if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return null;
+  try {
+    const reg = await navigator.serviceWorker.getRegistration();
+    return (await reg?.pushManager?.getSubscription()) ?? null;
+  } catch {
+    return null;
+  }
+}
+
 /** 서버와 이 브라우저의 푸시 구독·예약을 모두 해제해요. */
 export async function unsubscribePush(): Promise<boolean> {
   if (!pushReady || !('serviceWorker' in navigator)) return false;
   try {
-    await sendPush('DELETE', `/push/subscriptions/${encodeURIComponent(deviceId())}`);
-    const registration = await navigator.serviceWorker.ready;
-    const subscription = await registration.pushManager.getSubscription();
+    await sendPush('DELETE', `/push/subscriptions/${encodeURIComponent(deviceId())}`).catch((e) => {
+      if (!notRegistered(e)) throw e;
+    });
+    // 아이폰 사파리 탭처럼 푸시 기능이 없는 브라우저도 있어요
+    const subscription = await currentSubscription();
     if (subscription) await subscription.unsubscribe();
     local('alerts', {});
     local('prefs', { day_before: false, departure: false });
@@ -294,8 +315,9 @@ export async function savePreferences(prefs: { day_before: boolean; departure: b
   if (pushReady) {
     try {
       await sendPush('PUT', `/push/subscriptions/${deviceId()}/preferences`, prefs);
-    } catch {
-      return false;
+    } catch (e) {
+      // 아직 구독하지 않은 기기는 서버에 바꿀 설정이 없어요. 기기에만 저장해요.
+      if (!notRegistered(e)) return false;
     }
   }
   if (!prefs.departure) {

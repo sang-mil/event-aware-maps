@@ -135,7 +135,7 @@ export function Install({ from, event }: { from: string | null; event: string | 
     ['‘홈 화면에 추가’를 골라요', '목록을 조금 내리면 있어요'],
     ['홈 화면의 틈길 아이콘으로 열어요', '처음 열 때 알림 허용을 눌러 주세요'],
   ];
-  const back = from === 'onboarding' ? '/onboarding/' : event ? `/event/?id=${event}` : '/home/';
+  const back = from === 'onboarding' ? '/onboarding/' : from === 'settings' ? '/settings/' : event ? `/event/?id=${event}` : '/home/';
   return (
     <main className="screen">
       <header className="topbar">
