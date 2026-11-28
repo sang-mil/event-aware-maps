@@ -3,14 +3,15 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { alertKey, getStationForecast, hasAlert, pushReady, setAlert } from '@/api';
+import { alertKey, getStationForecast, hasAlert, setAlert } from '@/api';
 import { SourceNote } from '@/components/DataNote';
 import { BackHeader, BottomBar, Headline, LevelBadge, LineBadge, LineStack, LoadError, Loading, SectionTitle, StaleNotice, UncertainMark, Walk, stationName } from '@/components/ui';
 import { LEVEL, today, dateLabel, isoAt, requestPush, pushSupport, track } from '@/lib/app';
-import { useLoad, useRefs, useStationWalkMin } from '@/lib/useLoad';
+import { useLoad, useRefs, useStationWalkMin, usePushReady } from '@/lib/useLoad';
 
 /** 02 · 02-1 역 상세, 02-2 · 02-3 고른 날짜, E3 혼잡 정보가 없는 역 */
 export function Station() {
+  const pushReady = usePushReady(); // 서버까지 준비됐을 때만 알림을 켜요
   const q = useSearchParams();
   const id = q.get('id') ?? '';
   const pickedDate = q.get('date'); // 캘린더에서 들어오면 날짜가 있어요
@@ -160,7 +161,11 @@ export function Station() {
             <Link href={`/search/?to=${id}`} className="btn secondary">
               길찾기
             </Link>
-            {pushReady ? (
+            {pushReady && !on && Date.parse(isoAt(date, notifyHour * 60)) <= Date.now() ? (
+              <button type="button" disabled aria-disabled="true" className="btn secondary" style={{ flex: 2, cursor: 'default', opacity: 0.8 }}>
+                {notifyHour}시가 지나 알림을 받을 수 없어요
+              </button>
+            ) : pushReady ? (
               <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn primary'} style={{ flex: 2 }}>
                 {on ? `${notifyHour}시에 알려드릴게요` : `${notifyHour}시에 알림 받기`}
               </button>

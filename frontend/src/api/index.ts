@@ -156,6 +156,20 @@ export const serverReady = !usingMock;
 /** 웹 푸시 기능을 사용할 수 있는지 (푸시 Worker 주소와 공개 키가 설정된 경우) */
 export const pushReady = !!PUSH_API_BASE && !!VAPID_KEY;
 
+let pushStatus: Promise<boolean> | null = null;
+/**
+ * 푸시 서버가 실제로 보낼 준비가 됐는지(GET /push/status → { ready }).
+ * 화면 설정만 있고 서버 키가 없으면 알림이 오지 않으니, 그때는 화면을 '준비 중'으로 보여줘요.
+ */
+export function checkPushServer(): Promise<boolean> {
+  if (!pushReady) return Promise.resolve(false);
+  pushStatus ??= fetch(`${PUSH_API_BASE}/push/status`, { cache: 'no-store' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((d: { ready?: boolean } | null) => d?.ready === true)
+    .catch(() => false);
+  return pushStatus;
+}
+
 async function send(method: 'POST' | 'PUT' | 'DELETE', path: string, body?: unknown) {
   const res = await fetch(`${API_BASE}${path}`, {
     method,

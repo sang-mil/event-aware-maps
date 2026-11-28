@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { alertKey, getCalendar, getEvent, getEvents, getForecast, hasAlert, pushReady, setAlert, type EventDetail, type EventItem, usingStaticData } from '@/api';
+import { alertKey, getCalendar, getEvent, getEvents, getForecast, hasAlert, setAlert, type EventDetail, type EventItem, usingStaticData } from '@/api';
 import { SourceNote } from '@/components/DataNote';
 import {
   BackHeader,
@@ -29,7 +29,7 @@ import {
   UncertainMark,
 } from '@/components/ui';
 import { DEMO_MONTH, DEMO_TODAY, dateLabel, demoState, isIphone, pushSupport, replayDate, requestPush, today, track, type PushSupport } from '@/lib/app';
-import { useLoad, useRefs, useWalkMin } from '@/lib/useLoad';
+import { useLoad, useRefs, useWalkMin, usePushReady } from '@/lib/useLoad';
 
 const AREAS = [
   ['all', '전체'],
@@ -380,6 +380,7 @@ const BACK: Record<string, string> = { home: '/home/', calendar: '/calendar/', e
 
 /** 03-2 공연 상세 (+ 05-2 알림 불가, E6 시간 변경, E7 취소, E8 알림 거부) */
 export function EventScreen() {
+  const pushReady = usePushReady(); // 서버까지 준비됐을 때만 알림을 켜요
   const q = useSearchParams();
   const id = q.get('id') ?? '';
   const from = q.get('from') ?? 'home';
@@ -416,12 +417,16 @@ export function EventScreen() {
       setNotifyMsg('공연 종료 시각이 확인되지 않아 알림을 예약할 수 없어요.');
       return;
     }
+    const notifyAt = e.end_at ? new Date(Date.parse(e.end_at) - 30 * 60 * 1000).toISOString() : undefined;
+    if (!going && notifyAt && Date.parse(notifyAt) <= Date.now()) {
+      setNotifyMsg('공연이 끝나기 30분 전이 이미 지나서 알림을 예약할 수 없어요.');
+      return;
+    }
     if (!going && push !== 'granted') {
       const ok = await requestPush();
       setPush(pushSupport());
       if (!ok) return;
     }
-    const notifyAt = e.end_at ? new Date(Date.parse(e.end_at) - 30 * 60 * 1000).toISOString() : undefined;
     if (!(await setAlert(key, !going, { kind: 'show_end', event_id: id, notify_at: notifyAt }))) {
       setNotifyMsg('알림을 예약하지 못했어요. 잠시 후 다시 시도해 주세요.');
       return;
@@ -652,6 +657,7 @@ const GAME = {
 
 /** 03-3 경기 상세 */
 export function GameScreen() {
+  const pushReady = usePushReady(); // 서버까지 준비됐을 때만 알림을 켜요
   const q = useSearchParams();
   const id = q.get('id') ?? '';
   const demo = demoState(q); // before | end
@@ -694,7 +700,11 @@ export function GameScreen() {
         <strong style={{ fontSize: 21 }}>{g.head}</strong>
         <span style={{ fontSize: 15, lineHeight: 1.55, color: '#4A4F5C', whiteSpace: 'pre-line' }}>{g.guide}</span>
         {e.game_state === 'live' && e.end_at &&
-          (pushReady ? (
+          (pushReady && Date.parse(e.end_at) <= Date.now() ? (
+            <button type="button" disabled aria-disabled="true" className="btn secondary" style={{ height: 48, borderRadius: 14, fontSize: 16, flex: 'none', cursor: 'default', opacity: 0.8 }}>
+              경기 종료 예상 시각이 지나 알림을 받을 수 없어요
+            </button>
+          ) : pushReady ? (
             <button type="button" aria-pressed={on} onClick={toggle} className={on ? 'btn secondary' : 'btn dark'} style={{ height: 48, borderRadius: 14, fontSize: 16, flex: 'none' }}>
               {on ? '경기가 끝나면 알려드릴게요' : '경기 끝나면 알림 받기'}
             </button>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { ApiError, getStations, getVenues, getWalkRoutes, readWalkRoutes, type ApiErrorCode, type Loaded, type Station, type Venue } from '@/api';
+import { ApiError, checkPushServer, getStations, getVenues, getWalkRoutes, readWalkRoutes, type ApiErrorCode, type Loaded, type Station, type Venue } from '@/api';
 
 export type LoadState<T> =
   | { status: 'loading' }
@@ -62,4 +62,17 @@ export function useStationWalkMin() {
   const data = walks.status === 'ok' ? readWalkRoutes(walks.value.data) : null;
   return (fromStationId: string, toStationId: string): number | null =>
     data?.station_routes?.find((r) => r.from_station_id === fromStationId && r.to_station_id === toStationId)?.walk_min ?? null;
+}
+
+/** 알림을 실제로 쓸 수 있는지. 푸시 설정이 있고 서버도 준비됐을 때만 true (확인 전에는 false). */
+export function usePushReady(): boolean {
+  const [ok, setOk] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    checkPushServer().then((v) => alive && setOk(v));
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return ok;
 }

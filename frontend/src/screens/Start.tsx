@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { usePushReady } from '@/lib/useLoad';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BottomBar, Icon } from '@/components/ui';
-import { pushReady } from '@/api';
 import { asset, isIphone, pushSupport, requestLocation, requestPush, store, track, useLocationGranted } from '@/lib/app';
 
 /** 00 스플래시 */
@@ -34,6 +34,7 @@ const STEPS = [
 
 /** 00-1 첫 실행 안내 · 권한 요청 */
 export function Onboarding() {
+  const pushReady = usePushReady(); // 서버까지 준비됐을 때만 알림을 켜요
   const locGranted = useLocationGranted();
   const [loc, setLoc] = useState(false);
   const [noti, setNoti] = useState(false);

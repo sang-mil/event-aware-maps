@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { usePushReady } from '@/lib/useLoad';
 import { useEffect, useState, type ReactNode } from 'react';
-import { loadPreferences, pushReady, savePreferences, unsubscribePush } from '@/api';
+import { loadPreferences, savePreferences, unsubscribePush } from '@/api';
 import { BackHeader, Icon, Ph } from '@/components/ui';
 import { requestPush } from '@/lib/app';
 
 /** 01-3 설정 */
 export function Settings() {
+  const pushReady = usePushReady(); // 서버까지 준비됐을 때만 알림을 켜요
   const [prefs, setPrefs] = useState({ day_before: true, departure: false });
   const [pushMessage, setPushMessage] = useState<string | null>(null);
   useEffect(() => setPrefs(loadPreferences()), []);
