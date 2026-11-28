@@ -74,7 +74,7 @@ KOPIS 공식 API도 HTTP 주소를 사용하므로 Worker에서 KOPIS로 가는 
 
 ## 웹 푸시 알림 활성화
 
-Worker는 공연 종료 30분 전·역별 출발 알림 예약을 D1에 저장하고, 매분 Cron Trigger로 발송합니다. 한국 시각 오전 9~10시에는 10분 간격으로 공개 행사 JSON을 읽어 전날 알림을 발송·재시도합니다. KBO 경기 종료 시각이 없으면 경기 알림은 예약되지 않습니다. 한 번 실행할 때 최대 5건을 보내 무료 Worker의 처리 한도를 고려합니다.
+Worker는 공연 종료 30분 전·역별 출발 알림 예약을 D1에 저장하고, 매분 Cron Trigger로 발송합니다. 한국 시각 18:00~18:50에는 10분 간격으로 공개 행사 JSON을 읽어 전날 알림을 발송·재시도합니다. KBO 경기 종료 시각이 없으면 경기 알림은 예약되지 않습니다. 한 번 실행할 때 최대 5건을 보내 무료 Worker의 처리 한도를 고려합니다.
 
 푸시를 켜기 전에 아래 Cloudflare 설정이 필요합니다.
 
@@ -90,13 +90,14 @@ Worker는 공연 종료 30분 전·역별 출발 알림 예약을 D1에 저장�
    ```
 
 3. `worker` 폴더에서 `npx wrangler d1 migrations apply tumgil-push --remote`를 실행해 테이블을 만듭니다.
-4. `worker` 폴더에서 `node scripts/generate-vapid-keys.mjs`로 VAPID 키 쌍을 한 번 생성합니다. 공개 키는 Cloudflare Pages 환경변수 `NEXT_PUBLIC_VAPID_PUBLIC_KEY`와 Worker 일반 변수 `VAPID_PUBLIC_KEY`에 넣고, 개인 키는 Worker Secret `VAPID_PRIVATE_KEY`에 넣습니다. 개인 키를 코드, GitHub, 공개 문서, 채팅에 붙이지 않습니다.
+4. `worker` 폴더에서 `node scripts/generate-vapid-keys.mjs`로 VAPID 키 쌍을 한 번 생성합니다. 공개 키는 Cloudflare Pages 환경변수 `NEXT_PUBLIC_VAPID_PUBLIC_KEY`와 `worker/wrangler.toml`의 `VAPID_PUBLIC_KEY`에 같은 값으로 설정합니다. 개인 키만 Worker Secret `VAPID_PRIVATE_KEY`에 넣습니다. 개인 키를 코드, GitHub, 공개 문서, 채팅에 붙이지 않습니다.
 5. Cloudflare Pages에서 새 환경변수를 적용해 프런트를 다시 배포하고, Worker를 배포합니다. 푸시 서버 준비 여부는 `/api/push/status`가 `{"ready":true}`를 반환하는지 확인합니다.
 
 필요한 Worker Secrets:
 
 - `VAPID_PRIVATE_KEY`
-- `VAPID_PUBLIC_KEY` — Worker가 발송하고 설정 상태를 확인하는 공개 키.
 - (선택) `VAPID_SUBJECT` — 연락처 URL. 기본값은 서비스 URL입니다.
+
+공개 키는 공개되어도 되는 값이며 `wrangler.toml`에서 관리합니다. 비밀 개인 키는 Secret으로만 저장합니다.
 
 Cloudflare Pages 환경변수 `NEXT_PUBLIC_PUSH_API_BASE`에 `https://event-aware-maps-live-api.sangmil6369.workers.dev/api`를 설정합니다. Worker, D1, 키 설정이 끝나기 전에는 이 값을 비워 둡니다. 그래야 준비 중에 화면의 알림 버튼이 활성화되지 않습니다.

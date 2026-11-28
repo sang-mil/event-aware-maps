@@ -5,7 +5,7 @@
 ## 1. 아직 만들지 않은 것
 | 항목 | 상태 | 비고 |
 |---|---|---|
-| Cloudflare Workers (웹 푸시, 익명 피드백) | **부분 구현** | 실시간 도시데이터 조회용 Worker는 운영 중. 웹 푸시·익명 피드백은 미구현이며 화면에서 "준비 중" 상태 |
+| Cloudflare Workers (웹 푸시, 익명 피드백) | **웹 푸시 구현, 익명 피드백 미구현** | 웹 푸시는 D1·VAPID·Cron Trigger를 사용한다. 운영 준비 상태는 `/api/push/status`로 확인하고, 기기별 실제 발송은 별도 QA가 필요하다. 익명 피드백 API는 아직 없음 |
 | KSPO 입출차 데이터(약 240만 건) 활용 | 자료 대기 | 작업 폴더에 원자료가 없음. 현재 `kspo_linked.json`은 시간대별 공연·주차 요약 7,803건이라 차량별 입출차 시각을 대체할 수 없음. 원자료: [공공데이터포털 15159093](https://www.data.go.kr/data/15159093/openapi.do) |
 | 서울 지하철 일별 API(CardSubwayStatsNew) | 미사용 | 샘플 날짜에 자료 없음(INFO-200). 최근 공연 날 하루 합계 확인용 |
 | 카카오 도보 경로·지도 | 구현됨, 첫 데이터 발행 대기 | 월 1회 및 수동 GitHub Actions로 장소 좌표·도보 경로를 계산해 gh-pages에 발행. `KAKAO_REST_API_KEY`와 웹용 `NEXT_PUBLIC_KAKAO_MAP_JS_KEY` 설정 후 실제 발행·화면 확인 필요 |

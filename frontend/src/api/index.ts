@@ -291,8 +291,22 @@ export async function setAlert(
 
 /** 알림 설정. 설정 화면 값은 기기에 두고, 서버가 있으면 서버에도 보내요(PUT .../preferences). */
 export async function savePreferences(prefs: { day_before: boolean; departure: boolean }) {
+  if (pushReady) {
+    try {
+      await sendPush('PUT', `/push/subscriptions/${deviceId()}/preferences`, prefs);
+    } catch {
+      return false;
+    }
+  }
+  if (!prefs.departure) {
+    const alerts = local<Record<string, string>>('alerts') ?? {};
+    for (const key of Object.keys(alerts)) {
+      if (key.startsWith('departure:')) delete alerts[key];
+    }
+    local('alerts', alerts);
+  }
   local('prefs', prefs);
-  if (pushReady) await sendPush('PUT', `/push/subscriptions/${deviceId()}/preferences`, prefs).catch(() => undefined);
+  return true;
 }
 
 export function loadPreferences(): { day_before: boolean; departure: boolean } {

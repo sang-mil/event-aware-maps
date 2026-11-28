@@ -5,6 +5,9 @@ compatibility_flags = ["allow_custom_ports"]
 workers_dev = true
 previews = {}
 
+[vars]
+VAPID_PUBLIC_KEY = "BDl2zdDc4tXecyx2mElBgKKvxiFCFXMr5hmw0azR-eh9uucAcWLE1Z5WErw0B1guLE8v8PRn23fmizCP6V1_jaY"
+
 [[d1_databases]]
 binding = "PUSH_DB"
 database_name = "tumgil-push"
@@ -12,7 +15,7 @@ database_id = "73d1401a-a9ab-4f71-89af-c44a053dde33"
 migrations_dir = "migrations"
 
 [triggers]
-crons = ["* * * * *", "5-55/10 * * * *"]
+crons = ["* * * * *", "0-50/10 * * * *"]
 
 [placement]
 hostname = "www.kopis.or.kr"
